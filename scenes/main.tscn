@@ -36,7 +36,7 @@ position = Vector2(578, 865)
 shape = SubResource("RectangleShape2D_0wfyh")
 
 [node name="loop" type="Node2D" parent="." unique_id=1198484698]
-position = Vector2(-544, 172.00003)
+position = Vector2(655.00006, 300)
 rotation = 1.5584562
 
 [node name="Area2D" type="Area2D" parent="loop" unique_id=1358562972]
@@ -159,99 +159,100 @@ texture = SubResource("ExternalTexture_0wfyh")
 position = Vector2(503, 227)
 
 [node name="DestructiblePeg" parent="pegs" unique_id=1750133912 instance=ExtResource("4_jyhfs")]
+position = Vector2(354, 195)
 
 [node name="DestructiblePeg2" parent="pegs" unique_id=413804823 instance=ExtResource("4_jyhfs")]
-position = Vector2(63, -72)
+position = Vector2(253, 53)
 
 [node name="DestructiblePeg3" parent="pegs" unique_id=1449796975 instance=ExtResource("4_jyhfs")]
-position = Vector2(-14, -110)
+position = Vector2(176, 15)
 
 [node name="DestructiblePeg4" parent="pegs" unique_id=31807704 instance=ExtResource("4_jyhfs")]
-position = Vector2(15, -78)
+position = Vector2(205, 47)
 
 [node name="DestructiblePeg5" parent="pegs" unique_id=1809753087 instance=ExtResource("4_jyhfs")]
 position = Vector2(134, -149)
 
 [node name="DestructiblePeg6" parent="pegs" unique_id=1506844579 instance=ExtResource("4_jyhfs")]
-position = Vector2(132, -177)
+position = Vector2(278, -33)
 
 [node name="DestructiblePeg7" parent="pegs" unique_id=1876940873 instance=ExtResource("4_jyhfs")]
-position = Vector2(124, -105)
+position = Vector2(314, 20)
 
 [node name="DestructiblePeg8" parent="pegs" unique_id=1296707149 instance=ExtResource("4_jyhfs")]
-position = Vector2(105, -79)
+position = Vector2(295, 46)
 
 [node name="DestructiblePeg9" parent="pegs" unique_id=1640192018 instance=ExtResource("4_jyhfs")]
-position = Vector2(59, 184)
+position = Vector2(361, 369)
 
 [node name="DestructiblePeg10" parent="pegs" unique_id=1232251046 instance=ExtResource("4_jyhfs")]
-position = Vector2(-133, 68)
+position = Vector2(352, 4)
 
 [node name="DestructiblePeg11" parent="pegs" unique_id=1448806732 instance=ExtResource("4_jyhfs")]
-position = Vector2(-158, -81)
+position = Vector2(327, -145)
 
 [node name="DestructiblePeg12" parent="pegs" unique_id=1061093154 instance=ExtResource("4_jyhfs")]
-position = Vector2(-45, 52)
+position = Vector2(440, -12)
 
 [node name="DestructiblePeg13" parent="pegs" unique_id=1776647246 instance=ExtResource("4_jyhfs")]
-position = Vector2(66, 82)
+position = Vector2(203, 295)
 
 [node name="DestructiblePeg14" parent="pegs" unique_id=1193915899 instance=ExtResource("4_jyhfs")]
-position = Vector2(39, -90)
+position = Vector2(229, 35)
 
 [node name="DestructiblePeg15" parent="pegs" unique_id=109037163 instance=ExtResource("4_jyhfs")]
 position = Vector2(189, 159)
 
 [node name="DestructiblePeg16" parent="pegs" unique_id=229295601 instance=ExtResource("4_jyhfs")]
-position = Vector2(22, 175)
+position = Vector2(338, 109)
 
 [node name="DestructiblePeg17" parent="pegs" unique_id=2049077256 instance=ExtResource("4_jyhfs")]
-position = Vector2(-58, 130)
+position = Vector2(427, 66)
 
 [node name="DestructiblePeg18" parent="pegs" unique_id=575386422 instance=ExtResource("4_jyhfs")]
 position = Vector2(109, 128)
 
 [node name="DestructiblePeg19" parent="pegs" unique_id=42655106 instance=ExtResource("4_jyhfs")]
-position = Vector2(81, -100)
+position = Vector2(271, 25)
 
 [node name="DestructiblePeg20" parent="pegs" unique_id=28302140 instance=ExtResource("4_jyhfs")]
-position = Vector2(-123, -16)
+position = Vector2(362, -80)
 
 [node name="DestructiblePeg21" parent="pegs" unique_id=1731305513 instance=ExtResource("4_jyhfs")]
 position = Vector2(290, 283)
 
 [node name="DestructiblePeg22" parent="pegs" unique_id=746891447 instance=ExtResource("4_jyhfs")]
-position = Vector2(2, 308)
+position = Vector2(15, 398)
 
 [node name="DestructiblePeg23" parent="pegs" unique_id=596950605 instance=ExtResource("4_jyhfs")]
-position = Vector2(-129, 231)
+position = Vector2(504, 199)
 
 [node name="DestructiblePeg24" parent="pegs" unique_id=150331615 instance=ExtResource("4_jyhfs")]
-position = Vector2(118, 261)
+position = Vector2(131, 351)
 
 [node name="DestructiblePeg25" parent="pegs" unique_id=2147311641 instance=ExtResource("4_jyhfs")]
-position = Vector2(-3, -194)
+position = Vector2(402, -48)
 
 [node name="DestructiblePeg26" parent="pegs" unique_id=1733051331 instance=ExtResource("4_jyhfs")]
-position = Vector2(-13, -140)
+position = Vector2(392, 6)
 
 [node name="DestructiblePeg27" parent="pegs" unique_id=1946058450 instance=ExtResource("4_jyhfs")]
-position = Vector2(-4, -172)
+position = Vector2(401, -26)
 
 [node name="DestructiblePeg28" parent="pegs" unique_id=1699720659 instance=ExtResource("4_jyhfs")]
-position = Vector2(96, -189)
+position = Vector2(242, -45)
 
 [node name="DestructiblePeg29" parent="pegs" unique_id=1045156305 instance=ExtResource("4_jyhfs")]
 position = Vector2(244, -156)
 
 [node name="DestructiblePeg30" parent="pegs" unique_id=2128286579 instance=ExtResource("4_jyhfs")]
-position = Vector2(67, -205)
+position = Vector2(213, -61)
 
 [node name="DestructiblePeg31" parent="pegs" unique_id=374580509 instance=ExtResource("4_jyhfs")]
-position = Vector2(35, -197)
+position = Vector2(440, -51)
 
 [node name="DestructiblePeg32" parent="pegs" unique_id=1256801200 instance=ExtResource("4_jyhfs")]
-position = Vector2(-175, -197)
+position = Vector2(310, -261)
 
 [node name="DestructiblePeg33" parent="pegs" unique_id=322573258 instance=ExtResource("4_jyhfs")]
 position = Vector2(263, -214)

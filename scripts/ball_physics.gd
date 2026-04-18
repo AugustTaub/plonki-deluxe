@@ -2,7 +2,7 @@ extends Node2D
 
 class_name Ball
 
-var gravity: float = 500 # gravity in px per sec
+var gravity: float = 900 # gravity in px per sec
 
 var bounciness: float = 0.95 # how much velocity is retained with each bounce 0-1
 
@@ -10,7 +10,7 @@ var max_bounces_per_frame: int = 10
 var has_bounced_this_frame: bool = false
 
 
-var slipperiness: float = 1 # how similar the slop has to be to the velocity initiate a slide 0-2
+var slipperiness: float = 1.5 # how similar the slop has to be to the velocity initiate a slide 0-2
 var is_sliding: bool = false
 var slide_drag: float = 2500
 
@@ -41,7 +41,7 @@ func _ready():
 		start_y_target_dict[ray] = ray.target_position.y
 	
 	
-	velocity = Vector2(0, 5000000)
+	velocity = Vector2(0, 500)
 
 
 func _physics_process(delta):
@@ -169,7 +169,6 @@ func run_coll_check(move_vec: Vector2):
 	
 	
 	
-	
 	# get bounce direction
 	bounce_vec = move_vec.bounce(average_hit_vec.normalized()).normalized()
 	
@@ -187,7 +186,9 @@ func run_coll_check(move_vec: Vector2):
 		set_is_sliding(true)
 		# going along the surface and slightly up so the ball doesnt drag along it
 		var slide_velocity = velocity - average_hit_vec * velocity.dot(average_hit_vec)
-		slide_velocity += average_hit_vec * 20.0
+		slide_velocity += average_hit_vec * 50000/velocity.length()
+		print(velocity.length())
+		
 		
 		queue_pegs_for_destruction(hit_pegs)
 		result.bounce_vector = slide_velocity.normalized()
@@ -195,8 +196,8 @@ func run_coll_check(move_vec: Vector2):
 		result.is_valid = true
 		return result
 		
-	else:
-		set_is_sliding(false)
+	#else:
+		#set_is_sliding(false)
 	
 	queue_pegs_for_destruction(hit_pegs)
 	result.bounce_vector = bounce_vec
@@ -210,7 +211,7 @@ func perform_collision(collision_data: CollData,delta: float):
 	var speed = velocity.length()
 	
 	if is_sliding:
-		speed -= slide_drag * delta
+		#speed -= slide_drag * delta
 		speed = clampf(speed,1,5000)
 	
 	velocity = collision_data.bounce_vector.normalized() * speed
