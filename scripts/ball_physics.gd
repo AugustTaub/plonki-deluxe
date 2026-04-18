@@ -6,20 +6,38 @@ var gravity: float = 900 # gravity in px per sec
 
 var bounciness: float = 0.95 # how much velocity is retained with each bounce 0-1
 
-var max_bounces_per_frame: int = 10
+var max_bounces_per_frame: int = 3
 var has_bounced_this_frame: bool = false
 
-
-var slipperiness: float = 1.5 # how similar the slop has to be to the velocity initiate a slide 0-2
+var slipperiness: float = 1.5 # how similar the slop has to be to the velocity initiate a slide 0-2 (0 is no slide)
 var is_sliding: bool = false
-var slide_drag: float = 2500
 
 var air_time: float = 0
 
 var velocity: Vector2 = Vector2.ZERO
 
+
 var coll_ray_arr: Array[RayCast2D]
 var start_y_target_dict: Dictionary[RayCast2D, float]
+
+var last_frame_pos: Vector2 = Vector2.ZERO
+
+var inactive_time: float = 0
+
+var disabled: bool = false
+
+@onready var coll_rays_node: Node2D = $coll_rays
+@onready var ball_sprite_node: Node2D = $ball_sprite
+
+# overwritten every frame
+var _hit_normal_dict: Dictionary = {}
+var _hit_point_dict: Dictionary = {}
+var _hit_pegs: Array[DestructiblePeg] = []
+
+var _coll_data: CollData = CollData.new()
+
+
+
 
 class CollData extends RefCounted:
 	var is_valid: bool
@@ -33,7 +51,7 @@ class CollData extends RefCounted:
 
 
 func _ready():
-	for child in $coll_rays.get_children():
+	for child in coll_rays_node.get_children():
 		if child is RayCast2D:
 			coll_ray_arr.append(child)
 	
@@ -41,10 +59,12 @@ func _ready():
 		start_y_target_dict[ray] = ray.target_position.y
 	
 	
-	velocity = Vector2(0, 500)
+	velocity = Vector2(0,0)
 
 
 func _physics_process(delta):
+	
+	if disabled: return
 	
 	has_bounced_this_frame = false
 	
@@ -78,15 +98,25 @@ func _physics_process(delta):
 	
 	# Apply straight movement if there has been no bounce
 	if not has_bounced_this_frame:
-		
 		var final_move_vec: Vector2 = velocity * delta
 		global_position += final_move_vec
-
+	
+	
+	var dist_to_last_frame: float = global_position.distance_to(last_frame_pos)
+	
+	if dist_to_last_frame <= 1:
+		inactive_time += delta
+		if inactive_time > 10:
+			disabled = true
+			inactive_time = 0
+	
+	last_frame_pos = global_position
 
 func run_coll_check(move_vec: Vector2):
-	var hit_normal_dict: Dictionary[Area2D, Array]
-	var hit_point_dict: Dictionary[Area2D, Array]
-	var hit_pegs: Array[DestructiblePeg] = []
+	
+	_hit_normal_dict.clear()
+	_hit_point_dict.clear()
+	_hit_pegs.clear()
 	
 	var hit_vec_sum: Vector2 = Vector2.ZERO
 	var average_hit_vec: Vector2 = Vector2.ZERO
@@ -97,12 +127,9 @@ func run_coll_check(move_vec: Vector2):
 	var bounce_vec: Vector2 = Vector2.ZERO
 	var collision_point: Vector2 = Vector2.ZERO
 	
-	var result = CollData.new()
-	
-	
 	
 	# Point rays in movement direction
-	$coll_rays.look_at(global_position + move_vec.rotated(deg_to_rad(-90)))
+	coll_rays_node.look_at(global_position + move_vec.rotated(deg_to_rad(-90)))
 	
 	# Extend ray length based on movement distance
 	for ray in coll_ray_arr:
@@ -117,43 +144,43 @@ func run_coll_check(move_vec: Vector2):
 			var coll_normal: Vector2 = coll_ray.get_collision_normal()
 			var coll_point: Vector2 = coll_ray.get_collision_point()
 			
-			if hit_area is DestructiblePeg and not hit_pegs.has(hit_area):
-				hit_pegs.append(hit_area)
+			if hit_area is DestructiblePeg and not _hit_pegs.has(hit_area):
+				_hit_pegs.append(hit_area)
 			
-			if hit_normal_dict.has(hit_area):
-				hit_normal_dict[hit_area].append(coll_normal)
+			if _hit_normal_dict.has(hit_area):
+				_hit_normal_dict[hit_area].append(coll_normal)
 			else:
-				hit_normal_dict[hit_area] = [coll_normal]
+				_hit_normal_dict[hit_area] = [coll_normal]
 			
-			if hit_point_dict.has(hit_area):
-				hit_point_dict[hit_area].append(coll_point)
+			if _hit_point_dict.has(hit_area):
+				_hit_point_dict[hit_area].append(coll_point)
 			else:
-				hit_point_dict[hit_area] = [coll_point]
+				_hit_point_dict[hit_area] = [coll_point]
 	
-	if hit_normal_dict.is_empty() or hit_point_dict.is_empty():
-		result.is_valid = false
-		#print("Collision Error! hit_normal_dict.is_empty() or hit_point_dict.is_empty()")
-		return result
+	if _hit_normal_dict.is_empty() or _hit_point_dict.is_empty():
+		_coll_data.is_valid = false
+		#print("Collision Error! _hit_normal_dict.is_empty() or _hit_point_dict.is_empty()")
+		return _coll_data
 	
 	# Average collision normals
-	for key in hit_normal_dict.keys():
-		var arr: Array = hit_normal_dict[key]
+	for key in _hit_normal_dict.keys():
+		var arr: Array = _hit_normal_dict[key]
 		var sum_vec: Vector2 = Vector2.ZERO
 		for vec in arr:
 			sum_vec += vec
 		var average_vec = sum_vec / arr.size()
 		hit_vec_sum += average_vec
 	
-	average_hit_vec = hit_vec_sum / hit_normal_dict.keys().size()
+	average_hit_vec = hit_vec_sum / _hit_normal_dict.keys().size()
 	
 	if average_hit_vec == Vector2.ZERO:
-		result.is_valid = false
+		_coll_data.is_valid = false
 		#print("Collision Error! average_hit_vec == Vector2.ZERO")
-		return result
+		return _coll_data
 	
 	# closest collision point
-	for key in hit_point_dict.keys():
-		var arr: Array = hit_point_dict[key]
+	for key in _hit_point_dict.keys():
+		var arr: Array = _hit_point_dict[key]
 		var sum_vec: Vector2 = Vector2.ZERO
 		for vec in arr:
 			sum_vec += vec
@@ -180,48 +207,49 @@ func run_coll_check(move_vec: Vector2):
 		
 		# dont slide if the ball is already moving the right way
 		if dif_to_vel < 0.01:
-			result.is_valid = false
-			return result
+			_coll_data.is_valid = false
+			return _coll_data
 		
 		set_is_sliding(true)
 		# going along the surface and slightly up so the ball doesnt drag along it
 		var slide_velocity = velocity - average_hit_vec * velocity.dot(average_hit_vec)
 		slide_velocity += average_hit_vec * 50000/velocity.length()
-		print(velocity.length())
 		
 		
-		queue_pegs_for_destruction(hit_pegs)
-		result.bounce_vector = slide_velocity.normalized()
-		result.collision_point = closest_hit_point
-		result.is_valid = true
-		return result
+		queue_pegs_for_destruction(_hit_pegs)
+		_coll_data.bounce_vector = slide_velocity.normalized()
+		_coll_data.collision_point = closest_hit_point
+		_coll_data.is_valid = true
+		return _coll_data
 		
 	#else:
 		#set_is_sliding(false)
 	
-	queue_pegs_for_destruction(hit_pegs)
-	result.bounce_vector = bounce_vec
-	result.collision_point = closest_hit_point
-	result.is_valid = true
-	return result
+	queue_pegs_for_destruction(_hit_pegs)
+	_coll_data.bounce_vector = bounce_vec
+	_coll_data.collision_point = closest_hit_point
+	_coll_data.is_valid = true
+	return _coll_data
 
 func perform_collision(collision_data: CollData,delta: float):
 	if not collision_data.is_valid: return
 	
 	var speed = velocity.length()
 	
-	if is_sliding:
+	#if is_sliding:
 		#speed -= slide_drag * delta
-		speed = clampf(speed,1,5000)
+		#speed = clampf(speed,1,5000)
 	
 	velocity = collision_data.bounce_vector.normalized() * speed
+	
+	#if velocity.length() < 20:
+		#return
 	
 	var coll_pos: Vector2 = collision_data.collision_point - global_position.direction_to(collision_data.collision_point)*15
 	global_position = coll_pos
 	
-	$Line2D.add_point(coll_pos)
-	
-	add_debug_circle(coll_pos)
+	#$Line2D.add_point(coll_pos)
+	#add_debug_circle(coll_pos)
 	
 	if not is_sliding:
 		velocity *= bounciness
@@ -244,9 +272,9 @@ func set_is_sliding(new_is_sliding: bool):
 	is_sliding = new_is_sliding
 	match is_sliding:
 		true:
-			$ball_sprite.modulate = Color.RED
+			ball_sprite_node.modulate = Color.RED
 		false:
-			$ball_sprite.modulate = Color.WHITE
+			ball_sprite_node.modulate = Color.WHITE
 
 
 func add_debug_circle(pos: Vector2, cmodulate: Color = Color.WHITE):
