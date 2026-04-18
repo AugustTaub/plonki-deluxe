@@ -36,7 +36,7 @@ var _hit_pegs: Array[DestructiblePeg] = []
 
 var _coll_data: CollData = CollData.new()
 
-
+var _look_at_vector: Vector2 = Vector2.ZERO
 
 
 class CollData extends RefCounted:
@@ -107,7 +107,7 @@ func _physics_process(delta):
 	if dist_to_last_frame <= 1:
 		inactive_time += delta
 		if inactive_time > 10:
-			disabled = true
+			set_disabled(true)
 			inactive_time = 0
 	
 	last_frame_pos = global_position
@@ -129,7 +129,8 @@ func run_coll_check(move_vec: Vector2):
 	
 	
 	# Point rays in movement direction
-	coll_rays_node.look_at(global_position + move_vec.rotated(deg_to_rad(-90)))
+	_look_at_vector = global_position + move_vec.rotated(-PI/2)
+	coll_rays_node.look_at(_look_at_vector)
 	
 	# Extend ray length based on movement distance
 	for ray in coll_ray_arr:
@@ -187,7 +188,7 @@ func run_coll_check(move_vec: Vector2):
 		var object_average_pos = sum_vec / arr.size()
 		var dist_to_object_average: float = global_position.distance_to(object_average_pos)
 		
-		add_debug_circle(object_average_pos,Color.REBECCA_PURPLE)
+		#add_debug_circle(object_average_pos,Color.REBECCA_PURPLE)
 		
 		if dist_to_object_average < curr_closest_hit_dist:
 			curr_closest_hit_dist = dist_to_object_average
@@ -275,6 +276,15 @@ func set_is_sliding(new_is_sliding: bool):
 			ball_sprite_node.modulate = Color.RED
 		false:
 			ball_sprite_node.modulate = Color.WHITE
+
+func set_disabled(new_disabled: bool):
+	disabled = new_disabled
+	match disabled:
+		true:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+			hide()
+		false:
+			show()
+
 
 
 func add_debug_circle(pos: Vector2, cmodulate: Color = Color.WHITE):

@@ -20,12 +20,12 @@ func get_ball():
 		return
 	
 	var first_child: Ball = get_child(0)
-	first_child.disabled = false
+	first_child.set_disabled(false)
 	first_child.reparent(get_tree().root)
 	first_child.global_position = Vector2.ZERO
 	return first_child
 
 func return_ball(returned_ball: Ball):
 	returned_ball.reparent(self)
-	returned_ball.disabled = true
+	returned_ball.set_disabled(true)
 	returned_ball.global_position = far_away_pos
