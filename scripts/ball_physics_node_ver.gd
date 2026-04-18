@@ -266,7 +266,7 @@ func is_in_air() -> bool:
 
 func queue_pegs_for_destruction(pegs: Array[DestructiblePeg]):
 	for peg in pegs:
-		peg.queue_destruction(self)
+		peg.queue_destruction()
 
 
 func set_is_sliding(new_is_sliding: bool):

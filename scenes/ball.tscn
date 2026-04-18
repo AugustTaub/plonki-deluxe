@@ -1,30 +1,7 @@
 [gd_scene format=3 uid="uid://bxfextcfhtqvk"]
 
-[ext_resource type="Script" uid="uid://bnmoi1dowi5rn" path="res://scripts/ball_physics.gd" id="1_7s4qf"]
-
-[sub_resource type="Gradient" id="Gradient_n1dj2"]
-interpolation_mode = 1
-offsets = PackedFloat32Array(0.12048193, 0.5301205, 0.6204819, 0.686747)
-colors = PackedColorArray(0.54896253, 0.54896265, 0.54896235, 1, 0.24115604, 0.24115607, 0.2411559, 1, 0, 0, 0, 1, 0, 0, 0, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_7s4qf"]
-gradient = SubResource("Gradient_n1dj2")
-width = 32
-height = 32
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="Gradient" id="Gradient_7s4qf"]
-interpolation_mode = 1
-offsets = PackedFloat32Array(0.5060241, 0.6626506)
-colors = PackedColorArray(1, 1, 1, 0.6862745, 0, 0, 0, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_cxlvu"]
-gradient = SubResource("Gradient_7s4qf")
-width = 12
-height = 12
-fill = 1
-fill_from = Vector2(0.5, 0.5)
+[ext_resource type="Script" uid="uid://bnmoi1dowi5rn" path="res://scripts/ball_physics_node_ver.gd" id="1_7s4qf"]
+[ext_resource type="Texture2D" uid="uid://j0uodtkukcni" path="res://2D/godot_gen_textures/ball.tres" id="2_cxlvu"]
 
 [node name="ball" type="Node2D" unique_id=712663774]
 script = ExtResource("1_7s4qf")
@@ -36,12 +13,7 @@ default_color = Color(1, 1, 1, 0.45882353)
 
 [node name="ball_sprite" type="Sprite2D" parent="." unique_id=1997997334]
 texture_filter = 1
-texture = SubResource("GradientTexture2D_7s4qf")
-
-[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=522999437]
-texture_filter = 1
-position = Vector2(-6, -6)
-texture = SubResource("GradientTexture2D_cxlvu")
+texture = ExtResource("2_cxlvu")
 
 [node name="coll_ray" type="RayCast2D" parent="." unique_id=825287245]
 visible = false

@@ -36,9 +36,10 @@ func _process(delta):
 			destroy()
 
 
-func queue_destruction(destroying_ball: Ball):
-	destruction_queued =  true
-	perpetrator_ball = destroying_ball
+func queue_destruction():
+	destroy()
+
+
 
 func destroy():
 	change_peg_state(peg_state.DEAD)
@@ -58,25 +59,19 @@ func exit_peg_state(exit_state: peg_state):
 		peg_state.DEFAULT:
 			pass
 		peg_state.DEAD:
-			$peg_sprite.texture = preloaded_dead_tex
-			$peg_coll_shape.disabled = true
+			$peg_sprite.texture = preloaded_alive_tex
+			$peg_coll_shape.disabled = false
 		peg_state.REANIMATING:
 			pass
 
 func enter_peg_state(enter_state: peg_state):
 	match enter_state:
 		peg_state.DEFAULT:
-			$peg_sprite.texture = preloaded_alive_tex
-			$peg_coll_shape.disabled = false
-		peg_state.DEAD:
 			pass
+		peg_state.DEAD:
+			$peg_sprite.texture = preloaded_dead_tex
+			$peg_coll_shape.disabled = true
 		peg_state.REANIMATING:
 			pass
 
 #endregion
-
-
-func _on_area_exited(area):
-	var area_parent = area.get_parent()
-	if area_parent is Ball:
-		destroy()

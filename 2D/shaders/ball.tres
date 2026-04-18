@@ -1,0 +1,14 @@
+[gd_resource type="VisualShader" format=3 uid="uid://cuhas6ut2cf4w"]
+
+[ext_resource type="Texture2D" uid="uid://j0uodtkukcni" path="res://2D/godot_gen_textures/ball.tres" id="1_cpubg"]
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_167qn"]
+expanded_output_ports = [0]
+texture = ExtResource("1_cpubg")
+
+[resource]
+mode = 1
+flags/light_only = false
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_167qn")
+nodes/fragment/2/position = Vector2(-120, 180)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 2, 4, 0, 1)

@@ -16,7 +16,6 @@ func _physics_process(delta):
 	$pivot.rotate(-PI/2)
 	
 	if Input.is_action_just_pressed("fire_ball"):
-		var new_ball: Ball = PreInstanceBallHolder.get_ball()
-		new_ball.global_position = ball_spawn_point.global_position
-		
-		new_ball.velocity = global_position.direction_to(ball_spawn_point.global_position) * start_speed
+		var pos = ball_spawn_point.global_position
+		var vel = global_position.direction_to(ball_spawn_point.global_position) * start_speed
+		SignalBus.spawn_ball.emit(pos,vel)

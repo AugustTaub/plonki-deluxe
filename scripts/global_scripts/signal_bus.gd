@@ -1,3 +1,3 @@
 extends Node
 
-signal get_pre_instanced_ball()
+signal spawn_ball(ball_pos: Vector2, ball_vel: Vector2)
