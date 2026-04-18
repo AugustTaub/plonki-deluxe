@@ -6,9 +6,9 @@ class_name BallManager
 var gravity: float = 900
 var bounciness: float = 0.95
 var max_bounces_per_frame: int = 3
-var slipperiness: float = 1.5
+var slipperiness: float = 1.2
 var ball_radius: int = 16
-
+var spin_sensitivity: float = 1.0/140.0
 
 @export var ball_multimesh: MultiMeshInstance2D
 
@@ -22,6 +22,7 @@ class BallData extends RefCounted:
 	var inactive_time: float = 0.0
 	var is_sliding: bool = false
 	var visual_instance_id: int = -1 
+	var roll_offset: Vector2 = Vector2.ZERO
 
 var active_balls: Array[BallData] = []
 
@@ -42,8 +43,11 @@ func spawn_ball(spawn_pos: Vector2,spawn_vel: Vector2 = Vector2.ZERO):
 	new_ball.last_frame_pos = spawn_pos
 	new_ball.vel = spawn_vel
 	
+	
+	
 	if ball_multimesh and ball_multimesh.multimesh:
 		new_ball.visual_instance_id = active_balls.size()
+	
 	
 	
 	active_balls.append(new_ball)
@@ -61,6 +65,7 @@ func _physics_process(delta):
 
 func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirectSpaceState2D):
 	var has_bounced_this_frame = false
+	
 	
 	# 1. Apply Gravity
 	ball.vel.y += gravity * delta
@@ -98,8 +103,16 @@ func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirec
 			ball.active = false # Disable ball
 	else:
 		ball.inactive_time = 0
-		
+	
 	ball.last_frame_pos = ball.pos
+	
+	
+	
+	ball.roll_offset += ball.vel * delta * spin_sensitivity
+	
+	ball.roll_offset.x = fmod(ball.roll_offset.x, 1.0)
+	ball.roll_offset.y = fmod(ball.roll_offset.y, 1.0)
+	
 
 func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirectSpaceState2D) -> Dictionary:
 	var hit_normals: Array[Vector2] = []
@@ -193,8 +206,16 @@ func update_ball_visuals(ball: BallData):
 	if ball_multimesh and ball.visual_instance_id >= 0:
 		var trans = Transform2D(0, ball.pos)
 		ball_multimesh.multimesh.set_instance_transform_2d(ball.visual_instance_id, trans)
-
+		
 		if ball.is_sliding:
 			ball_multimesh.multimesh.set_instance_color(ball.visual_instance_id, Color.RED)
 		else:
 			ball_multimesh.multimesh.set_instance_color(ball.visual_instance_id, Color.WHITE)
+		
+		var custom_data = Color(ball.roll_offset.x, ball.roll_offset.y, 0.0, 0.0)
+		ball_multimesh.multimesh.set_instance_custom_data(ball.visual_instance_id, custom_data)
+		
+		#var normalized_vel: Vector2 = Vector2(ball.vel.x,ball.vel.y).normalized()
+		#var adj_vel_length: float = clamp(ball.vel.length()/800,-30,30)
+		
+		
