@@ -14,6 +14,7 @@ var curr_peg_state: peg_state = peg_state.DEFAULT
 var preloaded_alive_tex: Texture2D = preload("res://2D/godot_gen_textures/alive_circle_peg.tres")
 var preloaded_dead_tex: Texture2D = preload("res://2D/godot_gen_textures/dead_circle_peg.tres")
 
+var HP: int = 3
 
 
 # Called when the node enters the scene tree for the first time.
@@ -28,12 +29,6 @@ func _process(delta):
 		if destruct_timer >= destruct_timer_length:
 			destroy()
 		
-		if perpetrator_ball == null: 
-			return
-		
-		var dist: float = global_position.distance_to(perpetrator_ball.global_position)
-		if dist > 35:
-			destroy()
 
 
 func queue_destruction():
@@ -61,6 +56,8 @@ func exit_peg_state(exit_state: peg_state):
 		peg_state.DEAD:
 			$peg_sprite.texture = preloaded_alive_tex
 			$peg_coll_shape.disabled = false
+			
+			
 		peg_state.REANIMATING:
 			pass
 
@@ -69,9 +66,13 @@ func enter_peg_state(enter_state: peg_state):
 		peg_state.DEFAULT:
 			pass
 		peg_state.DEAD:
+			
 			$peg_sprite.texture = preloaded_dead_tex
 			$peg_coll_shape.disabled = true
+			
+			change_peg_state(peg_state.REANIMATING)
 		peg_state.REANIMATING:
-			pass
+			await get_tree().create_timer(0.5).timeout
+			change_peg_state(peg_state.DEFAULT)
 
 #endregion

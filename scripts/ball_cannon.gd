@@ -1,9 +1,12 @@
 extends Node2D
 
 
-var start_speed: float = 500
+var start_speed: float = 1000
  
 @onready var ball_spawn_point: Node2D = $pivot/ball_spawn_point
+
+var delta_timer: float = 0
+var shot_interval: float = 0.5
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -12,10 +15,15 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
+	delta_timer += 0.1
+	
 	$pivot.look_at(get_global_mouse_position())
 	$pivot.rotate(-PI/2)
 	
-	if Input.is_action_just_pressed("fire_ball"):
+	#if Input.is_action_just_pressed("fire_ball"):
+	if delta_timer >= shot_interval:
+		delta_timer = 0
 		var pos = ball_spawn_point.global_position
 		var vel = global_position.direction_to(ball_spawn_point.global_position) * start_speed
-		SignalBus.spawn_ball.emit(pos,vel)
+		var size = randi_range(0,BallManager.ball_size.size())
+		SignalBus.spawn_ball.emit(pos,vel,size)

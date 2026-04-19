@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Plonki-Deluxe (Copy)"
+config/name="Plonki-Deluxe"
 run/main_scene="uid://duilo8mjxt5la"
 config/features=PackedStringArray("4.6", "Forward Plus")
 run/max_fps=144
@@ -24,7 +24,12 @@ SignalBus="*uid://djee380ynnny2"
 [display]
 
 window/size/viewport_height=864
+window/stretch/mode="canvas_items"
 window/vsync/vsync_mode=0
+
+[global_group]
+
+ball_kill=""
 
 [input]
 

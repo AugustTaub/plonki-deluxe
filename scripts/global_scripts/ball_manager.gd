@@ -7,10 +7,18 @@ var gravity: float = 900
 var bounciness: float = 0.95
 var max_bounces_per_frame: int = 3
 var slipperiness: float = 1.2
-var ball_radius: int = 16
 var spin_sensitivity: float = 1.0/140.0
 
-@export var ball_multimesh: MultiMeshInstance2D
+var max_number_of_balls: int = 300
+
+### EXPORT VARS
+@export var standard_ball_multimesh: MultiMeshInstance2D
+@export var small_ball_multimesh: MultiMeshInstance2D
+@export var big_ball_multimesh: MultiMeshInstance2D
+
+### ENUM
+enum ball_size{SMALL,STANDARD,BIG}
+
 
 ### DATA STRUCTURE
 class BallData extends RefCounted:
@@ -23,35 +31,76 @@ class BallData extends RefCounted:
 	var is_sliding: bool = false
 	var visual_instance_id: int = -1 
 	var roll_offset: Vector2 = Vector2.ZERO
+	var size: ball_size = ball_size.STANDARD
+	var radius: int = 16
 
+###
 var active_balls: Array[BallData] = []
-
-var ray_offsets: Array[Vector2] = [
-	Vector2(-ball_radius, 0), # Left
-	Vector2(0, 0),  # Center
-	Vector2(ball_radius, 0)   # Right
-]
 
 func _ready():
 	
 	SignalBus.spawn_ball.connect(spawn_ball)
+	
+	standard_ball_multimesh.multimesh.instance_count = max_number_of_balls
+	for i in range(max_number_of_balls):
+		standard_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+	
+	small_ball_multimesh.multimesh.instance_count = max_number_of_balls
+	for i in range(max_number_of_balls):
+		small_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+	
+	big_ball_multimesh.multimesh.instance_count = max_number_of_balls
+	for i in range(max_number_of_balls):
+		big_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
 
 
-func spawn_ball(spawn_pos: Vector2,spawn_vel: Vector2 = Vector2.ZERO):
+func spawn_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO, size: ball_size = ball_size.STANDARD):
+	
+	for ball in active_balls:
+		if not ball.active and ball.size == size:
+			# Revive ball if therers on of the same size available
+			ball.active = true
+			ball.pos = spawn_pos
+			ball.last_frame_pos = spawn_pos
+			ball.vel = spawn_vel
+			ball.air_time = 0.0
+			ball.inactive_time = 0.0
+			ball.is_sliding = false
+			ball.roll_offset = Vector2.ZERO
+			return
+	
+	# If no dead balls make new one
 	var new_ball = BallData.new()
+	var ball_multimesh: MultiMeshInstance2D = standard_ball_multimesh
+	
+	match size:
+		ball_size.SMALL:
+			ball_multimesh = small_ball_multimesh
+			new_ball.radius = 8
+		ball_size.STANDARD:
+			ball_multimesh = standard_ball_multimesh
+			new_ball.radius = 16
+		ball_size.BIG:
+			ball_multimesh = big_ball_multimesh
+			new_ball.radius = 32
+	
+	
+	var size_count = 0
+	for b in active_balls:
+		if b.size == size:
+			size_count += 1
+	
+	if size_count >= ball_multimesh.multimesh.instance_count:
+		push_warning("Visual instance count for this size too large!")
+		return
+	
 	new_ball.pos = spawn_pos
 	new_ball.last_frame_pos = spawn_pos
 	new_ball.vel = spawn_vel
-	
-	
-	
-	if ball_multimesh and ball_multimesh.multimesh:
-		new_ball.visual_instance_id = active_balls.size()
-	
-	
+	new_ball.size = size
+	new_ball.visual_instance_id = size_count
 	
 	active_balls.append(new_ball)
-
 
 func _physics_process(delta):
 	var space_state = get_world_2d().direct_space_state
@@ -124,6 +173,24 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 	var query = PhysicsRayQueryParameters2D.new()
 	query.collide_with_areas = true
 	
+	var ray_offsets: Array
+	# more rays for bigger balls, so pegs cant go inbetween rays
+	if ball.size == ball_size.BIG:
+		ray_offsets= [
+		Vector2(-ball.radius, 0), # Left
+		Vector2(-ball.radius/2.0, 0), # Left
+		Vector2(0, 0),  # Center
+		Vector2(ball.radius/2.0, 0),   # Right
+		Vector2(ball.radius, 0)   # Right
+		]
+	else:
+		ray_offsets= [
+		Vector2(-ball.radius, 0), # Left
+		Vector2(0, 0),  # Center
+		Vector2(ball.radius, 0)   # Right
+		]
+	
+	
 	for offset in ray_offsets:
 		# Rotate offset to match movement direction
 		var rotated_offset = offset.rotated(ray_rot)
@@ -139,10 +206,14 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 			hit_normals.append(result.normal)
 			hit_points.append(result.position)
 			
-			var collider = result.collider
+			var collider: Area2D = result.collider
 			if collider is DestructiblePeg and not hit_pegs.has(collider):
 				hit_pegs.append(collider)
-				
+			
+			if collider.is_in_group("ball_kill"):
+				ball.active = false
+			
+			
 	if hit_normals.is_empty():
 		return {"is_valid": false}
 		
@@ -183,7 +254,7 @@ func perform_collision(ball: BallData, data: Dictionary):
 	var speed = ball.vel.length()
 	ball.vel = data.bounce_vector * speed
 	
-	var coll_pos = data.collision_point - ball.pos.direction_to(data.collision_point) * ball_radius
+	var coll_pos = data.collision_point - ball.pos.direction_to(data.collision_point) * ball.radius
 	ball.pos = coll_pos
 	
 	if not ball.is_sliding:
@@ -203,19 +274,33 @@ func queue_pegs_for_destruction(pegs: Array[Node2D]):
 			peg.queue_destruction() 
 
 func update_ball_visuals(ball: BallData):
+	var ball_multimesh: MultiMeshInstance2D
+	
+	match ball.size:
+		ball_size.SMALL:
+			ball_multimesh = small_ball_multimesh
+		ball_size.STANDARD:
+			ball_multimesh = standard_ball_multimesh
+		ball_size.BIG:
+			ball_multimesh = big_ball_multimesh
+	
 	if ball_multimesh and ball.visual_instance_id >= 0:
+		var multmesh_i: int = ball.visual_instance_id
+		
+		# if ball is dead hide it, by setting its scale to 0
+		if not ball.active:
+			ball_multimesh.multimesh.set_instance_transform_2d(multmesh_i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+			return 
+		
+		# draw active ball
 		var trans = Transform2D(0, ball.pos)
-		ball_multimesh.multimesh.set_instance_transform_2d(ball.visual_instance_id, trans)
+		ball_multimesh.multimesh.set_instance_transform_2d(multmesh_i, trans)
 		
+		### BUG: change shader to use COLOR so this works
 		if ball.is_sliding:
-			ball_multimesh.multimesh.set_instance_color(ball.visual_instance_id, Color.RED)
+			ball_multimesh.multimesh.set_instance_color(multmesh_i, Color.RED)
 		else:
-			ball_multimesh.multimesh.set_instance_color(ball.visual_instance_id, Color.WHITE)
+			ball_multimesh.multimesh.set_instance_color(multmesh_i, Color.WHITE)
 		
-		var custom_data = Color(ball.roll_offset.x, ball.roll_offset.y, 0.0, 0.0)
-		ball_multimesh.multimesh.set_instance_custom_data(ball.visual_instance_id, custom_data)
-		
-		#var normalized_vel: Vector2 = Vector2(ball.vel.x,ball.vel.y).normalized()
-		#var adj_vel_length: float = clamp(ball.vel.length()/800,-30,30)
-		
-		
+		var custom_data = Color(ball.roll_offset.y, ball.roll_offset.x, 0.0, 0.0)
+		ball_multimesh.multimesh.set_instance_custom_data(multmesh_i, custom_data)
