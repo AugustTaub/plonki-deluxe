@@ -15,7 +15,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	delta_timer += 0.1
+	delta_timer += delta
 	
 	$pivot.look_at(get_global_mouse_position())
 	$pivot.rotate(-PI/2)
@@ -25,5 +25,5 @@ func _physics_process(delta):
 		delta_timer = 0
 		var pos = ball_spawn_point.global_position
 		var vel = global_position.direction_to(ball_spawn_point.global_position) * start_speed
-		var size = randi_range(0,BallManager.ball_size.size())
+		var size = 1#randi_range(0,BallManager.ball_size.size())
 		SignalBus.spawn_ball.emit(pos,vel,size)

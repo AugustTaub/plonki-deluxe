@@ -16,6 +16,9 @@ var max_number_of_balls: int = 300
 @export var small_ball_multimesh: MultiMeshInstance2D
 @export var big_ball_multimesh: MultiMeshInstance2D
 
+@export_category("shadow multimeshes")
+@export var standard_shadow_multimesh: MultiMeshInstance2D
+
 ### ENUM
 enum ball_size{SMALL,STANDARD,BIG}
 
@@ -52,6 +55,10 @@ func _ready():
 	big_ball_multimesh.multimesh.instance_count = max_number_of_balls
 	for i in range(max_number_of_balls):
 		big_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+	
+	standard_shadow_multimesh.multimesh.instance_count = max_number_of_balls
+	for i in range(max_number_of_balls):
+		standard_shadow_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
 
 
 func spawn_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO, size: ball_size = ball_size.STANDARD):
@@ -295,6 +302,18 @@ func update_ball_visuals(ball: BallData):
 		# draw active ball
 		var trans = Transform2D(0, ball.pos)
 		ball_multimesh.multimesh.set_instance_transform_2d(multmesh_i, trans)
+		
+		# draw follow shadow
+		if ball.size == ball_size.STANDARD:
+			
+			var s_vel: Vector2 = ball.vel * get_physics_process_delta_time() * 0.025
+			
+			var s_data = Color(-s_vel.x,s_vel.y,0)
+			standard_shadow_multimesh.multimesh.set_instance_custom_data(multmesh_i, s_data)
+			
+			var s_trans = Transform2D(0, ball.pos - ball.vel * get_physics_process_delta_time())
+			standard_shadow_multimesh.multimesh.set_instance_transform_2d(multmesh_i, s_trans)
+		
 		
 		### BUG: change shader to use COLOR so this works
 		if ball.is_sliding:
