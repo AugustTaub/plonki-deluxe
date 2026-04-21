@@ -49,7 +49,7 @@ var simulated_positions: Array[Vector2]
 var delta_timer: float = 0
 var mouse_has_moved_this_frame: bool = false
 var last_frame_mouse_pos: Vector2 = Vector2.ZERO
-var sim_ball_point_distribution: int = 5
+var sim_ball_point_distribution: int = 2
 
 
 func _ready():
@@ -207,44 +207,47 @@ func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirec
 	
 
 func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirectSpaceState2D) -> Dictionary:
-	var hit_normals: Array[Vector2] = []
-	var hit_points: Array[Vector2] = []
 	var hit_pegs: Array[Node2D] = []
+	
+	# Track the absolute closest hit from our parallel sweeps
+	var closest_hit_dist: float = INF
+	var closest_hit_point: Vector2 = Vector2.ZERO
+	var hit_something: bool = false
+	var has_hit_peg: bool = false
+	
+	var closest_collider: Node2D
 	
 	var ray_rot = move_vec.angle() - (PI/2)
 	
 	var query = PhysicsRayQueryParameters2D.new()
 	query.collide_with_areas = true
 	
-	
 	# more rays for bigger balls, so pegs cant go inbetween rays
 	# its still really buggy for anything bigger than 32 though
-	
 	if ball.radius >= 20 and ball.radius <= 40: #big ball
-		ball.ray_offsets= [
-		Vector2(-ball.radius, 0), # Left
-		Vector2(-ball.radius/2.0, 0), # Left
-		Vector2(0, ball.radius),  # Center
-		Vector2(ball.radius/2.0, 0),   # Right
-		Vector2(ball.radius, 0)   # Right
+		ball.ray_offsets = [
+			Vector2(-ball.radius, 0), # Left
+			Vector2(-ball.radius/2.0, 0), # Left
+			Vector2(0, ball.radius),  # Center
+			Vector2(ball.radius/2.0, 0),   # Right
+			Vector2(ball.radius, 0)   # Right
 		]
 	elif ball.radius > 40: #huuuge ball
-		ball.ray_offsets= [
-		Vector2(-ball.radius, 0), # Left
-		Vector2(-ball.radius*(1.0/3.0), 0), # Left
-		Vector2(-ball.radius*(2.0/3.0), 0), # Left
-		Vector2(0, ball.radius),  # Center
-		Vector2(ball.radius*(1.0/3.0), 0),   # Right
-		Vector2(ball.radius*(2.0/3.0), 0),   # Right
-		Vector2(ball.radius, 0)   # Right
+		ball.ray_offsets = [
+			Vector2(-ball.radius, 0), # Left
+			Vector2(-ball.radius*(1.0/3.0), 0), # Left
+			Vector2(-ball.radius*(2.0/3.0), 0), # Left
+			Vector2(0, ball.radius),  # Center
+			Vector2(ball.radius*(1.0/3.0), 0),   # Right
+			Vector2(ball.radius*(2.0/3.0), 0),   # Right
+			Vector2(ball.radius, 0)   # Right
 		]
 	else: #normal ball
-		ball.ray_offsets= [
-		Vector2(-ball.radius, 0), # Left
-		Vector2(0, ball.radius),  # Center
-		Vector2(ball.radius, 0)   # Right
+		ball.ray_offsets = [
+			Vector2(-ball.radius, 0), # Left
+			Vector2(0, ball.radius),  # Center
+			Vector2(ball.radius, 0)   # Right
 		]
-	
 	
 	for offset in ball.ray_offsets:
 		# Rotate offset to match movement direction
@@ -258,29 +261,47 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 		var result = space_state.intersect_ray(query)
 		
 		if result:
-			hit_normals.append(result.normal)
-			hit_points.append(result.position)
+			hit_something = true
+			
+			var dist = ball.pos.distance_squared_to(result.position)
+			if dist < closest_hit_dist:
+				closest_hit_dist = dist
+				closest_hit_point = result.position
 			
 			var collider: Area2D = result.collider
+			closest_collider = collider
 			if collider is DestructiblePeg and not hit_pegs.has(collider):
 				hit_pegs.append(collider)
+				has_hit_peg = true
 			
 			if collider.is_in_group("ball_kill"):
 				ball.active = false
 			
-			
-	if hit_normals.is_empty():
+	if not hit_something:
 		return {"is_valid": false}
-		
-	# Calculate Averages
-	var avg_normal = Vector2.ZERO
-	for n in hit_normals: avg_normal += n
-	avg_normal = (avg_normal / hit_normals.size()).normalized()
 	
-	var closest_hit_point = hit_points[0] # Simplified for performance: just grab the first or average
 	
-	# Bouncing Math
-	var bounce_vec = move_vec.bounce(avg_normal).normalized()
+	# different logic here because the first approach only works for small colliders with simple shapes (pegs)
+	if has_hit_peg:
+		# Cast  ray from the ball center to the found collider
+		query.from = ball.pos
+		query.to = closest_collider.global_position
+	else:
+		var dir_to_hit = ball.pos.direction_to(closest_hit_point)
+		query.from = ball.pos
+		query.to = closest_hit_point + (dir_to_hit * 2.0)
+	
+	var final_result = space_state.intersect_ray(query)
+	var target_normal = Vector2.ZERO
+	
+	if final_result:
+		target_normal = final_result.normal
+		closest_hit_point = final_result.position
+	else:
+		# Fallback normal
+		target_normal = -move_vec.normalized()
+	
+	var bounce_vec = move_vec.bounce(target_normal).normalized()
 	var dif_to_vel = bounce_vec.distance_to(ball.vel.normalized())
 	
 	if dif_to_vel < slipperiness:
@@ -288,8 +309,8 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 			return {"is_valid": false}
 			
 		ball.is_sliding = true
-		var slide_velocity = ball.vel - avg_normal * ball.vel.dot(avg_normal)
-		slide_velocity += avg_normal * (50000.0 / max(ball.vel.length(), 1.0))
+		var slide_velocity = ball.vel - target_normal * ball.vel.dot(target_normal)
+		slide_velocity += target_normal * (50000.0 / max(ball.vel.length(), 1.0))
 		
 		if not ball.simulated:
 			queue_pegs_for_destruction(hit_pegs)
