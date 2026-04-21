@@ -1,13 +1,15 @@
 shader_type canvas_item;
 
 varying vec2 roll_pos;
+varying float scale;
 
 void vertex() {
     roll_pos = INSTANCE_CUSTOM.xy;
+    scale = INSTANCE_CUSTOM.z;
 }
 
 void fragment() {
-	vec2 p = UV - 0.5;
+	vec2 p = (UV - 0.5) * scale;
 	float r = length(p);
 	
 	if (r > 0.5) {

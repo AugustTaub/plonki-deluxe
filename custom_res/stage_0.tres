@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="StageResource" format=3 uid="uid://b4gy7863583he"]
+
+[ext_resource type="Script" uid="uid://dfl3oi2nhq41y" path="res://scripts/stage_res.gd" id="1_vyphw"]
+[ext_resource type="PackedScene" uid="uid://c5lcajojkf1id" path="res://scenes/stages/fall_back.tscn" id="2_fc3ak"]
+
+[resource]
+script = ExtResource("1_vyphw")
+metadata/_custom_type_script = "uid://dfl3oi2nhq41y"
