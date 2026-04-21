@@ -4,19 +4,16 @@
 [ext_resource type="Texture2D" uid="uid://cvqhgtudil8lp" path="res://2D/godot_gen_textures/alive_rect_peg.tres" id="2_e6lef"]
 [ext_resource type="Texture2D" uid="uid://com7mgsdnhi3g" path="res://2D/godot_gen_textures/dead_rect_peg.tres" id="3_qnma7"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1f7cw"]
-size = Vector2(40, 20)
-
 [node name="Node2D" type="Area2D" unique_id=1423066092 node_paths=PackedStringArray("peg_sprite", "peg_coll_shape")]
 script = ExtResource("1_1f7cw")
 peg_sprite = NodePath("Polygon2D2")
-peg_coll_shape = NodePath("CollisionShape2D")
+peg_coll_shape = NodePath("CollisionPolygon2D")
 preloaded_alive_tex = ExtResource("2_e6lef")
 preloaded_dead_tex = ExtResource("3_qnma7")
 metadata/_custom_type_script = "uid://dlyva8iecj0md"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=614623303]
-shape = SubResource("RectangleShape2D_1f7cw")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=400368116]
+polygon = PackedVector2Array(-20, -8, -20, 8, -17.858822, 9.999999, 17.634506, 9.999999, 20.000004, 7.572444, 20, -8, 17.553288, -10, -18, -10)
 
 [node name="Polygon2D2" type="Polygon2D" parent="." unique_id=1041700422]
 texture = ExtResource("2_e6lef")

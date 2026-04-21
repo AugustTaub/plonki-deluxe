@@ -29,6 +29,7 @@ class BallData extends RefCounted:
 	var visual_instance_id: int = -1 
 	var roll_offset: Vector2 = Vector2.ZERO
 	var radius: float = 16
+	var vis_scale: float = 1.0
 
 ###
 var active_balls: Array[BallData] = []
@@ -90,8 +91,7 @@ func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirec
 	
 	var has_bounced_this_frame = false
 	
-	# Apply Gravity
-	ball.vel.y += gravity * delta
+	
 	var move_vec: Vector2 = ball.vel * delta
 	
 	# Check Air Time
@@ -111,7 +111,9 @@ func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirec
 			has_bounced_this_frame = true
 			perform_collision(ball, coll_result)
 			# Recalculate move_vec for remaining bounces
-			move_vec = ball.vel * delta 
+			move_vec = ball.vel * delta
+			
+			bounce_anim(ball)
 		else:
 			break
 			
@@ -129,9 +131,15 @@ func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirec
 	
 	ball.last_frame_pos = ball.pos
 	
+	
+	
+	
+	# Apply Gravity
+	ball.vel.y += gravity * delta
+	
 	# DEBUG
 	#delta_timer += delta
-	#ball.radius = (sin(delta_timer)+2)*15
+	#ball.vis_scale = (sin(delta_timer)+2)
 	
 	ball.roll_offset += ball.vel * delta * spin_sensitivity
 	
@@ -273,7 +281,7 @@ func update_ball_visuals(ball: BallData):
 			return 
 		
 		# draw active ball
-		var trans = Transform2D(0, ball.pos)
+		var trans = Transform2D(0,ball.vis_scale*Vector2.ONE,0, ball.pos)
 		adjustable_ball_multimesh.multimesh.set_instance_transform_2d(multmesh_i, trans)
 		
 		var custom_data = Color(ball.roll_offset.y, ball.roll_offset.x, ball.radius, 0.0)
@@ -295,3 +303,9 @@ func update_ball_visuals(ball: BallData):
 		else:
 			adjustable_ball_multimesh.multimesh.set_instance_color(multmesh_i, Color.WHITE)
 		
+
+func bounce_anim(anim_ball: BallData):
+	var tween = create_tween()
+	tween.tween_property(anim_ball,"vis_scale",0.8,0.06).set_trans(Tween.TRANS_BOUNCE)
+	tween.tween_property(anim_ball,"vis_scale",1.4,0.02).set_trans(Tween.TRANS_BOUNCE)
+	tween.tween_property(anim_ball,"vis_scale",1.0,0.05)

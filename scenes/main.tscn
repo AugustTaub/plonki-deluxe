@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c6il25nb4y2ql" path="res://scripts/level_control.gd" id="1_sugp2"]
 [ext_resource type="Script" uid="uid://cv54s4540rxoq" path="res://scripts/debug_text.gd" id="2_0wfyh"]
+[ext_resource type="Texture2D" uid="uid://bp7jixmnjx2gu" path="res://2D/images/icon.svg" id="4_a8y0u"]
 [ext_resource type="Theme" uid="uid://bw5xudpofvg28" path="res://2D/themes/main_ui.tres" id="4_tefeu"]
 [ext_resource type="PackedScene" uid="uid://dcmaqt0frjic" path="res://scenes/ball_cannon.tscn" id="5_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://brln3uw4rbarc" path="res://scenes/stages/stage_0.tscn" id="5_trceg"]
@@ -115,16 +116,26 @@ offset_right = 659.0
 offset_bottom = 33.0
 theme = ExtResource("4_tefeu")
 
-[node name="money" type="RichTextLabel" parent="CanvasLayer" unique_id=1886729685]
-offset_left = 12.0
-offset_top = 7.0
-offset_right = 197.0
-offset_bottom = 80.0
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer" unique_id=1865144233]
+offset_right = 40.0
+offset_bottom = 40.0
+alignment = 1
+
+[node name="money" type="RichTextLabel" parent="CanvasLayer/HBoxContainer" unique_id=1886729685]
+custom_minimum_size = Vector2(109.75, 0)
+layout_mode = 2
 theme_override_constants/outline_size = 12
 theme_override_font_sizes/normal_font_size = 47
-text = "99999💲"
+text = "9999"
+fit_content = true
+scroll_active = false
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HBoxContainer" unique_id=426318906]
+layout_mode = 2
+texture = ExtResource("4_a8y0u")
+stretch_mode = 3
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1171107608]
 position = Vector2(582, 430)
