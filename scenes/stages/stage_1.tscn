@@ -27,7 +27,7 @@ position = Vector2(461, 357.00003)
 rotation = 0.00011190772
 
 [node name="Node2D5" parent="pegs" unique_id=598567506 instance=ExtResource("2_cuow7")]
-position = Vector2(422, 358.00003)
+position = Vector2(422, 357.00003)
 rotation = 0.00011190772
 
 [node name="Node2D6" parent="pegs" unique_id=279739632 instance=ExtResource("2_cuow7")]
@@ -35,9 +35,5 @@ position = Vector2(382, 357.00003)
 rotation = 0.00011190772
 
 [node name="Node2D7" parent="pegs" unique_id=1925709118 instance=ExtResource("2_cuow7")]
-position = Vector2(343, 356)
-rotation = 0.00011190772
-
-[node name="Node2D8" parent="pegs" unique_id=126723582 instance=ExtResource("2_cuow7")]
-position = Vector2(343, 356)
+position = Vector2(342, 357)
 rotation = 0.00011190772

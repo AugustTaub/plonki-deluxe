@@ -10,16 +10,23 @@ var slipperiness: float = 1.2
 var spin_sensitivity: float = 1.0/140.0
 
 var max_number_of_balls: int = 1000
+var max_number_of_sim_balls: int = 10000
 var max_allowed_ball_radius: float = 64
+
+var simulate_time: float = 0.6
 
 ### EXPORT VARS
 @export var adjustable_ball_multimesh: MultiMeshInstance2D
 
 @export var adjustable_shadow_multimesh: MultiMeshInstance2D
 
+@export var simulated_ball_multimesh: MultiMeshInstance2D
+
 ### DATA STRUCTURE
 class BallData extends RefCounted:
 	var active: bool = true
+	var simulated: bool = false
+	var frames_simulated: int = 0
 	var pos: Vector2 = Vector2.ZERO
 	var last_frame_pos: Vector2 = Vector2.ZERO
 	var vel: Vector2 = Vector2.ZERO
@@ -30,17 +37,25 @@ class BallData extends RefCounted:
 	var roll_offset: Vector2 = Vector2.ZERO
 	var radius: float = 16
 	var vis_scale: float = 1.0
+	var ray_offsets: Array[Vector2] = []
 
 ###
 var active_balls: Array[BallData] = []
 
+var curr_simulated_ball: BallData
+var simulated_positions: Array[Vector2]
 ###
 
 var delta_timer: float = 0
+var mouse_has_moved_this_frame: bool = false
+var last_frame_mouse_pos: Vector2 = Vector2.ZERO
+var sim_ball_point_distribution: int = 5
+
 
 func _ready():
 	
 	SignalBus.spawn_ball.connect(spawn_ball)
+	SignalBus.spawn_simulated_ball.connect(spawn_simulated_ball)
 	
 	adjustable_ball_multimesh.multimesh.instance_count = max_number_of_balls
 	for i in range(max_number_of_balls):
@@ -49,6 +64,10 @@ func _ready():
 	adjustable_shadow_multimesh.multimesh.instance_count = max_number_of_balls
 	for i in range(max_number_of_balls):
 		adjustable_shadow_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+	
+	simulated_ball_multimesh.multimesh.instance_count = max_number_of_sim_balls
+	for i in range(max_number_of_sim_balls):
+		simulated_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
 
 
 func spawn_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO, spawn_radius: float = 16.0):
@@ -77,7 +96,32 @@ func spawn_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO, spawn_rad
 	
 	active_balls.append(new_ball)
 
+func spawn_simulated_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO, spawn_radius: float = 16.0):
+	
+	
+	var new_ball = BallData.new()
+	
+	new_ball.simulated = true
+	new_ball.radius = clamp(spawn_radius,1,max_allowed_ball_radius)
+	new_ball.pos = spawn_pos
+	new_ball.last_frame_pos = spawn_pos
+	new_ball.vel = spawn_vel
+	new_ball.visual_instance_id = 1
+	
+	curr_simulated_ball = new_ball
+
+
 func _physics_process(delta):
+	
+	var mpos: Vector2 = get_global_mouse_position()
+	if last_frame_mouse_pos != mpos:
+		mouse_has_moved_this_frame = true
+	else:
+		mouse_has_moved_this_frame = false
+	
+	last_frame_mouse_pos = mpos
+	
+	
 	var space_state = get_world_2d().direct_space_state
 	
 	for ball in active_balls:
@@ -86,13 +130,24 @@ func _physics_process(delta):
 			
 		process_single_ball(ball, delta, space_state)
 		update_ball_visuals(ball)
+	
+	
+	if mouse_has_moved_this_frame:
+		
+		for i in simulate_time*144:
+			process_single_ball(curr_simulated_ball, delta, space_state)
+		
+		update_sim_ball_visuals()
+		simulated_positions = []
+
 
 func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirectSpaceState2D):
 	
 	var has_bounced_this_frame = false
 	
-	
 	var move_vec: Vector2 = ball.vel * delta
+	
+	ball.frames_simulated += 1
 	
 	# Check Air Time
 	var in_air = check_if_in_air(ball, space_state)
@@ -113,14 +168,20 @@ func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirec
 			# Recalculate move_vec for remaining bounces
 			move_vec = ball.vel * delta
 			
-			bounce_anim(ball)
+			if not ball.simulated:
+				bounce_anim(ball)
 		else:
 			break
-			
+	
+	
 	# Move Ball if no bounce interrupted it
 	if not has_bounced_this_frame:
-		ball.pos += move_vec
+		var no_bounce_pos: Vector2 = ball.pos + move_vec
+		ball.pos = no_bounce_pos
+		if ball.simulated and curr_simulated_ball.frames_simulated % sim_ball_point_distribution == 0:
+			simulated_positions.append(no_bounce_pos)
 		
+	
 	# Inactivity Check
 	if ball.pos.distance_to(ball.last_frame_pos) <= 1:
 		ball.inactive_time += delta
@@ -131,9 +192,7 @@ func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirec
 	
 	ball.last_frame_pos = ball.pos
 	
-	
-	
-	
+		
 	# Apply Gravity
 	ball.vel.y += gravity * delta
 	
@@ -157,38 +216,37 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 	var query = PhysicsRayQueryParameters2D.new()
 	query.collide_with_areas = true
 	
-	var ray_offsets: Array
 	
 	# more rays for bigger balls, so pegs cant go inbetween rays
 	# its still really buggy for anything bigger than 32 though
 	
 	if ball.radius >= 20 and ball.radius <= 40: #big ball
-		ray_offsets= [
+		ball.ray_offsets= [
 		Vector2(-ball.radius, 0), # Left
 		Vector2(-ball.radius/2.0, 0), # Left
-		Vector2(0, 0),  # Center
+		Vector2(0, ball.radius),  # Center
 		Vector2(ball.radius/2.0, 0),   # Right
 		Vector2(ball.radius, 0)   # Right
 		]
 	elif ball.radius > 40: #huuuge ball
-		ray_offsets= [
+		ball.ray_offsets= [
 		Vector2(-ball.radius, 0), # Left
 		Vector2(-ball.radius*(1.0/3.0), 0), # Left
 		Vector2(-ball.radius*(2.0/3.0), 0), # Left
-		Vector2(0, 0),  # Center
+		Vector2(0, ball.radius),  # Center
 		Vector2(ball.radius*(1.0/3.0), 0),   # Right
 		Vector2(ball.radius*(2.0/3.0), 0),   # Right
 		Vector2(ball.radius, 0)   # Right
 		]
 	else: #normal ball
-		ray_offsets= [
+		ball.ray_offsets= [
 		Vector2(-ball.radius, 0), # Left
-		Vector2(0, 0),  # Center
+		Vector2(0, ball.radius),  # Center
 		Vector2(ball.radius, 0)   # Right
 		]
 	
 	
-	for offset in ray_offsets:
+	for offset in ball.ray_offsets:
 		# Rotate offset to match movement direction
 		var rotated_offset = offset.rotated(ray_rot)
 		var start_pos = ball.pos + rotated_offset
@@ -233,14 +291,18 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 		var slide_velocity = ball.vel - avg_normal * ball.vel.dot(avg_normal)
 		slide_velocity += avg_normal * (50000.0 / max(ball.vel.length(), 1.0))
 		
-		queue_pegs_for_destruction(hit_pegs)
+		if not ball.simulated:
+			queue_pegs_for_destruction(hit_pegs)
+		
 		return {
 			"is_valid": true,
 			"bounce_vector": slide_velocity.normalized(),
 			"collision_point": closest_hit_point
 		}
-		
-	queue_pegs_for_destruction(hit_pegs)
+	
+	if not ball.simulated:
+		queue_pegs_for_destruction(hit_pegs)
+	
 	return {
 		"is_valid": true,
 		"bounce_vector": bounce_vec,
@@ -252,7 +314,14 @@ func perform_collision(ball: BallData, data: Dictionary):
 	ball.vel = data.bounce_vector * speed
 	
 	var coll_pos = data.collision_point - ball.pos.direction_to(data.collision_point) * ball.radius
+	
 	ball.pos = coll_pos
+	
+	if ball.simulated and curr_simulated_ball.frames_simulated % sim_ball_point_distribution == 0:
+		simulated_positions.append(coll_pos)
+	
+	
+	
 	
 	if not ball.is_sliding:
 		ball.vel *= bounciness
@@ -303,6 +372,27 @@ func update_ball_visuals(ball: BallData):
 		else:
 			adjustable_ball_multimesh.multimesh.set_instance_color(multmesh_i, Color.WHITE)
 		
+
+
+func clear_sim_ball_visuals():
+	if not simulated_positions: return
+	
+	for i in simulated_positions.size() + 1:
+		simulated_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+
+func update_sim_ball_visuals():
+	clear_sim_ball_visuals()
+	if simulated_ball_multimesh and simulated_positions:
+		for i in simulated_positions.size():
+			
+			# draw active ball
+			var trans = Transform2D(0,Vector2.ONE,0, simulated_positions[i])
+			simulated_ball_multimesh.multimesh.set_instance_transform_2d(i, trans)
+			
+		
+
+
+
 
 func bounce_anim(anim_ball: BallData):
 	var tween = create_tween()
