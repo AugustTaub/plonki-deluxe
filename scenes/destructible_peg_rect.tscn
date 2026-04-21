@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://d1f7gqwmdc8fk"]
+
+[ext_resource type="Script" uid="uid://dlyva8iecj0md" path="res://scripts/destructible_peg.gd" id="1_1f7cw"]
+[ext_resource type="Texture2D" uid="uid://cvqhgtudil8lp" path="res://2D/godot_gen_textures/alive_rect_peg.tres" id="2_e6lef"]
+[ext_resource type="Texture2D" uid="uid://com7mgsdnhi3g" path="res://2D/godot_gen_textures/dead_rect_peg.tres" id="3_qnma7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1f7cw"]
+size = Vector2(40, 20)
+
+[node name="Node2D" type="Area2D" unique_id=1423066092 node_paths=PackedStringArray("peg_sprite", "peg_coll_shape")]
+script = ExtResource("1_1f7cw")
+peg_sprite = NodePath("Polygon2D2")
+peg_coll_shape = NodePath("CollisionShape2D")
+preloaded_alive_tex = ExtResource("2_e6lef")
+preloaded_dead_tex = ExtResource("3_qnma7")
+metadata/_custom_type_script = "uid://dlyva8iecj0md"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=614623303]
+shape = SubResource("RectangleShape2D_1f7cw")
+
+[node name="Polygon2D2" type="Polygon2D" parent="." unique_id=1041700422]
+texture = ExtResource("2_e6lef")
+polygon = PackedVector2Array(-20, -10, -20, 10, 20, 10, 20, -10)
+uv = PackedVector2Array(0.051496506, 0.05227363, -0.053276062, 64.1581, 128.38124, 64.36666, 128.38214, -0.06580353)

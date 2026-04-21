@@ -11,8 +11,13 @@ var perpetrator_ball: Ball
 enum peg_state{DEFAULT,DEAD,REANIMATING}
 var curr_peg_state: peg_state = peg_state.DEFAULT
 
-var preloaded_alive_tex: Texture2D = preload("res://2D/godot_gen_textures/alive_circle_peg.tres")
-var preloaded_dead_tex: Texture2D = preload("res://2D/godot_gen_textures/dead_circle_peg.tres")
+@export_category("nodes")
+@export var peg_sprite: Node2D
+@export var peg_coll_shape: Node2D
+
+@export_category("textures")
+@export var preloaded_alive_tex: Texture2D = preload("res://2D/godot_gen_textures/alive_circle_peg.tres")
+@export var preloaded_dead_tex: Texture2D = preload("res://2D/godot_gen_textures/dead_circle_peg.tres")
 
 var HP: int = 3
 
@@ -54,8 +59,8 @@ func exit_peg_state(exit_state: peg_state):
 		peg_state.DEFAULT:
 			pass
 		peg_state.DEAD:
-			$peg_sprite.texture = preloaded_alive_tex
-			$peg_coll_shape.disabled = false
+			peg_sprite.texture = preloaded_alive_tex
+			peg_coll_shape.disabled = false
 			
 			
 		peg_state.REANIMATING:
@@ -67,8 +72,8 @@ func enter_peg_state(enter_state: peg_state):
 			pass
 		peg_state.DEAD:
 			
-			$peg_sprite.texture = preloaded_dead_tex
-			$peg_coll_shape.disabled = true
+			peg_sprite.texture = preloaded_dead_tex
+			peg_coll_shape.disabled = true
 			
 			change_peg_state(peg_state.REANIMATING)
 		peg_state.REANIMATING:

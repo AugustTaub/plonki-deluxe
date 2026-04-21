@@ -20,10 +20,10 @@ func _physics_process(delta):
 	$pivot.look_at(get_global_mouse_position())
 	$pivot.rotate(-PI/2)
 	
-	#if Input.is_action_just_pressed("fire_ball"):
-	if delta_timer >= shot_interval:
+	if Input.is_action_just_pressed("fire_ball"):
+		#if delta_timer >= shot_interval:
 		delta_timer = 0
 		var pos = ball_spawn_point.global_position
 		var vel = global_position.direction_to(ball_spawn_point.global_position) * start_speed
-		var size = 1#randi_range(0,BallManager.ball_size.size())
-		SignalBus.spawn_ball.emit(pos,vel,size)
+		var radius = 16.0
+		SignalBus.spawn_ball.emit(pos,vel,radius)

@@ -9,19 +9,13 @@ var max_bounces_per_frame: int = 3
 var slipperiness: float = 1.2
 var spin_sensitivity: float = 1.0/140.0
 
-var max_number_of_balls: int = 300
+var max_number_of_balls: int = 1000
+var max_allowed_ball_radius: float = 64
 
 ### EXPORT VARS
-@export var standard_ball_multimesh: MultiMeshInstance2D
-@export var small_ball_multimesh: MultiMeshInstance2D
-@export var big_ball_multimesh: MultiMeshInstance2D
+@export var adjustable_ball_multimesh: MultiMeshInstance2D
 
-@export_category("shadow multimeshes")
-@export var standard_shadow_multimesh: MultiMeshInstance2D
-
-### ENUM
-enum ball_size{SMALL,STANDARD,BIG}
-
+@export var adjustable_shadow_multimesh: MultiMeshInstance2D
 
 ### DATA STRUCTURE
 class BallData extends RefCounted:
@@ -34,38 +28,33 @@ class BallData extends RefCounted:
 	var is_sliding: bool = false
 	var visual_instance_id: int = -1 
 	var roll_offset: Vector2 = Vector2.ZERO
-	var size: ball_size = ball_size.STANDARD
-	var radius: int = 16
+	var radius: float = 16
 
 ###
 var active_balls: Array[BallData] = []
+
+###
+
+var delta_timer: float = 0
 
 func _ready():
 	
 	SignalBus.spawn_ball.connect(spawn_ball)
 	
-	standard_ball_multimesh.multimesh.instance_count = max_number_of_balls
+	adjustable_ball_multimesh.multimesh.instance_count = max_number_of_balls
 	for i in range(max_number_of_balls):
-		standard_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+		adjustable_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
 	
-	small_ball_multimesh.multimesh.instance_count = max_number_of_balls
+	adjustable_shadow_multimesh.multimesh.instance_count = max_number_of_balls
 	for i in range(max_number_of_balls):
-		small_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
-	
-	big_ball_multimesh.multimesh.instance_count = max_number_of_balls
-	for i in range(max_number_of_balls):
-		big_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
-	
-	standard_shadow_multimesh.multimesh.instance_count = max_number_of_balls
-	for i in range(max_number_of_balls):
-		standard_shadow_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+		adjustable_shadow_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
 
 
-func spawn_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO, size: ball_size = ball_size.STANDARD):
+func spawn_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO, spawn_radius: float = 16.0):
 	
 	for ball in active_balls:
-		if not ball.active and ball.size == size:
-			# Revive ball if therers on of the same size available
+		if not ball.active:
+			# Revive ball if therers one available
 			ball.active = true
 			ball.pos = spawn_pos
 			ball.last_frame_pos = spawn_pos
@@ -78,34 +67,12 @@ func spawn_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO, size: bal
 	
 	# If no dead balls make new one
 	var new_ball = BallData.new()
-	var ball_multimesh: MultiMeshInstance2D = standard_ball_multimesh
 	
-	match size:
-		ball_size.SMALL:
-			ball_multimesh = small_ball_multimesh
-			new_ball.radius = 8
-		ball_size.STANDARD:
-			ball_multimesh = standard_ball_multimesh
-			new_ball.radius = 16
-		ball_size.BIG:
-			ball_multimesh = big_ball_multimesh
-			new_ball.radius = 32
-	
-	
-	var size_count = 0
-	for b in active_balls:
-		if b.size == size:
-			size_count += 1
-	
-	if size_count >= ball_multimesh.multimesh.instance_count:
-		push_warning("Visual instance count for this size too large!")
-		return
-	
+	new_ball.radius = clamp(spawn_radius,1,max_allowed_ball_radius)
 	new_ball.pos = spawn_pos
 	new_ball.last_frame_pos = spawn_pos
 	new_ball.vel = spawn_vel
-	new_ball.size = size
-	new_ball.visual_instance_id = size_count
+	new_ball.visual_instance_id = active_balls.size()
 	
 	active_balls.append(new_ball)
 
@@ -120,14 +87,14 @@ func _physics_process(delta):
 		update_ball_visuals(ball)
 
 func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirectSpaceState2D):
+	
 	var has_bounced_this_frame = false
 	
-	
-	# 1. Apply Gravity
+	# Apply Gravity
 	ball.vel.y += gravity * delta
 	var move_vec: Vector2 = ball.vel * delta
 	
-	# 2. Check Air Time
+	# Check Air Time
 	var in_air = check_if_in_air(ball, space_state)
 	if in_air:
 		ball.air_time += delta
@@ -136,7 +103,7 @@ func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirec
 	else:
 		ball.air_time = 0
 		
-	# 3. Collision & Bouncing Loop
+	# Collision & Bouncing Loop
 	for i in max_bounces_per_frame:
 		var coll_result = run_coll_check(ball, move_vec, space_state)
 		
@@ -148,11 +115,11 @@ func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirec
 		else:
 			break
 			
-	# 4. Move Ball if no bounce interrupted it
+	# Move Ball if no bounce interrupted it
 	if not has_bounced_this_frame:
 		ball.pos += move_vec
 		
-	# 5. Inactivity Check (Sleep)
+	# Inactivity Check
 	if ball.pos.distance_to(ball.last_frame_pos) <= 1:
 		ball.inactive_time += delta
 		if ball.inactive_time > 10:
@@ -162,7 +129,9 @@ func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirec
 	
 	ball.last_frame_pos = ball.pos
 	
-	
+	# DEBUG
+	#delta_timer += delta
+	#ball.radius = (sin(delta_timer)+2)*15
 	
 	ball.roll_offset += ball.vel * delta * spin_sensitivity
 	
@@ -181,8 +150,11 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 	query.collide_with_areas = true
 	
 	var ray_offsets: Array
+	
 	# more rays for bigger balls, so pegs cant go inbetween rays
-	if ball.size == ball_size.BIG:
+	# its still really buggy for anything bigger than 32 though
+	
+	if ball.radius >= 20 and ball.radius <= 40: #big ball
 		ray_offsets= [
 		Vector2(-ball.radius, 0), # Left
 		Vector2(-ball.radius/2.0, 0), # Left
@@ -190,7 +162,17 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 		Vector2(ball.radius/2.0, 0),   # Right
 		Vector2(ball.radius, 0)   # Right
 		]
-	else:
+	elif ball.radius > 40: #huuuge ball
+		ray_offsets= [
+		Vector2(-ball.radius, 0), # Left
+		Vector2(-ball.radius*(1.0/3.0), 0), # Left
+		Vector2(-ball.radius*(2.0/3.0), 0), # Left
+		Vector2(0, 0),  # Center
+		Vector2(ball.radius*(1.0/3.0), 0),   # Right
+		Vector2(ball.radius*(2.0/3.0), 0),   # Right
+		Vector2(ball.radius, 0)   # Right
+		]
+	else: #normal ball
 		ray_offsets= [
 		Vector2(-ball.radius, 0), # Left
 		Vector2(0, 0),  # Center
@@ -281,45 +263,35 @@ func queue_pegs_for_destruction(pegs: Array[Node2D]):
 			peg.queue_destruction() 
 
 func update_ball_visuals(ball: BallData):
-	var ball_multimesh: MultiMeshInstance2D
 	
-	match ball.size:
-		ball_size.SMALL:
-			ball_multimesh = small_ball_multimesh
-		ball_size.STANDARD:
-			ball_multimesh = standard_ball_multimesh
-		ball_size.BIG:
-			ball_multimesh = big_ball_multimesh
-	
-	if ball_multimesh and ball.visual_instance_id >= 0:
+	if adjustable_ball_multimesh and adjustable_shadow_multimesh and ball.visual_instance_id >= 0:
 		var multmesh_i: int = ball.visual_instance_id
 		
 		# if ball is dead hide it, by setting its scale to 0
 		if not ball.active:
-			ball_multimesh.multimesh.set_instance_transform_2d(multmesh_i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+			adjustable_ball_multimesh.multimesh.set_instance_transform_2d(multmesh_i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
 			return 
 		
 		# draw active ball
 		var trans = Transform2D(0, ball.pos)
-		ball_multimesh.multimesh.set_instance_transform_2d(multmesh_i, trans)
+		adjustable_ball_multimesh.multimesh.set_instance_transform_2d(multmesh_i, trans)
+		
+		var custom_data = Color(ball.roll_offset.y, ball.roll_offset.x, ball.radius, 0.0)
+		adjustable_ball_multimesh.multimesh.set_instance_custom_data(multmesh_i, custom_data)
 		
 		# draw follow shadow
-		if ball.size == ball_size.STANDARD:
-			
-			var s_vel: Vector2 = ball.vel * get_physics_process_delta_time() * 0.025
-			
-			var s_data = Color(-s_vel.x,s_vel.y,0)
-			standard_shadow_multimesh.multimesh.set_instance_custom_data(multmesh_i, s_data)
-			
-			var s_trans = Transform2D(0, ball.pos - ball.vel * get_physics_process_delta_time())
-			standard_shadow_multimesh.multimesh.set_instance_transform_2d(multmesh_i, s_trans)
+		var s_vel: Vector2 = ball.vel * get_physics_process_delta_time() * 0.04
+		
+		var s_data = Color(-s_vel.x,s_vel.y,ball.radius)
+		adjustable_shadow_multimesh.multimesh.set_instance_custom_data(multmesh_i, s_data)
+		
+		var s_trans = Transform2D(0, ball.pos - ball.vel * get_physics_process_delta_time())
+		adjustable_shadow_multimesh.multimesh.set_instance_transform_2d(multmesh_i, s_trans)
 		
 		
 		### BUG: change shader to use COLOR so this works
 		if ball.is_sliding:
-			ball_multimesh.multimesh.set_instance_color(multmesh_i, Color.RED)
+			adjustable_ball_multimesh.multimesh.set_instance_color(multmesh_i, Color.RED)
 		else:
-			ball_multimesh.multimesh.set_instance_color(multmesh_i, Color.WHITE)
+			adjustable_ball_multimesh.multimesh.set_instance_color(multmesh_i, Color.WHITE)
 		
-		var custom_data = Color(ball.roll_offset.y, ball.roll_offset.x, 0.0, 0.0)
-		ball_multimesh.multimesh.set_instance_custom_data(multmesh_i, custom_data)
