@@ -10,7 +10,7 @@ var slipperiness: float = 1.2
 var spin_sensitivity: float = 1.0/140.0
 
 var max_number_of_balls: int = 1000
-var max_number_of_sim_balls: int = 10000
+var max_number_of_sim_balls: int = 100
 var max_allowed_ball_radius: float = 64
 
 var simulate_time: float = 0.6
@@ -21,6 +21,8 @@ var simulate_time: float = 0.6
 @export var adjustable_shadow_multimesh: MultiMeshInstance2D
 
 @export var simulated_ball_multimesh: MultiMeshInstance2D
+
+@export var adjustable_slidevfx_multimesh: MultiMeshInstance2D
 
 ### DATA STRUCTURE
 class BallData extends RefCounted:
@@ -51,6 +53,7 @@ var mouse_has_moved_this_frame: bool = false
 var last_frame_mouse_pos: Vector2 = Vector2.ZERO
 var sim_ball_point_distribution: int = 2
 
+@onready var physics_ticks_per_second: int = ProjectSettings.get_setting("physics/common/physics_ticks_per_second")
 
 func _ready():
 	
@@ -65,9 +68,15 @@ func _ready():
 	for i in range(max_number_of_balls):
 		adjustable_shadow_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
 	
+	adjustable_slidevfx_multimesh.multimesh.instance_count = max_number_of_balls
+	for i in range(max_number_of_balls):
+		adjustable_slidevfx_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+	
+	
 	simulated_ball_multimesh.multimesh.instance_count = max_number_of_sim_balls
 	for i in range(max_number_of_sim_balls):
 		simulated_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+	
 
 
 func spawn_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO, spawn_radius: float = 16.0):
@@ -134,7 +143,7 @@ func _physics_process(delta):
 	
 	if mouse_has_moved_this_frame:
 		
-		for i in simulate_time*144:
+		for i in simulate_time*physics_ticks_per_second:
 			process_single_ball(curr_simulated_ball, delta, space_state)
 		
 		update_sim_ball_visuals()
@@ -148,6 +157,9 @@ func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirec
 	var move_vec: Vector2 = ball.vel * delta
 	
 	ball.frames_simulated += 1
+	if ball.frames_simulated >= int(simulate_time*physics_ticks_per_second) and ball.simulated:
+		return
+		
 	
 	# Check Air Time
 	var in_air = check_if_in_air(ball, space_state)
@@ -353,7 +365,13 @@ func check_if_in_air(ball: BallData, space_state: PhysicsDirectSpaceState2D) -> 
 	query.from = ball.pos
 	query.to = ball.pos + Vector2(0, 20)
 	query.collide_with_areas = true
-	return space_state.intersect_ray(query).is_empty()
+	
+	var query2 = PhysicsRayQueryParameters2D.new()
+	query2.from = ball.pos
+	query2.to = ball.pos + Vector2(0, -20)
+	query2.collide_with_areas = true
+	
+	return space_state.intersect_ray(query).is_empty() and space_state.intersect_ray(query2).is_empty()
 
 func queue_pegs_for_destruction(pegs: Array[Node2D]):
 	for peg in pegs:
@@ -377,8 +395,29 @@ func update_ball_visuals(ball: BallData):
 		var custom_data = Color(ball.roll_offset.y, ball.roll_offset.x, ball.radius, 0.0)
 		adjustable_ball_multimesh.multimesh.set_instance_custom_data(multmesh_i, custom_data)
 		
+		if ball.is_sliding:
+			# draw slide vfx
+			var vfxtrans = Transform2D(0,ball.vis_scale*Vector2.ONE*1.1,0, ball.pos)
+			adjustable_slidevfx_multimesh.multimesh.set_instance_transform_2d(multmesh_i, vfxtrans)
+			
+			var vfx_data = Color(ball.roll_offset.x, ball.roll_offset.y, ball.radius, 0.0)
+			adjustable_slidevfx_multimesh.multimesh.set_instance_custom_data(multmesh_i, vfx_data)
+			
+			var col: Color = Color.RED
+			adjustable_shadow_multimesh.multimesh.set_instance_color(multmesh_i,col)
+			
+		else:
+			var vfxtrans = Transform2D(0,Vector2.ZERO,0, ball.pos)
+			adjustable_slidevfx_multimesh.multimesh.set_instance_transform_2d(multmesh_i, vfxtrans)
+			
+			var col: Color = Color.BLACK
+			adjustable_shadow_multimesh.multimesh.set_instance_color(multmesh_i,col)
+		
+		
+		
+		
 		# draw follow shadow
-		var s_vel: Vector2 = ball.vel * get_physics_process_delta_time() * 0.04
+		var s_vel: Vector2 = ball.vel * get_physics_process_delta_time() * 0.025
 		
 		var s_data = Color(-s_vel.x,s_vel.y,ball.radius)
 		adjustable_shadow_multimesh.multimesh.set_instance_custom_data(multmesh_i, s_data)
@@ -387,36 +426,37 @@ func update_ball_visuals(ball: BallData):
 		adjustable_shadow_multimesh.multimesh.set_instance_transform_2d(multmesh_i, s_trans)
 		
 		
-		### BUG: change shader to use COLOR so this works
-		if ball.is_sliding:
-			adjustable_ball_multimesh.multimesh.set_instance_color(multmesh_i, Color.RED)
-		else:
-			adjustable_ball_multimesh.multimesh.set_instance_color(multmesh_i, Color.WHITE)
-		
 
 
 func clear_sim_ball_visuals():
 	if not simulated_positions: return
 	
-	for i in simulated_positions.size() + 1:
+	for i in max_number_of_sim_balls:
 		simulated_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
 
 func update_sim_ball_visuals():
-	clear_sim_ball_visuals()
+	#clear_sim_ball_visuals()
 	if simulated_ball_multimesh and simulated_positions:
-		for i in simulated_positions.size():
+		for i in max_number_of_sim_balls:
 			
-			# draw active ball
-			var trans = Transform2D(0,Vector2.ONE,0, simulated_positions[i])
-			simulated_ball_multimesh.multimesh.set_instance_transform_2d(i, trans)
-			
-		
-
+			if i >= simulated_positions.size():
+				#move ball away
+				simulated_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ONE, 0, Vector2.ZERO))
+			else:
+				# draw active ball
+				var trans = Transform2D(0,Vector2.ONE,0, simulated_positions[i])
+				simulated_ball_multimesh.multimesh.set_instance_transform_2d(i, trans)
+				
+				
+				var dist: float =1- (i / float(physics_ticks_per_second))*3
+				
+				var s_data = Color(dist,0,0)
+				simulated_ball_multimesh.multimesh.set_instance_custom_data(i, s_data)
 
 
 
 func bounce_anim(anim_ball: BallData):
 	var tween = create_tween()
 	tween.tween_property(anim_ball,"vis_scale",0.8,0.06).set_trans(Tween.TRANS_BOUNCE)
-	tween.tween_property(anim_ball,"vis_scale",1.4,0.02).set_trans(Tween.TRANS_BOUNCE)
+	tween.tween_property(anim_ball,"vis_scale",1.2,0.02).set_trans(Tween.TRANS_BOUNCE)
 	tween.tween_property(anim_ball,"vis_scale",1.0,0.05)

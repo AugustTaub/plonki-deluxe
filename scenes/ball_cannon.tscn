@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cbax1n6d7rsfi" path="res://scripts/ball_cannon.gd" id="1_587w4"]
 
 [node name="ball_cannon" type="Node2D" unique_id=564166182]
+z_index = 1
 script = ExtResource("1_587w4")
 
 [node name="pivot" type="Node2D" parent="." unique_id=2118282629]

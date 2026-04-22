@@ -115,6 +115,3 @@ position = Vector2(481, -56)
 
 [node name="DestructiblePeg36" parent="pegs" unique_id=828909787 instance=ExtResource("2_whglb")]
 position = Vector2(518, -133)
-
-[node name="DestructiblePeg37" parent="pegs" unique_id=350764303 instance=ExtResource("2_whglb")]
-position = Vector2(518, -133)

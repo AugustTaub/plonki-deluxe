@@ -1,7 +1,7 @@
 extends Node2D
 
 
-var start_speed: float = 600
+var start_speed: float = 700
  
 @onready var ball_spawn_point: Node2D = $pivot/ball_spawn_point
 

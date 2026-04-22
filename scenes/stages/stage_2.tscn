@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://djcidx4lmyas8"]
+
+[ext_resource type="Script" uid="uid://rc1pswo54tv8" path="res://scripts/stage_node.gd" id="1_g6yqk"]
+[ext_resource type="PackedScene" uid="uid://d1f7gqwmdc8fk" path="res://scenes/destructible_peg_rect.tscn" id="2_x3wqt"]
+[ext_resource type="Script" uid="uid://bdeluorccs3eu" path="res://scripts/cog.gd" id="3_x3wqt"]
+
+[node name="stage_2" type="Node2D" unique_id=1777195591]
+script = ExtResource("1_g6yqk")
+metadata/_custom_type_script = "uid://rc1pswo54tv8"
+
+[node name="pegs" type="Node2D" parent="." unique_id=494298063]
+position = Vector2(90, 12)
+
+[node name="Node2D" parent="pegs" unique_id=1423066092 instance=ExtResource("2_x3wqt")]
+position = Vector2(151.00006, 62.00003)
+rotation = -1.2037057
+
+[node name="Node2D2" parent="pegs" unique_id=1952507547 instance=ExtResource("2_x3wqt")]
+position = Vector2(14, 466)
+rotation = -0.76211786
+
+[node name="Node2D3" parent="pegs" unique_id=531258507 instance=ExtResource("2_x3wqt")]
+position = Vector2(288.9999, 663)
+rotation = -0.34905934
+
+[node name="Node2D8" parent="pegs" unique_id=1191389254 instance=ExtResource("2_x3wqt")]
+position = Vector2(229.00006, 206)
+rotation = -1.5455248
+
+[node name="Node2D17" parent="pegs" unique_id=233207341 instance=ExtResource("2_x3wqt")]
+position = Vector2(956, 365)
+rotation = -1.8059489
+
+[node name="Node2D18" parent="pegs" unique_id=1119109603 instance=ExtResource("2_x3wqt")]
+position = Vector2(986, 147.00003)
+rotation = -2.483918
+
+[node name="Node2D9" parent="pegs" unique_id=1124889162 instance=ExtResource("2_x3wqt")]
+position = Vector2(919.99994, 622)
+rotation = -0.76211786
+
+[node name="Node2D10" parent="pegs" unique_id=1959090001 instance=ExtResource("2_x3wqt")]
+position = Vector2(429.99985, 703.00006)
+rotation = -0.34905934
+
+[node name="Node2D11" parent="pegs" unique_id=888157855 instance=ExtResource("2_x3wqt")]
+position = Vector2(99, 290.00003)
+rotation = -0.028853446
+
+[node name="Node2D12" parent="pegs" unique_id=1715408932 instance=ExtResource("2_x3wqt")]
+position = Vector2(68.99994, 689.00006)
+rotation = 0.47987133
+
+[node name="Node2D13" parent="pegs" unique_id=170757135 instance=ExtResource("2_x3wqt")]
+position = Vector2(771, 676)
+rotation = 1.1049707
+
+[node name="Node2D14" parent="pegs" unique_id=1377971125 instance=ExtResource("2_x3wqt")]
+position = Vector2(97.999985, 544)
+rotation = 1.6037552
+
+[node name="Node2D15" parent="pegs" unique_id=1161374311 instance=ExtResource("2_x3wqt")]
+position = Vector2(66, 157)
+rotation = 1.9136679
+
+[node name="Node2D16" parent="pegs" unique_id=85023389 instance=ExtResource("2_x3wqt")]
+position = Vector2(980.00006, 95.00003)
+rotation = 2.5130205
+
+[node name="Node2D4" parent="pegs" unique_id=1708760838 instance=ExtResource("2_x3wqt")]
+position = Vector2(654, 713.00006)
+rotation = 0.00011190772
+
+[node name="Node2D5" parent="pegs" unique_id=598567506 instance=ExtResource("2_x3wqt")]
+position = Vector2(182, 490)
+rotation = 0.00011190772
+
+[node name="Node2D6" parent="pegs" unique_id=279739632 instance=ExtResource("2_x3wqt")]
+position = Vector2(854, 475)
+rotation = 0.00011190772
+
+[node name="Node2D7" parent="pegs" unique_id=1925709118 instance=ExtResource("2_x3wqt")]
+position = Vector2(166.00006, 333)
+rotation = 0.00011190772
+
+[node name="cog" type="Area2D" parent="." unique_id=19504815]
+position = Vector2(600, 354)
+script = ExtResource("3_x3wqt")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="cog" unique_id=461621179]
+polygon = PackedVector2Array(-60, 59, -69, 98, -38, 120, -2, 89, 32, 121, 73, 105, 64, 62, 111, 64, 130, 28, 96, 3, 131, -24, 118, -60, 66, -58, 70, -115, 48, -130, -2, -93, -46, -129, -73, -113, -58, -58, -112, -69, -132, -45, -92, -2, -130, 33, -116, 68)
+
+[node name="Polygon2D" type="Polygon2D" parent="cog" unique_id=1584236263]
+color = Color(0.51645976, 0.17745513, 0.15725034, 1)
+polygon = PackedVector2Array(-60, 59, -69, 98, -38, 120, -2, 89, 32, 121, 73, 105, 64, 62, 111, 64, 130, 28, 96, 3, 131, -24, 118, -60, 66, -58, 70, -115, 48, -130, -2, -93, -46, -129, -73, -113, -58, -58, -112, -69, -132, -45, -92, -2, -130, 33, -116, 68)
