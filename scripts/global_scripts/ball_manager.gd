@@ -286,8 +286,13 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 				hit_pegs.append(collider)
 				has_hit_peg = true
 			
-			if collider.is_in_group("ball_kill"):
-				ball.active = false
+			if collider is BallInteractibleObject:
+				ball =  collider.perform_interaction(ball)
+				return {
+					"is_valid": false}
+			
+			#if collider.is_in_group("ball_kill"):
+				#ball.active = false
 			
 	if not hit_something:
 		return {"is_valid": false}

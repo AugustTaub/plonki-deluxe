@@ -6,7 +6,7 @@ var start_speed: float = 700
 @onready var ball_spawn_point: Node2D = $pivot/ball_spawn_point
 
 var delta_timer: float = 0
-var shot_interval: float = 0.5
+var shot_interval: float = 0.6
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -29,6 +29,6 @@ func _physics_process(delta):
 	
 	
 	if Input.is_action_just_pressed("fire_ball"):
-		#if delta_timer >= shot_interval:
+	#if delta_timer >= shot_interval:
 		delta_timer = 0
 		SignalBus.spawn_ball.emit(pos,vel,radius)

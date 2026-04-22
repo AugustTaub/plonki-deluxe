@@ -2,6 +2,38 @@
 
 [ext_resource type="Script" uid="uid://rc1pswo54tv8" path="res://scripts/stage_node.gd" id="1_3847s"]
 [ext_resource type="PackedScene" uid="uid://d1f7gqwmdc8fk" path="res://scenes/destructible_peg_rect.tscn" id="2_cuow7"]
+[ext_resource type="Script" uid="uid://c33idtn4w1ory" path="res://scripts/ball_teleporter.gd" id="3_8q8ih"]
+[ext_resource type="Script" uid="uid://gyalaocvdi10" path="res://scripts/ball_exploder.gd" id="4_k45mu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_k45mu"]
+radius = 16.0
+
+[sub_resource type="Gradient" id="Gradient_8q8ih"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0.098557696, 0.36778846, 0.45180723, 0.55421686, 0.6987952)
+colors = PackedColorArray(0.3019608, 0.16470589, 0.827451, 1, 0.60784316, 0.16470589, 0.827451, 1, 0.8846484, 0.16278473, 0.82754374, 1, 1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_k45mu"]
+gradient = SubResource("Gradient_8q8ih")
+width = 32
+height = 32
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_ncvry"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0.098557696, 0.36778846, 0.45180723, 0.55421686, 0.6987952)
+colors = PackedColorArray(0.6237485, 0.06519417, 0.26287833, 1, 0.60784316, 0.16470589, 0.827451, 1, 0.8862745, 0.16470589, 0.1254902, 1, 1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ncvry"]
+gradient = SubResource("Gradient_ncvry")
+width = 32
+height = 32
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ncvry"]
+radius = 127.39309
 
 [node name="stage1" type="Node2D" unique_id=1777195591]
 script = ExtResource("1_3847s")
@@ -81,3 +113,48 @@ rotation = 0.00011190772
 [node name="Node2D7" parent="pegs" unique_id=1925709118 instance=ExtResource("2_cuow7")]
 position = Vector2(342, 357)
 rotation = 0.00011190772
+
+[node name="BallTeleporter" type="Area2D" parent="." unique_id=316168401 node_paths=PackedStringArray("paired_telporter")]
+position = Vector2(703, 226)
+script = ExtResource("3_8q8ih")
+paired_telporter = NodePath("../BallTeleporter2")
+metadata/_custom_type_script = "uid://c33idtn4w1ory"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallTeleporter" unique_id=2143807784]
+shape = SubResource("CircleShape2D_k45mu")
+
+[node name="Sprite2D" type="Sprite2D" parent="BallTeleporter" unique_id=1117877246]
+scale = Vector2(2.2854311, 2.2854311)
+texture = SubResource("GradientTexture2D_k45mu")
+
+[node name="BallTeleporter2" type="Area2D" parent="." unique_id=1126508263 node_paths=PackedStringArray("paired_telporter")]
+position = Vector2(293, 390)
+script = ExtResource("3_8q8ih")
+paired_telporter = NodePath("../BallTeleporter")
+metadata/_custom_type_script = "uid://c33idtn4w1ory"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallTeleporter2" unique_id=388628651]
+shape = SubResource("CircleShape2D_k45mu")
+
+[node name="Sprite2D" type="Sprite2D" parent="BallTeleporter2" unique_id=2017976514]
+scale = Vector2(2.2854311, 2.2854311)
+texture = SubResource("GradientTexture2D_k45mu")
+
+[node name="BallExploder" type="Area2D" parent="." unique_id=718596040 node_paths=PackedStringArray("explo_area", "sprite")]
+position = Vector2(574, 266)
+script = ExtResource("4_k45mu")
+explo_area = NodePath("Area2D")
+sprite = NodePath("Sprite2D")
+metadata/_custom_type_script = "uid://gyalaocvdi10"
+
+[node name="Sprite2D" type="Sprite2D" parent="BallExploder" unique_id=323172377]
+texture = SubResource("GradientTexture2D_ncvry")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallExploder" unique_id=614361133]
+shape = SubResource("CircleShape2D_k45mu")
+
+[node name="Area2D" type="Area2D" parent="BallExploder" unique_id=1080769552]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallExploder/Area2D" unique_id=1971360052]
+shape = SubResource("CircleShape2D_ncvry")
