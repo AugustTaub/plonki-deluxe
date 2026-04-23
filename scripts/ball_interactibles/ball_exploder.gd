@@ -23,6 +23,7 @@ func perform_interaction(ball_data: BallManager.BallData) -> BallManager.BallDat
 	
 	if explo_area and not ball_data.simulated:
 		destroy()
+		SignalBus.spawn_shock_wave.emit(global_position,286,0.2)
 		var found_areas: Array = explo_area.get_overlapping_areas()
 		for found_area in found_areas:
 			if found_area is DestructiblePeg:

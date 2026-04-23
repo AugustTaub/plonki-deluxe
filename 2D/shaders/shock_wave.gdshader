@@ -1,31 +1,23 @@
 shader_type canvas_item;
-render_mode blend_mix;
 
-varying float radius_px;
+varying float v_progress;
 
 void vertex() {
-    radius_px = INSTANCE_CUSTOM.x;
-}
-
-vec4 get_trail_sample(sampler2D tex, vec2 uv, vec2 offset, float scale_multiplier) {
-    
-    float actual_scale = (1000.0 / radius_px * 0.5) * scale_multiplier;
-    
-    vec2 shifted_uv = (uv - 0.5 - offset) * actual_scale + 0.5;
-    
-    if (shifted_uv.x < 0.0 || shifted_uv.x > 1.0 || shifted_uv.y < 0.0 || shifted_uv.y > 1.0) {
-        return vec4(0.0);
-    }
-    
-    return texture(tex, shifted_uv);
+	v_progress = INSTANCE_CUSTOM.x;
 }
 
 void fragment() {
-    vec4 input_tint = COLOR;
-    
-    vec4 t0 = get_trail_sample(TEXTURE, UV, vec2(0,0), 1.0);
-
-    vec4 final_sample = t0;
-    
-    COLOR = final_sample * input_tint;
+	
+	vec4 tex_color = texture(TEXTURE, UV);
+	
+	vec2 centered_uv = UV - 0.5;
+	float dist = length(centered_uv);
+	float circle_mask = smoothstep(0.5, 0.48, dist);
+	
+	
+	vec3 final_rgb = tex_color.rgb; 
+	
+	float v_fade = 1.0 - v_progress;
+	
+	COLOR = vec4(final_rgb, tex_color.a * circle_mask * v_fade);
 }

@@ -18,7 +18,6 @@ config/icon="res://2D/images/icon.svg"
 
 [autoload]
 
-PreInstanceBallHolder="*uid://dyqhq1jsc4e2c"
 SignalBus="*uid://djee380ynnny2"
 
 [display]

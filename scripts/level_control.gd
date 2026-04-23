@@ -13,7 +13,3 @@ func _ready():
 func _process(delta):
 	delta_timer += delta
 	
-	#if delta_timer >= 1:
-		#delta_timer = 0
-		#var instance = ball_scn.instantiate()
-		#add_child(instance)
