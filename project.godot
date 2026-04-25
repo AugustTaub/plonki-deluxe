@@ -19,6 +19,7 @@ config/icon="res://2D/images/icon.svg"
 [autoload]
 
 SignalBus="*uid://djee380ynnny2"
+SaveManager="*uid://d03l27pfkh31u"
 
 [display]
 
@@ -42,7 +43,6 @@ fire_ball={
 
 common/physics_ticks_per_second=144
 3d/physics_engine="Jolt Physics"
-common/physics_interpolation=true
 
 [rendering]
 

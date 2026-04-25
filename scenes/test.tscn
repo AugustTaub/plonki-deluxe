@@ -1,19 +1,485 @@
 [gd_scene format=3 uid="uid://cqe6leidv0y2r"]
 
-[ext_resource type="Shader" uid="uid://qw101u0puhr6" path="res://2D/shaders/ball_trail.gdshader" id="1_errlg"]
+[ext_resource type="Texture2D" uid="uid://d133h6eqbckax" path="res://2D/images/upgrade_rotated.png" id="1_bl13t"]
+[ext_resource type="Theme" uid="uid://2h0b7dr8830" path="res://2D/themes/upgrade_box.tres" id="1_iyx0m"]
+[ext_resource type="Script" uid="uid://u8dqe1j8oeyv" path="res://scripts/upgrade_box.gd" id="2_74lek"]
+[ext_resource type="Texture2D" uid="uid://bqhnyytltm040" path="res://2D/images/upgrade.png" id="2_iyx0m"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bl13t"]
-shader = ExtResource("1_errlg")
+[node name="Control" type="Control" unique_id=1475028177]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[sub_resource type="Gradient" id="Gradient_iyx0m"]
-offsets = PackedFloat32Array(1)
-colors = PackedColorArray(1, 1, 1, 1)
+[node name="TabContainer" type="TabContainer" parent="." unique_id=1489761036]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 69.0
+offset_right = 240.0
+offset_bottom = 855.0
+theme = ExtResource("1_iyx0m")
+current_tab = 0
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_74lek"]
-gradient = SubResource("Gradient_iyx0m")
+[node name="Ball" type="ScrollContainer" parent="TabContainer" unique_id=1590756980]
+layout_mode = 2
+metadata/_tab_index = 0
 
-[node name="Node2D" type="Node2D" unique_id=810308111]
+[node name="vbox" type="VBoxContainer" parent="TabContainer/Ball" unique_id=826038568]
+layout_mode = 2
+theme_override_constants/separation = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2119629821]
-material = SubResource("ShaderMaterial_bl13t")
-texture = SubResource("GradientTexture2D_74lek")
+[node name="UpgradeBox" type="HBoxContainer" parent="TabContainer/Ball/vbox" unique_id=1404305354]
+layout_mode = 2
+script = ExtResource("2_74lek")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Ball/vbox/UpgradeBox" unique_id=648605057]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="TabContainer/Ball/vbox/UpgradeBox/VBoxContainer" unique_id=54210065]
+custom_minimum_size = Vector2(130.35, 0)
+layout_mode = 2
+theme = ExtResource("1_iyx0m")
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Ball/vbox/UpgradeBox/VBoxContainer/PanelContainer" unique_id=1001941814]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_bottom = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Ball/vbox/UpgradeBox/VBoxContainer/PanelContainer/MarginContainer" unique_id=1281158320]
+layout_mode = 2
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 18
+text = "Ball Speed"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="PanelContainer2" type="PanelContainer" parent="TabContainer/Ball/vbox/UpgradeBox/VBoxContainer" unique_id=585884044]
+layout_mode = 2
+theme = ExtResource("1_iyx0m")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Ball/vbox/UpgradeBox/VBoxContainer/PanelContainer2" unique_id=1175449053]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="MarginContainer2" type="MarginContainer" parent="TabContainer/Ball/vbox/UpgradeBox/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=1428837880]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="TabContainer/Ball/vbox/UpgradeBox/VBoxContainer/PanelContainer2/HBoxContainer/MarginContainer2" unique_id=817739539]
+custom_minimum_size = Vector2(50.68, 31.94)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 17
+text = "325%"
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Ball/vbox/UpgradeBox/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=450737726]
+layout_mode = 2
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 6
+
+[node name="TextureRect" type="TextureRect" parent="TabContainer/Ball/vbox/UpgradeBox/VBoxContainer/PanelContainer2/HBoxContainer/MarginContainer" unique_id=1802120192]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("1_bl13t")
+expand_mode = 2
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="TabContainer/Ball/vbox/UpgradeBox/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=729224822]
+custom_minimum_size = Vector2(50.68, 31.94)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 17
+text = "999%"
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="TabContainer/Ball/vbox/UpgradeBox" unique_id=682312818]
+texture_filter = 1
+custom_minimum_size = Vector2(53.465, 0)
+layout_mode = 2
+theme = ExtResource("1_iyx0m")
+icon = ExtResource("2_iyx0m")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Machine" type="ScrollContainer" parent="TabContainer" unique_id=1036544001]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="vbox" type="VBoxContainer" parent="TabContainer/Machine" unique_id=1183355703]
+layout_mode = 2
+
+[node name="UpgradeBox" type="HBoxContainer" parent="TabContainer/Machine/vbox" unique_id=607370142]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Machine/vbox/UpgradeBox" unique_id=2035795690]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="TabContainer/Machine/vbox/UpgradeBox/VBoxContainer" unique_id=295655884]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Machine/vbox/UpgradeBox/VBoxContainer/PanelContainer" unique_id=1400654135]
+layout_mode = 2
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 18
+text = "Upgrade"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="PanelContainer2" type="PanelContainer" parent="TabContainer/Machine/vbox/UpgradeBox/VBoxContainer" unique_id=338327769]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Machine/vbox/UpgradeBox/VBoxContainer/PanelContainer2" unique_id=554372883]
+layout_mode = 2
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="TabContainer/Machine/vbox/UpgradeBox/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=176581856]
+custom_minimum_size = Vector2(50.68, 31.94)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 17
+text = "325%"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Machine/vbox/UpgradeBox/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=108304816]
+layout_mode = 2
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="TextureRect" type="TextureRect" parent="TabContainer/Machine/vbox/UpgradeBox/VBoxContainer/PanelContainer2/HBoxContainer/MarginContainer" unique_id=361896640]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("1_bl13t")
+expand_mode = 2
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="TabContainer/Machine/vbox/UpgradeBox/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=1779126165]
+custom_minimum_size = Vector2(50.68, 31.94)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 17
+text = "999%"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="Button" type="Button" parent="TabContainer/Machine/vbox/UpgradeBox" unique_id=544030609]
+texture_filter = 1
+custom_minimum_size = Vector2(53.465, 0)
+layout_mode = 2
+icon = ExtResource("2_iyx0m")
+icon_alignment = 1
+expand_icon = true
+
+[node name="UpgradeBox2" type="HBoxContainer" parent="TabContainer/Machine/vbox" unique_id=1011919676]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Machine/vbox/UpgradeBox2" unique_id=301637938]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="TabContainer/Machine/vbox/UpgradeBox2/VBoxContainer" unique_id=710187285]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Machine/vbox/UpgradeBox2/VBoxContainer/PanelContainer" unique_id=329020373]
+layout_mode = 2
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 18
+text = "Upgrade"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="PanelContainer2" type="PanelContainer" parent="TabContainer/Machine/vbox/UpgradeBox2/VBoxContainer" unique_id=722640706]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Machine/vbox/UpgradeBox2/VBoxContainer/PanelContainer2" unique_id=991201571]
+layout_mode = 2
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="TabContainer/Machine/vbox/UpgradeBox2/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=648783999]
+custom_minimum_size = Vector2(50.68, 31.94)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 17
+text = "325%"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Machine/vbox/UpgradeBox2/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=571233006]
+layout_mode = 2
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="TextureRect" type="TextureRect" parent="TabContainer/Machine/vbox/UpgradeBox2/VBoxContainer/PanelContainer2/HBoxContainer/MarginContainer" unique_id=1119228414]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("1_bl13t")
+expand_mode = 2
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="TabContainer/Machine/vbox/UpgradeBox2/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=1241137339]
+custom_minimum_size = Vector2(50.68, 31.94)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 17
+text = "999%"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="Button" type="Button" parent="TabContainer/Machine/vbox/UpgradeBox2" unique_id=672435584]
+texture_filter = 1
+custom_minimum_size = Vector2(53.465, 0)
+layout_mode = 2
+icon = ExtResource("2_iyx0m")
+icon_alignment = 1
+expand_icon = true
+
+[node name="UpgradeBox3" type="HBoxContainer" parent="TabContainer/Machine/vbox" unique_id=1526720671]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Machine/vbox/UpgradeBox3" unique_id=76817275]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="TabContainer/Machine/vbox/UpgradeBox3/VBoxContainer" unique_id=495838961]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Machine/vbox/UpgradeBox3/VBoxContainer/PanelContainer" unique_id=1845279673]
+layout_mode = 2
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 18
+text = "Upgrade"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="PanelContainer2" type="PanelContainer" parent="TabContainer/Machine/vbox/UpgradeBox3/VBoxContainer" unique_id=1781331335]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Machine/vbox/UpgradeBox3/VBoxContainer/PanelContainer2" unique_id=1775685159]
+layout_mode = 2
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="TabContainer/Machine/vbox/UpgradeBox3/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=1932403773]
+custom_minimum_size = Vector2(50.68, 31.94)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 17
+text = "325%"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Machine/vbox/UpgradeBox3/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=1126079182]
+layout_mode = 2
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="TextureRect" type="TextureRect" parent="TabContainer/Machine/vbox/UpgradeBox3/VBoxContainer/PanelContainer2/HBoxContainer/MarginContainer" unique_id=1892645653]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("1_bl13t")
+expand_mode = 2
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="TabContainer/Machine/vbox/UpgradeBox3/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=489804090]
+custom_minimum_size = Vector2(50.68, 31.94)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 17
+text = "999%"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="Button" type="Button" parent="TabContainer/Machine/vbox/UpgradeBox3" unique_id=467206163]
+texture_filter = 1
+custom_minimum_size = Vector2(53.465, 0)
+layout_mode = 2
+icon = ExtResource("2_iyx0m")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Stage" type="ScrollContainer" parent="TabContainer" unique_id=1700426838]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="vbox" type="VBoxContainer" parent="TabContainer/Stage" unique_id=1324905280]
+layout_mode = 2
+
+[node name="UpgradeBox" type="HBoxContainer" parent="TabContainer/Stage/vbox" unique_id=1492833484]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Stage/vbox/UpgradeBox" unique_id=1155883952]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="TabContainer/Stage/vbox/UpgradeBox/VBoxContainer" unique_id=669878190]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Stage/vbox/UpgradeBox/VBoxContainer/PanelContainer" unique_id=1984730355]
+layout_mode = 2
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 18
+text = "Upgrade"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="PanelContainer2" type="PanelContainer" parent="TabContainer/Stage/vbox/UpgradeBox/VBoxContainer" unique_id=1397909791]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Stage/vbox/UpgradeBox/VBoxContainer/PanelContainer2" unique_id=1795628941]
+layout_mode = 2
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="TabContainer/Stage/vbox/UpgradeBox/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=2102862581]
+custom_minimum_size = Vector2(50.68, 31.94)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 17
+text = "325%"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Stage/vbox/UpgradeBox/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=777774282]
+layout_mode = 2
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="TextureRect" type="TextureRect" parent="TabContainer/Stage/vbox/UpgradeBox/VBoxContainer/PanelContainer2/HBoxContainer/MarginContainer" unique_id=1243552419]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("1_bl13t")
+expand_mode = 2
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="TabContainer/Stage/vbox/UpgradeBox/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=1781010559]
+custom_minimum_size = Vector2(50.68, 31.94)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 17
+text = "999%"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="Button" type="Button" parent="TabContainer/Stage/vbox/UpgradeBox" unique_id=140511642]
+texture_filter = 1
+custom_minimum_size = Vector2(53.465, 0)
+layout_mode = 2
+icon = ExtResource("2_iyx0m")
+icon_alignment = 1
+expand_icon = true
+
+[node name="UpgradeBox2" type="HBoxContainer" parent="TabContainer/Stage/vbox" unique_id=887555522]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Stage/vbox/UpgradeBox2" unique_id=1715338253]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="TabContainer/Stage/vbox/UpgradeBox2/VBoxContainer" unique_id=1036681605]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Stage/vbox/UpgradeBox2/VBoxContainer/PanelContainer" unique_id=483462765]
+layout_mode = 2
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 18
+text = "Upgrade"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="PanelContainer2" type="PanelContainer" parent="TabContainer/Stage/vbox/UpgradeBox2/VBoxContainer" unique_id=693102443]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Stage/vbox/UpgradeBox2/VBoxContainer/PanelContainer2" unique_id=1822744915]
+layout_mode = 2
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="TabContainer/Stage/vbox/UpgradeBox2/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=1667576680]
+custom_minimum_size = Vector2(50.68, 31.94)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 17
+text = "325%"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Stage/vbox/UpgradeBox2/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=357028602]
+layout_mode = 2
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="TextureRect" type="TextureRect" parent="TabContainer/Stage/vbox/UpgradeBox2/VBoxContainer/PanelContainer2/HBoxContainer/MarginContainer" unique_id=1000237774]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("1_bl13t")
+expand_mode = 2
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="TabContainer/Stage/vbox/UpgradeBox2/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=128063172]
+custom_minimum_size = Vector2(50.68, 31.94)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 17
+text = "999%"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="Button" type="Button" parent="TabContainer/Stage/vbox/UpgradeBox2" unique_id=545160161]
+texture_filter = 1
+custom_minimum_size = Vector2(53.465, 0)
+layout_mode = 2
+icon = ExtResource("2_iyx0m")
+icon_alignment = 1
+expand_icon = true
+
+[node name="UpgradeBox3" type="HBoxContainer" parent="TabContainer/Stage/vbox" unique_id=1728044894]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Stage/vbox/UpgradeBox3" unique_id=169664349]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="TabContainer/Stage/vbox/UpgradeBox3/VBoxContainer" unique_id=15156144]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Stage/vbox/UpgradeBox3/VBoxContainer/PanelContainer" unique_id=11614147]
+layout_mode = 2
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 18
+text = "Upgrade"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="PanelContainer2" type="PanelContainer" parent="TabContainer/Stage/vbox/UpgradeBox3/VBoxContainer" unique_id=125206235]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Stage/vbox/UpgradeBox3/VBoxContainer/PanelContainer2" unique_id=524026991]
+layout_mode = 2
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="TabContainer/Stage/vbox/UpgradeBox3/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=1059051398]
+custom_minimum_size = Vector2(50.68, 31.94)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 17
+text = "325%"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Stage/vbox/UpgradeBox3/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=598027580]
+layout_mode = 2
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="TextureRect" type="TextureRect" parent="TabContainer/Stage/vbox/UpgradeBox3/VBoxContainer/PanelContainer2/HBoxContainer/MarginContainer" unique_id=283242351]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("1_bl13t")
+expand_mode = 2
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="TabContainer/Stage/vbox/UpgradeBox3/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=1097619516]
+custom_minimum_size = Vector2(50.68, 31.94)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 17
+text = "999%"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="Button" type="Button" parent="TabContainer/Stage/vbox/UpgradeBox3" unique_id=1724072238]
+texture_filter = 1
+custom_minimum_size = Vector2(53.465, 0)
+layout_mode = 2
+icon = ExtResource("2_iyx0m")
+icon_alignment = 1
+expand_icon = true

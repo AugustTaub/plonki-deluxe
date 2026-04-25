@@ -1,0 +1,43 @@
+[gd_resource type="Theme" format=3 uid="uid://2h0b7dr8830"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ksp8l"]
+bg_color = Color(0.18681726, 0.19280943, 0.1869888, 0.31764707)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3gyf7"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_top = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30w7b"]
+bg_color = Color(0.34407574, 0.34407577, 0.3440756, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+expand_margin_left = 2.0
+expand_margin_right = 2.0
+shadow_color = Color(1, 1, 1, 0.10980392)
+shadow_size = 5
+shadow_offset = Vector2(0, -2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ka1b"]
+bg_color = Color(0.2159017, 0.21590173, 0.21590167, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_color = Color(0.17283267, 0.1728327, 0.17283252, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+expand_margin_left = 2.0
+expand_margin_right = 2.0
+
+[resource]
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_ksp8l")
+TabContainer/font_sizes/font_size = 20
+TabContainer/styles/panel = SubResource("StyleBoxFlat_3gyf7")
+TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_30w7b")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_7ka1b")

@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="LevelResource" format=3 uid="uid://dt0l4y0c6i2kq"]
-
-[ext_resource type="Script" uid="uid://dfl3oi2nhq41y" path="res://scripts/stage_res.gd" id="1"]
-
-[resource]
-script = ExtResource("1")
-test = 9
-metadata/_custom_type_script = "uid://dfl3oi2nhq41y"

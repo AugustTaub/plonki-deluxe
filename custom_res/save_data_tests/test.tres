@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SaveGame" format=3 uid="uid://c80w0yjd4q40n"]
+
+[ext_resource type="Script" uid="uid://drfxtc5ceokld" path="res://scripts/managers/save_game.gd" id="1_mx8ne"]
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="2_j07jm"]
+[ext_resource type="Resource" uid="uid://cvslx5sb28pf5" path="res://custom_res/upgrades/test.tres" id="3_l3pva"]
+
+[resource]
+script = ExtResource("1_mx8ne")
+money_amount = 18
+unlocked_upgrades = Array[ExtResource("2_j07jm")]([ExtResource("3_l3pva")])
+metadata/_custom_type_script = "uid://drfxtc5ceokld"
