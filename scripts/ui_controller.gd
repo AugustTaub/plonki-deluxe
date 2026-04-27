@@ -29,6 +29,8 @@ func on_workshop_toggled():
 		true:
 			var tween = create_tween()
 			tween.tween_property(workshop_screen_node,"global_position",global_position,0.3)
+			get_tree().paused = true
 		false:
 			var tween = create_tween()
 			tween.tween_property(workshop_screen_node,"global_position",hidden_workshop_pos,0.3)
+			get_tree().paused = false

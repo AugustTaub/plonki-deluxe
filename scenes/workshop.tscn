@@ -46,6 +46,7 @@ fill_from = Vector2(0.5, 0.5)
 texture = SubResource("GradientTexture2D_f1oc0")
 
 [node name="workshop" type="Control" unique_id=1661245154]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -144,6 +145,7 @@ offset_left = 700.0
 offset_top = 19.0
 offset_right = 1099.0
 offset_bottom = 115.0
+theme_override_constants/outline_size = 16
 theme_override_font_sizes/normal_font_size = 48
 text = "Unlock: 0000"
 
