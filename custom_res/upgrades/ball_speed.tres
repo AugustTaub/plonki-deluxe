@@ -3,7 +3,14 @@
 [ext_resource type="Curve" uid="uid://d3vjg4q23dchj" path="res://2D/curves/standard.tres" id="1_aifwu"]
 [ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="2_53lf0"]
 
+[sub_resource type="Curve" id="Curve_aifwu"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.6, 0.5), 0.6187041, 0.6187041, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
+point_count = 3
+
 [resource]
 script = ExtResource("2_53lf0")
 name = "ball_speed"
+start_result = 200.0
+end_result = 800.0
+result_scaling_curve = SubResource("Curve_aifwu")
 metadata/_custom_type_script = "uid://bbo5op84iqbom"

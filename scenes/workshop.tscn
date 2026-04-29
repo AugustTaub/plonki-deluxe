@@ -102,6 +102,7 @@ layout_mode = 0
 offset_left = 1072.0
 offset_right = 1152.0
 offset_bottom = 85.0
+focus_mode = 0
 theme_override_font_sizes/font_size = 47
 text = "X"
 

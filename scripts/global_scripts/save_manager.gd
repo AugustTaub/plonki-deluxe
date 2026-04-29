@@ -1,6 +1,6 @@
 extends Node
 
-const SAVE_PATH := "user://plonki_save1333.tres"
+const SAVE_PATH := "user://plonki_save1332315r33.tres"
 
 var save_game: SaveGame = null
 
@@ -22,6 +22,11 @@ func set_money(new_money: int):
 	SignalBus.set_money_counter.emit(new_money)
 	
 	ResourceSaver.save(save_game, SAVE_PATH)
+
+func change_money(change_amount: int):
+	set_money(save_game.money_amount+change_amount)
+
+
 
 func add_upgrade(new_upgrade: UpgradeData):
 	if not save_game.unlocked_upgrades.has(new_upgrade):

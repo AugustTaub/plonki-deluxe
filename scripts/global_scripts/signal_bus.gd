@@ -18,4 +18,10 @@ signal set_money_counter(new_amount: int)
 
 ###
 
+@warning_ignore("unused_signal")
 signal save_game_loaded()
+
+###
+
+@warning_ignore("unused_signal")
+signal upgrade_preloader_loaded(preloader_node: ResourcePreloader)

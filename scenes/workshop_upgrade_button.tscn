@@ -60,4 +60,20 @@ text = "999"
 fit_content = true
 horizontal_alignment = 1
 
+[node name="hint_panel" type="PanelContainer" parent="." unique_id=1909199663]
+visible = false
+layout_mode = 0
+offset_left = -55.0
+offset_top = -48.0
+offset_right = 129.975
+offset_bottom = 1.0
+
+[node name="hint_text" type="RichTextLabel" parent="hint_panel" unique_id=1798710912]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Hint Hint Hint"
+fit_content = true
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
 [connection signal="pressed" from="." to="." method="_on_pressed"]
