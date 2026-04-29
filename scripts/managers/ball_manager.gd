@@ -86,6 +86,7 @@ func spawn_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO, spawn_rad
 			# Revive ball if therers one available
 			ball.active = true
 			ball.pos = spawn_pos
+			ball.radius = clamp(spawn_radius,1,max_allowed_ball_radius)
 			ball.last_frame_pos = spawn_pos
 			ball.vel = spawn_vel
 			ball.air_time = 0.0

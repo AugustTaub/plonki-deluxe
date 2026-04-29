@@ -55,9 +55,9 @@ func update_visuals_from_save_game():
 	# cost
 	if curr_lvl < associated_upgrade.max_level:
 		var cost = associated_upgrade.get_level_price(curr_lvl)
-		$cost_text.text = str(cost)
+		%cost_text.text = str(cost)
 	else:
-		$cost_text.hide()
+		$cost_text_container.hide()
 	
 	# level
 	var max_lvl: String = str(associated_upgrade.max_level)

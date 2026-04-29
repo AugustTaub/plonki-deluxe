@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://du3eonw0shm4s"]
+
+[ext_resource type="Curve" uid="uid://d3vjg4q23dchj" path="res://2D/curves/standard.tres" id="1_gsqlm"]
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="2_v7rgg"]
+
+[resource]
+script = ExtResource("2_v7rgg")
+name = "ball_size"
+max_level = 5
+start_price = 200
+start_result = 8.0
+end_result = 40.0
+metadata/_custom_type_script = "uid://bbo5op84iqbom"

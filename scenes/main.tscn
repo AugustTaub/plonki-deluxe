@@ -27,6 +27,7 @@
 [ext_resource type="Script" uid="uid://bpkun8bhfpwog" path="res://scripts/managers/shock_wave_manager.gd" id="20_gqmmt"]
 [ext_resource type="Shader" uid="uid://66yohp1rod72" path="res://2D/shaders/shock_wave.gdshader" id="21_yc10j"]
 [ext_resource type="Resource" uid="uid://v81rtw47g0f" path="res://custom_res/upgrades/ball_speed.tres" id="27_2f3dj"]
+[ext_resource type="Resource" uid="uid://du3eonw0shm4s" path="res://custom_res/upgrades/ball_size.tres" id="27_fv21b"]
 [ext_resource type="Script" uid="uid://r7b4etqxtw30" path="res://scripts/batch_resource_preloader.gd" id="27_vxglm"]
 [ext_resource type="Resource" uid="uid://cvslx5sb28pf5" path="res://custom_res/upgrades/test.tres" id="28_yq6so"]
 
@@ -308,7 +309,7 @@ multimesh = SubResource("MultiMesh_yc10j")
 texture = SubResource("GradientTexture2D_yc10j")
 
 [node name="UpgradePreloader" type="ResourcePreloader" parent="." unique_id=1889169227]
-resources = [PackedStringArray("ball_speed", "test"), [ExtResource("27_2f3dj"), ExtResource("28_yq6so")]]
+resources = [PackedStringArray("ball_size", "ball_speed", "test"), [ExtResource("27_fv21b"), ExtResource("27_2f3dj"), ExtResource("28_yq6so")]]
 script = ExtResource("27_vxglm")
 
 [connection signal="pressed" from="CanvasLayer/workshop_button" to="CanvasLayer/UI_Controller" method="_on_workshop_button_pressed"]

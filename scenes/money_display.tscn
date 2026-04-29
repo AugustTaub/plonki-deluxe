@@ -1,23 +1,11 @@
 [gd_scene format=3 uid="uid://dxofmr5dxupur"]
 
 [ext_resource type="Script" uid="uid://b3ywhwga858ka" path="res://scripts/money_display.gd" id="1_vr4hv"]
+[ext_resource type="Texture2D" uid="uid://dbf8xs67fg1be" path="res://2D/godot_gen_textures/coin_circle.tres" id="2_bft5h"]
 
 [sub_resource type="Theme" id="Theme_jkv2x"]
 Button/constants/outline_size = 15
 Button/font_sizes/font_size = 40
-
-[sub_resource type="Gradient" id="Gradient_dp3eg"]
-interpolation_mode = 1
-offsets = PackedFloat32Array(0.15254237, 0.5301205, 0.6398305, 0.7584746)
-colors = PackedColorArray(0.7729138, 0.52443993, 0.076838605, 1, 0.74, 0.44695997, 0.088800006, 1, 0, 0, 0, 1, 0, 0, 0, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_0ld40"]
-gradient = SubResource("Gradient_dp3eg")
-width = 16
-height = 16
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.9188034, 0.08547009)
 
 [node name="money_display" type="Control" unique_id=523163818]
 layout_mode = 3
@@ -35,7 +23,7 @@ offset_right = 210.0
 offset_bottom = 70.0
 theme = SubResource("Theme_jkv2x")
 text = "000"
-icon = SubResource("GradientTexture2D_0ld40")
+icon = ExtResource("2_bft5h")
 flat = true
 alignment = 0
 clip_text = true

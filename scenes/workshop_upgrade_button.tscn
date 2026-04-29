@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://j0uodtkukcni" path="res://2D/godot_gen_textures/ball.tres" id="1_lfnkh"]
 [ext_resource type="Script" uid="uid://c3qxq6fdv1cgr" path="res://scripts/workshop_upgrade_button.gd" id="2_sxehb"]
+[ext_resource type="Texture2D" uid="uid://dbf8xs67fg1be" path="res://2D/godot_gen_textures/coin_circle.tres" id="3_o5l0w"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_35y6k"]
 texture = ExtResource("1_lfnkh")
@@ -36,7 +37,7 @@ fill_from = Vector2(0.5, 0.5)
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5p7st"]
 texture = SubResource("GradientTexture2D_f1oc0")
 
-[node name="Button" type="Button" unique_id=1671652110]
+[node name="UpgradeButton" type="Button" unique_id=1671652110]
 texture_filter = 1
 custom_minimum_size = Vector2(64, 64)
 offset_right = 64.0
@@ -48,17 +49,6 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_gdjy1")
 theme_override_styles/hover = SubResource("StyleBoxTexture_5p7st")
 text = "0/3"
 script = ExtResource("2_sxehb")
-
-[node name="cost_text" type="RichTextLabel" parent="." unique_id=1527123068]
-layout_mode = 0
-offset_left = -11.0
-offset_top = 45.0
-offset_right = 77.0
-offset_bottom = 91.0
-theme_override_font_sizes/normal_font_size = 33
-text = "999"
-fit_content = true
-horizontal_alignment = 1
 
 [node name="hint_panel" type="PanelContainer" parent="." unique_id=1909199663]
 visible = false
@@ -72,6 +62,27 @@ offset_bottom = 1.0
 unique_name_in_owner = true
 layout_mode = 2
 text = "Hint Hint Hint"
+fit_content = true
+
+[node name="cost_text_container" type="HBoxContainer" parent="." unique_id=26863430]
+layout_mode = 0
+offset_left = -7.0
+offset_top = 54.0
+offset_right = 223.0
+offset_bottom = 94.0
+
+[node name="TextureRect" type="TextureRect" parent="cost_text_container" unique_id=395123872]
+layout_mode = 2
+texture = ExtResource("3_o5l0w")
+expand_mode = 3
+
+[node name="cost_text" type="RichTextLabel" parent="cost_text_container" unique_id=1527123068]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/normal_font_size = 25
+text = "999"
 fit_content = true
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

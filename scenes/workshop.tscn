@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://d2wnh3mtqdeu4" path="res://scripts/workshop_upgrade_zone.gd" id="6_cy215"]
 [ext_resource type="PackedScene" uid="uid://cpha31pc0s008" path="res://scenes/workshop_upgrade_button.tscn" id="6_f1oc0"]
 [ext_resource type="Resource" uid="uid://v81rtw47g0f" path="res://custom_res/upgrades/ball_speed.tres" id="7_cy215"]
+[ext_resource type="Resource" uid="uid://du3eonw0shm4s" path="res://custom_res/upgrades/ball_size.tres" id="8_4xjol"]
 [ext_resource type="PackedScene" uid="uid://dxofmr5dxupur" path="res://scenes/money_display.tscn" id="10_gdjy1"]
 
 [node name="workshop" type="Control" unique_id=1661245154]
@@ -71,7 +72,7 @@ texture = ExtResource("3_cy215")
 anchors_preset = 0
 mouse_filter = 1
 
-[node name="Button" parent="cannon/upgrade_buttons" unique_id=1671652110 instance=ExtResource("6_f1oc0")]
+[node name="UpgradeButton" parent="cannon/upgrade_buttons" unique_id=1671652110 instance=ExtResource("6_f1oc0")]
 layout_mode = 0
 offset_left = 902.0
 offset_top = 98.0
@@ -79,6 +80,15 @@ offset_right = 966.0
 offset_bottom = 162.0
 mouse_filter = 1
 associated_upgrade = ExtResource("7_cy215")
+
+[node name="UpgradeButton2" parent="cannon/upgrade_buttons" unique_id=202079135 instance=ExtResource("6_f1oc0")]
+layout_mode = 0
+offset_left = 740.0
+offset_top = 83.0
+offset_right = 804.0
+offset_bottom = 147.0
+mouse_filter = 1
+associated_upgrade = ExtResource("8_4xjol")
 
 [node name="mouse_coll_area" type="Area2D" parent="cannon" unique_id=480621266]
 position = Vector2(868, 113)

@@ -1,21 +1,37 @@
 extends Node
 
-const SAVE_PATH := "user://plonki_save1332315r33.tres"
+const SAVE_PATH := "user://plonki_save2fgd321ehof.tres"
 
 var save_game: SaveGame = null
 
+var upgrade_preloader: ResourcePreloader
 
 func _ready() -> void:
+	
+	var new_save: bool = false
 	
 	if ResourceLoader.exists(SAVE_PATH):
 		save_game = ResourceLoader.load(SAVE_PATH, "", ResourceLoader.CACHE_MODE_IGNORE)
 	else:
 		save_game = SaveGame.new()
-	
+		new_save = true
 	
 	await get_tree().create_timer(0).timeout
-	set_money(save_game.money_amount)
+	SignalBus.upgrade_preloader_loaded.connect(_on_upgrade_preloader_loaded)
 
+	if upgrade_preloader and new_save:
+		for res_name in upgrade_preloader.get_resource_list():
+				var res: UpgradeData = upgrade_preloader.get_resource(res_name)
+				if res is UpgradeData:
+					save_game.upgrade_levels[res] = 0
+		
+	
+	set_money(save_game.money_amount)
+	
+	
+
+func _on_upgrade_preloader_loaded(preloader: ResourcePreloader):
+	upgrade_preloader = preloader
 
 func set_money(new_money: int):
 	save_game.money_amount = new_money
@@ -31,7 +47,7 @@ func change_money(change_amount: int):
 func add_upgrade(new_upgrade: UpgradeData):
 	if not save_game.unlocked_upgrades.has(new_upgrade):
 		save_game.unlocked_upgrades.append(new_upgrade)
-		save_game.upgrade_levels[new_upgrade] = 1
+		save_game.upgrade_levels[new_upgrade] = 0
 	
 	ResourceSaver.save(save_game, SAVE_PATH)
 
@@ -44,7 +60,7 @@ func increase_upgrade_level(increase_upgrade: UpgradeData):
 		if new_val <= increase_upgrade.max_level:
 			save_game.upgrade_levels[increase_upgrade] = new_val
 	else:
-		save_game.upgrade_levels[increase_upgrade] = 1
+		save_game.upgrade_levels[increase_upgrade] = 0
 	
 	ResourceSaver.save(save_game, SAVE_PATH)
 

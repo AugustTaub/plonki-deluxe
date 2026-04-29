@@ -32,11 +32,17 @@ func _physics_process(delta):
 	var speed_upgrade: UpgradeData = upgrade_preloader.get_resource("ball_speed")
 	var speed_level: int = SaveManager.get_upgrade_level_by_name("ball_speed")
 	
-	start_speed = speed_upgrade.get_level_price(speed_level)
+	start_speed = speed_upgrade.get_level_result(speed_level)
+	
+	var radius_upgrade: UpgradeData = upgrade_preloader.get_resource("ball_size")
+	var radius_level: int = SaveManager.get_upgrade_level_by_name("ball_size")
+	
+	var radius = radius_upgrade.get_level_result(radius_level)
+	#print("radius: ",radius)
 	
 	var pos = ball_spawn_point.global_position
 	var vel = global_position.direction_to(ball_spawn_point.global_position) * start_speed
-	var radius = 16.0
+	
 	
 	if sin(delta_timer*(1/delta))>0:
 		SignalBus.spawn_simulated_ball.emit(pos,vel,radius)
