@@ -17,3 +17,5 @@ signal workshop_toggled()
 signal set_money_counter(new_amount: int)
 
 ###
+
+signal save_game_loaded()

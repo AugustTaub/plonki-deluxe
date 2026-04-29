@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://v81rtw47g0f"]
+
+[ext_resource type="Curve" uid="uid://d3vjg4q23dchj" path="res://2D/curves/standard.tres" id="1_aifwu"]
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="2_53lf0"]
+
+[resource]
+script = ExtResource("2_53lf0")
+name = "ball_speed"
+metadata/_custom_type_script = "uid://bbo5op84iqbom"

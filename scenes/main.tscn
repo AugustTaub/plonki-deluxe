@@ -175,6 +175,7 @@ offset_left = 22.0
 offset_top = 152.0
 offset_right = 186.0
 offset_bottom = 271.0
+focus_mode = 0
 text = "WORKSHOP"
 
 [node name="money_display" parent="CanvasLayer" unique_id=523163818 instance=ExtResource("4_2wyq8")]

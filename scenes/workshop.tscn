@@ -2,48 +2,12 @@
 
 [ext_resource type="Script" uid="uid://cbjxqgoycl1rc" path="res://scripts/workshop.gd" id="1_4xjol"]
 [ext_resource type="Texture2D" uid="uid://davsnx3h8isch" path="res://2D/godot_gen_textures/workshop_base.png" id="1_acb0r"]
-[ext_resource type="Texture2D" uid="uid://b05bgoxuf4bac" path="res://2D/godot_gen_textures/workshop_bucket.png" id="2_35y6k"]
 [ext_resource type="Texture2D" uid="uid://c3ffht6hyaf1" path="res://2D/godot_gen_textures/workshop_cannon.png" id="3_cy215"]
-[ext_resource type="Texture2D" uid="uid://q0lyelgpf0e8" path="res://2D/godot_gen_textures/workshop_enchanter.png" id="4_4xjol"]
 [ext_resource type="Resource" uid="uid://cvslx5sb28pf5" path="res://custom_res/upgrades/test.tres" id="4_15wdr"]
-[ext_resource type="Texture2D" uid="uid://f7qgdm50n8r4" path="res://2D/godot_gen_textures/workshop_stages.png" id="5_gdjy1"]
-[ext_resource type="Texture2D" uid="uid://evdkxdmrfgxx" path="res://2D/godot_gen_textures/workshop_ballfactory.png" id="6_15wdr"]
 [ext_resource type="Script" uid="uid://d2wnh3mtqdeu4" path="res://scripts/workshop_upgrade_zone.gd" id="6_cy215"]
-[ext_resource type="Texture2D" uid="uid://j0uodtkukcni" path="res://2D/godot_gen_textures/ball.tres" id="7_35y6k"]
+[ext_resource type="PackedScene" uid="uid://cpha31pc0s008" path="res://scenes/workshop_upgrade_button.tscn" id="6_f1oc0"]
+[ext_resource type="Resource" uid="uid://v81rtw47g0f" path="res://custom_res/upgrades/ball_speed.tres" id="7_cy215"]
 [ext_resource type="PackedScene" uid="uid://dxofmr5dxupur" path="res://scenes/money_display.tscn" id="10_gdjy1"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_35y6k"]
-texture = ExtResource("7_35y6k")
-
-[sub_resource type="Gradient" id="Gradient_cy215"]
-interpolation_mode = 1
-offsets = PackedFloat32Array(0.12048193, 0.28431374, 0.5147059, 0.686747)
-colors = PackedColorArray(0.08, 0.08, 0.08, 1, 0.24115604, 0.24115607, 0.2411559, 1, 0, 0, 0, 1, 0, 0, 0, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_4xjol"]
-gradient = SubResource("Gradient_cy215")
-width = 16
-height = 16
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gdjy1"]
-texture = SubResource("GradientTexture2D_4xjol")
-
-[sub_resource type="Gradient" id="Gradient_15wdr"]
-interpolation_mode = 1
-offsets = PackedFloat32Array(0.12048193, 0.40686274, 0.5637255, 0.75490195)
-colors = PackedColorArray(0.67, 0.67, 0.67, 1, 0.85, 0.85, 0.85, 1, 0, 0, 0, 1, 0, 0, 0, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_f1oc0"]
-gradient = SubResource("Gradient_15wdr")
-width = 16
-height = 16
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5p7st"]
-texture = SubResource("GradientTexture2D_f1oc0")
 
 [node name="workshop" type="Control" unique_id=1661245154]
 process_mode = 3
@@ -63,6 +27,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0.06053035, 0.06053035, 0.060530342, 1)
 
 [node name="bg" type="TextureRect" parent="." unique_id=1147585824]
@@ -104,34 +69,16 @@ texture = ExtResource("3_cy215")
 
 [node name="upgrade_buttons" type="Control" parent="cannon" unique_id=1015434802]
 anchors_preset = 0
+mouse_filter = 1
 
-[node name="Button" type="Button" parent="cannon/upgrade_buttons" unique_id=655787988]
-texture_filter = 1
-custom_minimum_size = Vector2(64, 64)
+[node name="Button" parent="cannon/upgrade_buttons" unique_id=1671652110 instance=ExtResource("6_f1oc0")]
 layout_mode = 0
-offset_left = 950.0
-offset_top = 129.0
-offset_right = 1014.0
-offset_bottom = 193.0
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxTexture_35y6k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_gdjy1")
-theme_override_styles/hover = SubResource("StyleBoxTexture_5p7st")
-text = "0/3"
-
-[node name="Button2" type="Button" parent="cannon/upgrade_buttons" unique_id=2064812269]
-texture_filter = 1
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 0
-offset_left = 816.0
-offset_top = 76.0
-offset_right = 880.0
-offset_bottom = 140.0
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxTexture_35y6k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_gdjy1")
-theme_override_styles/hover = SubResource("StyleBoxTexture_5p7st")
-text = "0/3"
+offset_left = 902.0
+offset_top = 98.0
+offset_right = 966.0
+offset_bottom = 162.0
+mouse_filter = 1
+associated_upgrade = ExtResource("7_cy215")
 
 [node name="mouse_coll_area" type="Area2D" parent="cannon" unique_id=480621266]
 position = Vector2(868, 113)
@@ -141,263 +88,14 @@ polygon = PackedVector2Array(-286, -113, -289, -4, -220, 104, -25, 143, 62, 148,
 
 [node name="unlock_cost_text" type="RichTextLabel" parent="cannon" unique_id=1155360000]
 layout_mode = 0
-offset_left = 700.0
-offset_top = 19.0
-offset_right = 1099.0
-offset_bottom = 115.0
+offset_left = 697.0
+offset_top = 14.0
+offset_right = 1045.0
+offset_bottom = 83.0
+mouse_filter = 1
 theme_override_constants/outline_size = 16
 theme_override_font_sizes/normal_font_size = 48
 text = "Unlock: 0000"
-
-[node name="bucket" type="Control" parent="." unique_id=315165461 node_paths=PackedStringArray("sprite", "button_parent", "coll_area")]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(868.515, 111.515)
-mouse_filter = 1
-script = ExtResource("6_cy215")
-sprite = NodePath("bucket_sprite")
-button_parent = NodePath("upgrade_buttons")
-coll_area = NodePath("mouse_coll_area")
-
-[node name="bucket_sprite" type="TextureRect" parent="bucket" unique_id=1189160943]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(727.24, 370.31)
-texture = ExtResource("2_35y6k")
-
-[node name="upgrade_buttons" type="Control" parent="bucket" unique_id=1294297583]
-anchors_preset = 0
-
-[node name="Button" type="Button" parent="bucket/upgrade_buttons" unique_id=1112848249]
-texture_filter = 1
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 0
-offset_left = 762.0
-offset_top = 359.0
-offset_right = 826.0
-offset_bottom = 423.0
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxTexture_35y6k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_gdjy1")
-theme_override_styles/hover = SubResource("StyleBoxTexture_5p7st")
-text = "0/3"
-
-[node name="Button2" type="Button" parent="bucket/upgrade_buttons" unique_id=1434341881]
-texture_filter = 1
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 0
-offset_left = 628.0
-offset_top = 306.0
-offset_right = 692.0
-offset_bottom = 370.0
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxTexture_35y6k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_gdjy1")
-theme_override_styles/hover = SubResource("StyleBoxTexture_5p7st")
-text = "0/3"
-
-[node name="mouse_coll_area" type="Area2D" parent="bucket" unique_id=1945589271]
-position = Vector2(730, 370)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="bucket/mouse_coll_area" unique_id=1924200951]
-polygon = PackedVector2Array(-138, -97, -115, 57, -70, 117, -19, 142, 41, 140, 93, 105, 130, 28, 140, -94)
-
-[node name="enchanter" type="Control" parent="." unique_id=711617548 node_paths=PackedStringArray("sprite", "button_parent", "coll_area")]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(868.515, 111.515)
-mouse_filter = 1
-script = ExtResource("6_cy215")
-sprite = NodePath("enchanter_sprite")
-button_parent = NodePath("upgrade_buttons")
-coll_area = NodePath("../stages/mouse_coll_area")
-
-[node name="enchanter_sprite" type="TextureRect" parent="enchanter" unique_id=2020669206]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(133.855, 574.6)
-texture = ExtResource("4_4xjol")
-
-[node name="upgrade_buttons" type="Control" parent="enchanter" unique_id=1213238161]
-anchors_preset = 0
-
-[node name="Button" type="Button" parent="enchanter/upgrade_buttons" unique_id=1145294701]
-texture_filter = 1
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 0
-offset_left = 186.0
-offset_top = 538.0
-offset_right = 250.0
-offset_bottom = 602.0
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxTexture_35y6k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_gdjy1")
-theme_override_styles/hover = SubResource("StyleBoxTexture_5p7st")
-text = "0/3"
-
-[node name="Button2" type="Button" parent="enchanter/upgrade_buttons" unique_id=1187335040]
-texture_filter = 1
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 0
-offset_left = 52.0
-offset_top = 485.0
-offset_right = 116.0
-offset_bottom = 549.0
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxTexture_35y6k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_gdjy1")
-theme_override_styles/hover = SubResource("StyleBoxTexture_5p7st")
-text = "0/3"
-
-[node name="mouse_coll_area" type="Area2D" parent="enchanter/upgrade_buttons" unique_id=1368367814]
-position = Vector2(133, 577)
-
-[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="enchanter/upgrade_buttons/mouse_coll_area" unique_id=268953854]
-position = Vector2(801, 55)
-polygon = PackedVector2Array(-183, -66, -183, 91, -77, 223, 61, 223, 196, 116, 207, -75, 54, -242, -41, -229)
-
-[node name="stages" type="Control" parent="." unique_id=1060828482 node_paths=PackedStringArray("sprite", "button_parent", "coll_area")]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(868.515, 111.515)
-mouse_filter = 1
-script = ExtResource("6_cy215")
-sprite = NodePath("stages_sprite")
-button_parent = NodePath("upgrade_buttons")
-coll_area = NodePath("../enchanter/upgrade_buttons/mouse_coll_area")
-
-[node name="stages_sprite" type="TextureRect" parent="stages" unique_id=2095595277]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(931.955, 633.375)
-texture = ExtResource("5_gdjy1")
-
-[node name="upgrade_buttons" type="Control" parent="stages" unique_id=1811307538]
-anchors_preset = 0
-
-[node name="Button" type="Button" parent="stages/upgrade_buttons" unique_id=1168489836]
-texture_filter = 1
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 0
-offset_left = 977.0
-offset_top = 622.0
-offset_right = 1041.0
-offset_bottom = 686.0
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxTexture_35y6k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_gdjy1")
-theme_override_styles/hover = SubResource("StyleBoxTexture_5p7st")
-text = "0/3"
-
-[node name="Button2" type="Button" parent="stages/upgrade_buttons" unique_id=713827498]
-texture_filter = 1
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 0
-offset_left = 843.0
-offset_top = 569.0
-offset_right = 907.0
-offset_bottom = 633.0
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxTexture_35y6k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_gdjy1")
-theme_override_styles/hover = SubResource("StyleBoxTexture_5p7st")
-text = "0/3"
-
-[node name="mouse_coll_area" type="Area2D" parent="stages" unique_id=306864195]
-position = Vector2(934, 632)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="stages/mouse_coll_area" unique_id=387838005]
-position = Vector2(-801, -55)
-polygon = PackedVector2Array(-129, -295, -133, 8, -126, 285, 138, 287, 149, 35, 153, -272)
-
-[node name="factory" type="Control" parent="." unique_id=1098991151 node_paths=PackedStringArray("sprite", "button_parent", "coll_area")]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(868.515, 111.515)
-mouse_filter = 1
-script = ExtResource("6_cy215")
-sprite = NodePath("factory_sprite")
-button_parent = NodePath("upgrade_buttons")
-coll_area = NodePath("mouse_coll_area")
-
-[node name="factory_sprite" type="TextureRect" parent="factory" unique_id=209492023]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(171.88, 56.56)
-texture = ExtResource("6_15wdr")
-
-[node name="upgrade_buttons" type="Control" parent="factory" unique_id=1945036690]
-anchors_preset = 0
-
-[node name="Button" type="Button" parent="factory/upgrade_buttons" unique_id=1623475137]
-texture_filter = 1
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 0
-offset_left = 225.0
-offset_top = 25.0
-offset_right = 289.0
-offset_bottom = 89.0
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxTexture_35y6k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_gdjy1")
-theme_override_styles/hover = SubResource("StyleBoxTexture_5p7st")
-text = "0/3"
-
-[node name="Button2" type="Button" parent="factory/upgrade_buttons" unique_id=316407758]
-texture_filter = 1
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 0
-offset_left = 44.0
-offset_top = 19.0
-offset_right = 108.0
-offset_bottom = 83.0
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxTexture_35y6k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_gdjy1")
-theme_override_styles/hover = SubResource("StyleBoxTexture_5p7st")
-text = "0/3"
-
-[node name="mouse_coll_area" type="Area2D" parent="factory" unique_id=2005706458]
-position = Vector2(173, 55)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="factory/mouse_coll_area" unique_id=1348241068]
-polygon = PackedVector2Array(-180, -58, -173, 156, -102, 177, 20, 174, 27, 63, 308, 63, 325, -56)
 
 [node name="close_button" type="Button" parent="." unique_id=1411028783]
 layout_mode = 0

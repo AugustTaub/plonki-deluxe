@@ -22,8 +22,10 @@ func _ready():
 	coll_area.mouse_entered.connect(on_mouse_entered)
 	coll_area.mouse_exited.connect(on_mouse_exited)
 	
-	change_vis_state(curr_vis_state)
-	
+	if SaveManager.save_game.unlocked_upgrades.has(associated_upgrade):
+		change_vis_state(vis_state.UNLOCKED)
+	else:
+		change_vis_state(vis_state.LOCKED)
 	
 	
 	if unlock_cost_text and associated_upgrade:
@@ -43,6 +45,7 @@ func _process(delta):
 			if Input.is_action_just_pressed("fire_ball") and associated_upgrade:
 				if SaveManager.save_game.money_amount >= associated_upgrade.start_price:
 					SaveManager.set_money(SaveManager.save_game.money_amount-associated_upgrade.start_price)
+					SaveManager.add_upgrade(associated_upgrade)
 					change_vis_state(vis_state.UNLOCKED)
 				
 		vis_state.UNLOCKED:
@@ -82,6 +85,7 @@ func enter_vis_state(enter_state: vis_state):
 			modulate = Color.DIM_GRAY
 		vis_state.UNLOCKED:
 			modulate = Color.WHITE
+			unlock_cost_text.hide()
 		vis_state.UNLOCKED_HOVERED:
 			sprite.scale = Vector2.ONE * 1.1
 

@@ -5,6 +5,8 @@ var start_speed: float = 700
  
 @onready var ball_spawn_point: Node2D = $pivot/ball_spawn_point
 
+@export var test_upgrade: UpgradeData
+
 var delta_timer: float = 0
 var shot_interval: float = 0.6
 
@@ -19,6 +21,11 @@ func _physics_process(delta):
 	
 	$pivot.look_at(get_global_mouse_position())
 	$pivot.rotate(-PI/2)
+	
+	
+	var speed_level: int = 1+ SaveManager.get_upgrade_level_by_name("ball_speed")
+	
+	start_speed = speed_level * 200
 	
 	var pos = ball_spawn_point.global_position
 	var vel = global_position.direction_to(ball_spawn_point.global_position) * start_speed
