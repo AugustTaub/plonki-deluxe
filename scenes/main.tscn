@@ -14,7 +14,6 @@
 [ext_resource type="Shader" uid="uid://qw101u0puhr6" path="res://2D/shaders/ball_trail.gdshader" id="7_85g3d"]
 [ext_resource type="PackedScene" uid="uid://dt4cjm7fquw6t" path="res://scenes/stages/stage_1.tscn" id="8_a8y0u"]
 [ext_resource type="Shader" uid="uid://c6buc113kmw17" path="res://2D/shaders/fake3Dball.gdshader" id="8_choun"]
-[ext_resource type="Texture2D" uid="uid://b8hjvcou64q4t" path="res://2D/images/Sprite-0002.png" id="8_tipki"]
 [ext_resource type="Script" uid="uid://cn5pmgmsdbna5" path="res://scripts/ball_interactibles/kill_zone.gd" id="9_0ld40"]
 [ext_resource type="PackedScene" uid="uid://dmdmxku73lvmo" path="res://scenes/stages/stage_3.tscn" id="9_jscy8"]
 [ext_resource type="PackedScene" uid="uid://djcidx4lmyas8" path="res://scenes/stages/stage_2.tscn" id="9_muem4"]
@@ -24,6 +23,7 @@
 [ext_resource type="Texture2D" uid="uid://cj8bbt23rgiqq" path="res://2D/godot_gen_textures/blu_ball.tres" id="15_jkv2x"]
 [ext_resource type="Shader" uid="uid://b8oco35fngtil" path="res://2D/shaders/fake3Dball_glowing.gdshader" id="16_0ld40"]
 [ext_resource type="Texture2D" uid="uid://dyd4oclypohv0" path="res://2D/images/flames.png" id="16_dp3eg"]
+[ext_resource type="Texture2D" uid="uid://bcwj61mhugcmi" path="res://2D/images/ball3.png" id="20_fv21b"]
 [ext_resource type="Script" uid="uid://bpkun8bhfpwog" path="res://scripts/managers/shock_wave_manager.gd" id="20_gqmmt"]
 [ext_resource type="Shader" uid="uid://66yohp1rod72" path="res://2D/shaders/shock_wave.gdshader" id="21_yc10j"]
 [ext_resource type="Resource" uid="uid://v81rtw47g0f" path="res://custom_res/upgrades/ball_speed.tres" id="27_2f3dj"]
@@ -284,7 +284,7 @@ texture = ExtResource("13_yc10j")
 texture_filter = 1
 material = SubResource("ShaderMaterial_jbj1t")
 multimesh = SubResource("MultiMesh_85g3d")
-texture = ExtResource("8_tipki")
+texture = ExtResource("20_fv21b")
 
 [node name="adjustable_slidevfx_multimesh" type="MultiMeshInstance2D" parent="BallManager" unique_id=401439019]
 texture_filter = 1

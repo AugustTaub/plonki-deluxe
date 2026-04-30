@@ -9,5 +9,5 @@ name = "ball_size"
 max_level = 5
 start_price = 200
 start_result = 8.0
-end_result = 40.0
+end_result = 32.0
 metadata/_custom_type_script = "uid://bbo5op84iqbom"
