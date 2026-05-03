@@ -1,6 +1,6 @@
 extends Node
 
-const SAVE_PATH := "user://plonki_save2fgd321ehof.tres"
+const SAVE_PATH := "user://plonki_save2fgd321eho.tres"
 
 var save_game: SaveGame = null
 

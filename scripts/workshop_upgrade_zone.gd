@@ -52,6 +52,7 @@ func _process(delta):
 			if is_hovered:
 				change_vis_state(vis_state.UNLOCKED_HOVERED)
 			
+			
 		vis_state.UNLOCKED_HOVERED:
 			if not is_hovered:
 				change_vis_state(vis_state.UNLOCKED)
@@ -81,11 +82,22 @@ func enter_vis_state(enter_state: vis_state):
 	match enter_state:
 		vis_state.LOCKED:
 			modulate = Color.DARK_SLATE_GRAY
+			
+			for button in $upgrade_buttons.get_children():
+				if button is WorkshopUpgradeButton:
+					button.set_button_disabled(true)
+			
+			
 		vis_state.LOCKED_HOVERED:
 			modulate = Color.DIM_GRAY
 		vis_state.UNLOCKED:
 			modulate = Color.WHITE
 			unlock_cost_text.hide()
+			
+			for button in $upgrade_buttons.get_children():
+				if button is WorkshopUpgradeButton:
+					button.set_button_disabled(false)
+			
 		vis_state.UNLOCKED_HOVERED:
 			sprite.scale = Vector2.ONE * 1.1
 

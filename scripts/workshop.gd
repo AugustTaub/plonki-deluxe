@@ -13,3 +13,4 @@ func _process(delta):
 
 func _on_close_button_pressed():
 	SignalBus.workshop_toggled.emit()
+	

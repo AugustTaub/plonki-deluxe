@@ -237,15 +237,7 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 	
 	# more rays for bigger balls, so pegs cant go inbetween rays
 	# its still really buggy for anything bigger than 32 though
-	if ball.radius >= 20 and ball.radius <= 40: #big ball
-		ball.ray_offsets = [
-			Vector2(-ball.radius, 0), # Left
-			Vector2(-ball.radius/2.0, 0), # Left
-			Vector2(0, ball.radius),  # Center
-			Vector2(ball.radius/2.0, 0),   # Right
-			Vector2(ball.radius, 0)   # Right
-		]
-	elif ball.radius > 40: #huuuge ball
+	if ball.radius >= 25: #big ball
 		ball.ray_offsets = [
 			Vector2(-ball.radius, 0), # Left
 			Vector2(-ball.radius*(1.0/3.0), 0), # Left
@@ -254,7 +246,7 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 			Vector2(ball.radius*(1.0/3.0), 0),   # Right
 			Vector2(ball.radius*(2.0/3.0), 0),   # Right
 			Vector2(ball.radius, 0)   # Right
-		]
+			]
 	else: #normal ball
 		ball.ray_offsets = [
 			Vector2(-ball.radius, 0), # Left

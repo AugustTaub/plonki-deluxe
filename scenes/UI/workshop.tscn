@@ -5,10 +5,10 @@
 [ext_resource type="Texture2D" uid="uid://c3ffht6hyaf1" path="res://2D/godot_gen_textures/workshop_cannon.png" id="3_cy215"]
 [ext_resource type="Resource" uid="uid://cvslx5sb28pf5" path="res://custom_res/upgrades/test.tres" id="4_15wdr"]
 [ext_resource type="Script" uid="uid://d2wnh3mtqdeu4" path="res://scripts/workshop_upgrade_zone.gd" id="6_cy215"]
-[ext_resource type="PackedScene" uid="uid://cpha31pc0s008" path="res://scenes/workshop_upgrade_button.tscn" id="6_f1oc0"]
+[ext_resource type="PackedScene" uid="uid://cpha31pc0s008" path="res://scenes/UI/workshop_upgrade_button.tscn" id="6_f1oc0"]
 [ext_resource type="Resource" uid="uid://v81rtw47g0f" path="res://custom_res/upgrades/ball_speed.tres" id="7_cy215"]
 [ext_resource type="Resource" uid="uid://du3eonw0shm4s" path="res://custom_res/upgrades/ball_size.tres" id="8_4xjol"]
-[ext_resource type="PackedScene" uid="uid://dxofmr5dxupur" path="res://scenes/money_display.tscn" id="10_gdjy1"]
+[ext_resource type="PackedScene" uid="uid://dxofmr5dxupur" path="res://scenes/UI/money_display.tscn" id="10_gdjy1"]
 
 [node name="workshop" type="Control" unique_id=1661245154]
 process_mode = 3

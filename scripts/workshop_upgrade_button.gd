@@ -1,5 +1,7 @@
 extends Button
 
+class_name WorkshopUpgradeButton
+
 @export var associated_upgrade: UpgradeData
 
 
@@ -72,6 +74,18 @@ func update_visuals_from_save_game():
 		%hint_text.text = associated_upgrade.name + "\r" + str(round(curr_value)) + " -> " + str(round(next_value))
 	else:
 		%hint_text.text = associated_upgrade.name + "\r [fully upgraded]" 
+
+func set_button_disabled(button_disabled: bool):
+	match button_disabled:
+		true:
+			disabled = true
+			text = ""
+			$cost_text_container.hide()
+			
+		false:
+			disabled = false
+			$cost_text_container.show()
+			update_visuals_from_save_game()
 
 
 func _on_mouse_entered():

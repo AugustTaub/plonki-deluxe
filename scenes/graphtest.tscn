@@ -12,23 +12,18 @@ offset_left = 17.0
 offset_top = 29.0
 offset_right = 1161.0
 offset_bottom = 562.0
-scroll_offset = Vector2(-158, -127)
 
 [node name="GraphNode" type="GraphNode" parent="GraphEdit" unique_id=125708270]
 layout_mode = 0
-offset_left = 158.0
-offset_top = 127.0
-offset_right = 445.0
-offset_bottom = 182.0
+offset_right = 287.0
+offset_bottom = 55.0
 mouse_filter = 1
 title = "test"
 
 [node name="GraphNode2" type="GraphNode" parent="GraphEdit" unique_id=107702622]
 layout_mode = 0
-offset_left = 158.0
-offset_top = 127.0
-offset_right = 445.0
-offset_bottom = 182.0
+offset_right = 287.0
+offset_bottom = 55.0
 mouse_filter = 1
 title = "test2"
 slots_focus_mode = 1
