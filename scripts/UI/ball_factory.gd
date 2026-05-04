@@ -157,10 +157,15 @@ func update_ball_visuals(ball: BallData):
 	adjustable_ball_multimesh.multimesh.set_instance_custom_data(ball.instance_id, custom_data)
 
 func animate_ball_exit(ball_pos: Vector2, ball_roll_offset: Vector2, ball_rot_offset: float, ball_radius):
+	
+	for child in $bands.get_children():
+		if child is AnimatedSprite2D:
+			child.speed_scale = 5.5
+	
 	var i: int = 0
 	
 	var start_trans = Transform2D(0, Vector2.ONE, 0, ball_pos)
-	var end_trans = Transform2D(0, Vector2.ONE, 0, despawn_point + (height_dir * ball_radius))
+	var end_trans = Transform2D(2*PI, Vector2.ONE, 0, despawn_point + (height_dir * ball_radius))
 	
 	adjustable_ball_multimesh.multimesh.set_instance_transform_2d(i, start_trans)
 	
@@ -173,7 +178,7 @@ func animate_ball_exit(ball_pos: Vector2, ball_roll_offset: Vector2, ball_rot_of
 	
 	tween.tween_method(
 		func(current_trans: Transform2D): 
-			adjustable_ball_multimesh.multimesh.set_instance_transform_2d(i, current_trans), 
+			adjustable_ball_multimesh.multimesh.set_instance_transform_2d(i, current_trans),
 		start_trans, 
 		end_trans, 
 		dur
@@ -181,3 +186,7 @@ func animate_ball_exit(ball_pos: Vector2, ball_roll_offset: Vector2, ball_rot_of
 	
 	await  tween.finished
 	adjustable_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+	
+	for child in $bands.get_children():
+		if child is AnimatedSprite2D:
+			child.speed_scale = 1.0

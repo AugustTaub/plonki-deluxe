@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c6il25nb4y2ql" path="res://scripts/level_control.gd" id="1_sugp2"]
 [ext_resource type="Script" uid="uid://cv54s4540rxoq" path="res://scripts/debug_text.gd" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://dxofmr5dxupur" path="res://scenes/UI/money_display.tscn" id="4_2wyq8"]
-[ext_resource type="Theme" uid="uid://bw5xudpofvg28" path="res://2D/themes/main_ui.tres" id="4_tefeu"]
+[ext_resource type="Texture2D" uid="uid://ch0ub3rdyc4km" path="res://2D/images/9_patch.png" id="4_qkpxi"]
 [ext_resource type="Script" uid="uid://dwaaneqwjxucc" path="res://scripts/play_area.gd" id="4_y6deb"]
 [ext_resource type="PackedScene" uid="uid://dcmaqt0frjic" path="res://scenes/ball_cannon.tscn" id="5_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://brln3uw4rbarc" path="res://scenes/stages/stage_0.tscn" id="5_trceg"]
@@ -156,19 +156,59 @@ offset_bottom = 214.0
 theme_override_font_sizes/normal_font_size = 41
 text = "debug"
 
-[node name="Panel" type="Panel" parent="CanvasLayer" unique_id=951167566]
-offset_right = 207.0
-offset_bottom = 872.0
-theme = ExtResource("4_tefeu")
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=60242174]
+show_behind_parent = true
+offset_left = 1142.0
+offset_top = -111.0
+offset_right = 1156.0
+offset_bottom = 737.0
+color = Color(0.092913814, 0.102500565, 0.13584527, 1)
 
-[node name="Panel2" type="Panel" parent="CanvasLayer" unique_id=833534520]
-offset_left = 204.0
-offset_top = 714.0
-offset_right = 1173.0
-offset_bottom = 865.0
-theme = ExtResource("4_tefeu")
+[node name="NinePatchRect" type="NinePatchRect" parent="CanvasLayer" unique_id=1050900106]
+texture_filter = 1
+offset_left = -1.0
+offset_top = -1.0000038
+offset_right = 19.9
+offset_bottom = 85.399994
+scale = Vector2(10, 10)
+texture = ExtResource("4_qkpxi")
+region_rect = Rect2(0, 0, 16, 16)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/NinePatchRect" unique_id=559189221]
+show_behind_parent = true
+layout_mode = 0
+offset_right = 20.8
+offset_bottom = 86.299995
+color = Color(0.092913814, 0.102500565, 0.13584527, 1)
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="CanvasLayer" unique_id=1863534285]
+texture_filter = 1
+offset_left = 204.99998
+offset_top = 716.0
+offset_right = 299.99997
+offset_bottom = 730.7
+scale = Vector2(10, 10)
+texture = ExtResource("4_qkpxi")
+region_rect = Rect2(0, 0, 16, 16)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/NinePatchRect2" unique_id=595164426]
+show_behind_parent = true
+layout_mode = 0
+offset_top = 1.3999939
+offset_right = 94.899994
+offset_bottom = 15.199997
+color = Color(0.092913814, 0.102500565, 0.13584527, 1)
 
 [node name="workshop_button" type="Button" parent="CanvasLayer" unique_id=1548444912]
+texture_filter = 1
 offset_left = 22.0
 offset_top = 152.0
 offset_right = 186.0
@@ -259,9 +299,6 @@ position = Vector2(1163, 17)
 position = Vector2(-6, 240)
 shape = SubResource("RectangleShape2D_a8y0u")
 
-[node name="ball_factory" parent="stage_manager" unique_id=149330198 instance=ExtResource("15_tel4y")]
-position = Vector2(86, -3)
-
 [node name="ball_cannon" parent="." unique_id=564166182 instance=ExtResource("5_tbgi4")]
 position = Vector2(701, 5)
 
@@ -294,6 +331,9 @@ texture_filter = 1
 material = SubResource("ShaderMaterial_tefeu")
 multimesh = SubResource("MultiMesh_jkv2x")
 texture = ExtResource("15_jkv2x")
+
+[node name="ball_factory" parent="." unique_id=149330198 instance=ExtResource("15_tel4y")]
+position = Vector2(86, -3)
 
 [node name="shock_wave_manager" type="Node2D" parent="." unique_id=707590614 node_paths=PackedStringArray("wave_multimesh")]
 script = ExtResource("20_gqmmt")

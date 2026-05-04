@@ -7,7 +7,7 @@ var start_speed: float = 700
 
 @export var test_upgrade: UpgradeData
 
-var delta_timer: float = 0
+var time_since_last_shot: float = 0
 var shot_interval: float = 0.6
 
 var upgrade_preloader: ResourcePreloader
@@ -23,7 +23,7 @@ func _on_upgrade_preloader_loaded(preloader: ResourcePreloader):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	delta_timer += delta
+	time_since_last_shot += delta
 	
 	$pivot.look_at(get_global_mouse_position())
 	$pivot.rotate(-PI/2)
@@ -44,11 +44,19 @@ func _physics_process(delta):
 	var vel = global_position.direction_to(ball_spawn_point.global_position) * start_speed
 	
 	
-	if sin(delta_timer*(1/delta))>0:
+	if sin(time_since_last_shot*(1/delta))>0:
 		SignalBus.spawn_simulated_ball.emit(pos,vel,radius)
 	
 	
 	if Input.is_action_just_pressed("fire_ball"):
-	#if delta_timer >= shot_interval:
-		delta_timer = 0
+	#if time_since_last_shot >= shot_interval:
+		var anim_spd: float = 1
+		
+		if time_since_last_shot < 1:
+			anim_spd /= time_since_last_shot
+		
+		%cannon_sprite.play("default",anim_spd)
+		
+		time_since_last_shot = 0
 		SignalBus.spawn_ball.emit(pos,vel,radius)
+		

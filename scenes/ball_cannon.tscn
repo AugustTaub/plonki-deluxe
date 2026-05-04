@@ -2,6 +2,61 @@
 
 [ext_resource type="Script" uid="uid://cbax1n6d7rsfi" path="res://scripts/ball_cannon.gd" id="1_587w4"]
 [ext_resource type="Resource" uid="uid://cvslx5sb28pf5" path="res://custom_res/upgrades/test.tres" id="2_yppoi"]
+[ext_resource type="Texture2D" uid="uid://btqsytmfobaep" path="res://2D/images/cannon1.png" id="3_k8t16"]
+[ext_resource type="Texture2D" uid="uid://bsc6thrn6u4xq" path="res://2D/images/cannon_anim.png" id="4_5tpgd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4x4q7"]
+atlas = ExtResource("4_5tpgd")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mdogl"]
+atlas = ExtResource("4_5tpgd")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_plce3"]
+atlas = ExtResource("4_5tpgd")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7mxx5"]
+atlas = ExtResource("4_5tpgd")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ujpeh"]
+atlas = ExtResource("4_5tpgd")
+region = Rect2(96, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8addy"]
+atlas = ExtResource("4_5tpgd")
+region = Rect2(120, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x7ul6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4x4q7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mdogl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_plce3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7mxx5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ujpeh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8addy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4x4q7")
+}],
+"loop": false,
+"name": &"default",
+"speed": 12.0
+}]
 
 [node name="ball_cannon" type="Node2D" unique_id=564166182]
 z_index = 1
@@ -11,12 +66,14 @@ test_upgrade = ExtResource("2_yppoi")
 [node name="pivot" type="Node2D" parent="." unique_id=2118282629]
 
 [node name="Polygon2D2" type="Polygon2D" parent="pivot" unique_id=1856919481]
+visible = false
 scale = Vector2(17.545418, 17.502615)
 color = Color(0, 0, 0, 1)
 polygon = PackedVector2Array(-4, -2, -4, 1, -3, 2, -1.3108835, 3.0281188, -1.2538886, 5.9419694, 1.3108835, 5.9419694, 1.4818684, 3.0281188, 3, 2, 4, 1, 4, -2, 3.2919939, -3.426969, 1.2661515, -4.4423676, -1.0762287, -4.378905, -2.7222257, -3.6173563)
 uv = PackedVector2Array(2.534586, 2.7210102, 2.534586, 24.746069, 9.876272, 32.087753, 24.559643, 39.429443, 24.559643, 61.454506, 39.243015, 61.454506, 39.243015, 39.429443, 53.92639, 32.087753, 61.268074, 24.746069, 61.268074, 2.7210102, 56.070114, -7.755348, 41.197018, -15.210085, 23.999996, -14.744162, 11.915604, -9.153112)
 
 [node name="Polygon2D" type="Polygon2D" parent="pivot" unique_id=418716678]
+visible = false
 scale = Vector2(15.795898, 15.757363)
 color = Color(0.537641, 0.47212863, 0.3052951, 1)
 polygon = PackedVector2Array(-4, -2, -4, 1, -3, 2, -1, 3, -1, 6, 1, 6, 1, 3, 3, 2, 4, 1, 4, -2, 3.2919939, -3.426969, 1.2661515, -4.4423676, -1.0762287, -4.378905, -2.7222257, -3.6173563)
@@ -24,3 +81,19 @@ uv = PackedVector2Array(2.534586, 2.7210102, 2.534586, 24.746069, 9.876272, 32.0
 
 [node name="ball_spawn_point" type="Node2D" parent="pivot" unique_id=1431079914]
 position = Vector2(0, 82)
+
+[node name="Sprite2D" type="Sprite2D" parent="pivot" unique_id=430078931]
+visible = false
+texture_filter = 1
+position = Vector2(0, 34)
+scale = Vector2(10.603024, 10.603024)
+texture = ExtResource("3_k8t16")
+
+[node name="cannon_sprite" type="AnimatedSprite2D" parent="pivot" unique_id=755207782]
+unique_name_in_owner = true
+texture_filter = 1
+position = Vector2(0, 34)
+scale = Vector2(10.603024, 10.603024)
+sprite_frames = SubResource("SpriteFrames_x7ul6")
+frame = 6
+frame_progress = 1.0
