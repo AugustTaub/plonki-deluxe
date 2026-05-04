@@ -20,7 +20,7 @@ config/icon="res://2D/images/icon.svg"
 
 SignalBus="*uid://djee380ynnny2"
 SaveManager="*uid://d03l27pfkh31u"
-BallFactoryManger="*uid://btanyn2b3wtwh"
+BallFactoryManager="*uid://btanyn2b3wtwh"
 
 [display]
 

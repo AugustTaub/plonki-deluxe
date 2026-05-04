@@ -3,8 +3,10 @@
 [ext_resource type="Script" uid="uid://c6il25nb4y2ql" path="res://scripts/level_control.gd" id="1_sugp2"]
 [ext_resource type="Script" uid="uid://cv54s4540rxoq" path="res://scripts/debug_text.gd" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://dxofmr5dxupur" path="res://scenes/UI/money_display.tscn" id="4_2wyq8"]
+[ext_resource type="Texture2D" uid="uid://rgq7rj5j0ka7" path="res://2D/images/Sprite-0001.png" id="4_5q0nq"]
 [ext_resource type="Texture2D" uid="uid://ch0ub3rdyc4km" path="res://2D/images/9_patch.png" id="4_qkpxi"]
 [ext_resource type="Script" uid="uid://dwaaneqwjxucc" path="res://scripts/play_area.gd" id="4_y6deb"]
+[ext_resource type="Script" uid="uid://b3pjlksxikx3q" path="res://scripts/UI/ball_nr_display.gd" id="5_qkpxi"]
 [ext_resource type="PackedScene" uid="uid://dcmaqt0frjic" path="res://scenes/ball_cannon.tscn" id="5_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://brln3uw4rbarc" path="res://scenes/stages/stage_0.tscn" id="5_trceg"]
 [ext_resource type="PackedScene" uid="uid://d1va858ot1uni" path="res://scenes/UI/workshop.tscn" id="5_y6deb"]
@@ -31,6 +33,9 @@
 [ext_resource type="Resource" uid="uid://du3eonw0shm4s" path="res://custom_res/upgrades/ball_size.tres" id="27_fv21b"]
 [ext_resource type="Script" uid="uid://r7b4etqxtw30" path="res://scripts/batch_resource_preloader.gd" id="27_vxglm"]
 [ext_resource type="Resource" uid="uid://cvslx5sb28pf5" path="res://custom_res/upgrades/test.tres" id="28_yq6so"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tel4y"]
+texture = ExtResource("4_5q0nq")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tefeu"]
 bg_color = Color(0.55, 0.42368335, 0.2585, 0)
@@ -207,16 +212,62 @@ offset_right = 94.899994
 offset_bottom = 15.199997
 color = Color(0.092913814, 0.102500565, 0.13584527, 1)
 
+[node name="NinePatchRect3" type="NinePatchRect" parent="CanvasLayer" unique_id=1371473106]
+texture_filter = 1
+offset_left = 128.0
+offset_top = -82.99999
+offset_right = 178.2
+offset_bottom = -70.99999
+scale = Vector2(10, 10)
+texture = ExtResource("4_qkpxi")
+region_rect = Rect2(0, 0, 16, 16)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="NinePatchRect4" type="NinePatchRect" parent="CanvasLayer" unique_id=1150823843]
+texture_filter = 1
+offset_left = 1127.0
+offset_top = 52.000004
+offset_right = 1139.0
+offset_bottom = 123.09999
+scale = Vector2(10, 10)
+texture = ExtResource("4_qkpxi")
+region_rect = Rect2(0, 0, 16, 16)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
 [node name="workshop_button" type="Button" parent="CanvasLayer" unique_id=1548444912]
 texture_filter = 1
-offset_left = 22.0
-offset_top = 152.0
-offset_right = 186.0
-offset_bottom = 271.0
+offset_left = 23.0
+offset_top = 203.0
+offset_right = 187.0
+offset_bottom = 322.0
 focus_mode = 0
 text = "WORKSHOP"
 
+[node name="ball_nr_display" type="Button" parent="CanvasLayer" unique_id=1678408169]
+texture_filter = 1
+offset_left = 1075.0
+offset_top = -4.0
+offset_right = 1160.0
+offset_bottom = 77.0
+theme_override_colors/font_outline_color = Color(0.186459, 0.18645903, 0.18645903, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleBoxTexture_tel4y")
+text = "999"
+expand_icon = true
+script = ExtResource("5_qkpxi")
+
 [node name="money_display" parent="CanvasLayer" unique_id=523163818 instance=ExtResource("4_2wyq8")]
+offset_left = 30.0
+offset_top = 9.0
+offset_right = 70.0
+offset_bottom = 49.0
 
 [node name="play_area" type="ReferenceRect" parent="CanvasLayer" unique_id=20659669]
 offset_left = 207.0

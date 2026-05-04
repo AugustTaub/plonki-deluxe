@@ -48,7 +48,7 @@ func _physics_process(delta):
 		SignalBus.spawn_simulated_ball.emit(pos,vel,radius)
 	
 	
-	if Input.is_action_just_pressed("fire_ball"):
+	if Input.is_action_just_pressed("fire_ball") and BallFactoryManager.has_balls():
 	#if time_since_last_shot >= shot_interval:
 		var anim_spd: float = 1
 		
@@ -59,4 +59,4 @@ func _physics_process(delta):
 		
 		time_since_last_shot = 0
 		SignalBus.spawn_ball.emit(pos,vel,radius)
-		
+		BallFactoryManager.remove_last_ball_from_queue()

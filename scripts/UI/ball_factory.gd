@@ -2,7 +2,7 @@ extends Node2D
 
 ### GLOBAL BALL SETTINGS
 @export var roll_sensitivity: float = 0.2
-@export var rot_sensitivity: float = -1
+@export var rot_sensitivity: float = 1
 
 @export var max_number_of_balls: int = 200
 @export var spawn_vel: float = 20.0 
@@ -41,12 +41,15 @@ var inactive_pool: Array[BallData] = []
 @onready var travel_dir: Vector2 = ball_travel_vec.normalized()
 @onready var tube_length: float = ball_travel_vec.length()
 
-@onready var height_dir: Vector2 = travel_dir.orthogonal().normalized() 
+@onready var height_dir: Vector2 = -travel_dir.orthogonal().normalized() 
 
 ###
 var delta_timer: float = 0
 
 func _ready():
+	
+	BallFactoryManager.new_ball_produced.connect(spawn_ball)
+	BallFactoryManager.last_ball_removed.connect(take_ball_from_end)
 	
 	adjustable_ball_multimesh.multimesh.instance_count = max_number_of_balls
 	
@@ -57,7 +60,10 @@ func _ready():
 		inactive_pool.append(new_ball)
 		adjustable_ball_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
 		
-	spawn_ball()
+	
+	for child in $bands.get_children():
+		if child is AnimatedSprite2D:
+			child.speed_scale = -1
 
 func spawn_ball(spawn_radius: float = 16.0):
 	if inactive_pool.is_empty():
@@ -90,13 +96,6 @@ func take_ball_from_end():
 
 
 func _physics_process(delta):
-	if Input.is_action_just_pressed("fire_ball"):
-		take_ball_from_end()
-	
-	delta_timer += delta
-	if delta_timer > 1:
-		spawn_ball(randf_range(8,32))
-		delta_timer = 0
 	
 	
 	for i in range(active_queue.size()):
@@ -160,7 +159,7 @@ func animate_ball_exit(ball_pos: Vector2, ball_roll_offset: Vector2, ball_rot_of
 	
 	for child in $bands.get_children():
 		if child is AnimatedSprite2D:
-			child.speed_scale = 5.5
+			child.speed_scale = -5.5
 	
 	var i: int = 0
 	
@@ -189,4 +188,4 @@ func animate_ball_exit(ball_pos: Vector2, ball_roll_offset: Vector2, ball_rot_of
 	
 	for child in $bands.get_children():
 		if child is AnimatedSprite2D:
-			child.speed_scale = 1.0
+			child.speed_scale = -1.0

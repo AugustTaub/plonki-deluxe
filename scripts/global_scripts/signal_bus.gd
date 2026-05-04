@@ -16,6 +16,9 @@ signal workshop_toggled()
 @warning_ignore("unused_signal")
 signal set_money_counter(new_amount: int)
 
+@warning_ignore("unused_signal")
+signal set_ball_counter(new_amount: int)
+
 ###
 
 @warning_ignore("unused_signal")
