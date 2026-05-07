@@ -24,12 +24,12 @@ metadata/_custom_type_script = "uid://rc1pswo54tv8"
 
 [node name="bg" type="Sprite2D" parent="." unique_id=1945480160]
 z_index = -1
-position = Vector2(683, 381.5)
-scale = Vector2(15.093751, 14.859375)
+position = Vector2(583.99994, 381.5)
+scale = Vector2(18.1875, 14.859375)
 texture = SubResource("GradientTexture2D_o6xl0")
 
 [node name="pegs" type="Node2D" parent="." unique_id=482697035]
-position = Vector2(519, 244)
+position = Vector2(411, 272)
 
 [node name="DestructiblePeg" parent="pegs" unique_id=1750133912 instance=ExtResource("2_sl44i")]
 
@@ -135,7 +135,7 @@ position = Vector2(481, -56)
 position = Vector2(518, -133)
 
 [node name="BallInteractibleFallingBlock" type="Area2D" parent="." unique_id=1797111737 node_paths=PackedStringArray("sprite", "falling_area")]
-position = Vector2(972, 53)
+position = Vector2(864, 81)
 script = ExtResource("3_sl44i")
 sprite = NodePath("Sprite2D")
 falling_area = NodePath("falling")

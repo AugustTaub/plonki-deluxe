@@ -40,7 +40,7 @@ script = ExtResource("1_3847s")
 metadata/_custom_type_script = "uid://rc1pswo54tv8"
 
 [node name="pegs" type="Node2D" parent="." unique_id=494298063]
-position = Vector2(90, 12)
+position = Vector2(2, 6)
 
 [node name="Node2D" parent="pegs" unique_id=1423066092 instance=ExtResource("2_cuow7")]
 position = Vector2(554, 298)
@@ -115,7 +115,7 @@ position = Vector2(342, 357)
 rotation = 0.00011190772
 
 [node name="BallTeleporter" type="Area2D" parent="." unique_id=316168401 node_paths=PackedStringArray("paired_telporter")]
-position = Vector2(703, 226)
+position = Vector2(615, 220)
 script = ExtResource("3_8q8ih")
 paired_telporter = NodePath("../BallTeleporter2")
 metadata/_custom_type_script = "uid://c33idtn4w1ory"
@@ -128,7 +128,7 @@ scale = Vector2(2.2854311, 2.2854311)
 texture = SubResource("GradientTexture2D_k45mu")
 
 [node name="BallTeleporter2" type="Area2D" parent="." unique_id=1126508263 node_paths=PackedStringArray("paired_telporter")]
-position = Vector2(293, 390)
+position = Vector2(205, 384)
 script = ExtResource("3_8q8ih")
 paired_telporter = NodePath("../BallTeleporter")
 metadata/_custom_type_script = "uid://c33idtn4w1ory"
@@ -141,7 +141,7 @@ scale = Vector2(2.2854311, 2.2854311)
 texture = SubResource("GradientTexture2D_k45mu")
 
 [node name="BallExploder" type="Area2D" parent="." unique_id=718596040 node_paths=PackedStringArray("explo_area", "sprite")]
-position = Vector2(574, 266)
+position = Vector2(486, 260)
 script = ExtResource("4_k45mu")
 explo_area = NodePath("explo_area")
 sprite = NodePath("Sprite2D")

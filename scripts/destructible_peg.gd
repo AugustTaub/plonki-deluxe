@@ -42,7 +42,7 @@ func queue_destruction():
 
 
 func destroy():
-	SaveManager.set_money(SaveManager.save_game.money_amount + 1)
+	SaveManager.change_money(1)
 	change_peg_state(peg_state.DEAD)
 
 

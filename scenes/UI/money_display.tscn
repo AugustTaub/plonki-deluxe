@@ -2,10 +2,11 @@
 
 [ext_resource type="Script" uid="uid://b3ywhwga858ka" path="res://scripts/money_display.gd" id="1_vr4hv"]
 [ext_resource type="Texture2D" uid="uid://dbf8xs67fg1be" path="res://2D/godot_gen_textures/coin_circle.tres" id="2_bft5h"]
+[ext_resource type="Texture2D" uid="uid://ch0ub3rdyc4km" path="res://2D/images/9_patch.png" id="2_ompqv"]
 
 [sub_resource type="Theme" id="Theme_jkv2x"]
 Button/constants/outline_size = 15
-Button/font_sizes/font_size = 40
+Button/font_sizes/font_size = 32
 
 [node name="money_display" type="Control" unique_id=523163818]
 layout_mode = 3
@@ -14,17 +15,29 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_vr4hv")
 
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=1519969660]
+texture_filter = 1
+layout_mode = 0
+offset_right = 46.413486
+offset_bottom = 14.611652
+scale = Vector2(4.6538196, 4.6538196)
+texture = ExtResource("2_ompqv")
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
 [node name="money" type="Button" parent="." unique_id=892096333]
 texture_filter = 1
 layout_mode = 0
 offset_left = 10.0
 offset_top = 7.0
-offset_right = 210.0
-offset_bottom = 70.0
+offset_right = 202.0
+offset_bottom = 60.0
 theme = SubResource("Theme_jkv2x")
 text = "000"
 icon = ExtResource("2_bft5h")
 flat = true
-alignment = 0
 clip_text = true
+icon_alignment = 1
 expand_icon = true

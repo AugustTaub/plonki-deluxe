@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c6il25nb4y2ql" path="res://scripts/level_control.gd" id="1_sugp2"]
 [ext_resource type="Script" uid="uid://cv54s4540rxoq" path="res://scripts/debug_text.gd" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://dxofmr5dxupur" path="res://scenes/UI/money_display.tscn" id="4_2wyq8"]
-[ext_resource type="Texture2D" uid="uid://rgq7rj5j0ka7" path="res://2D/images/Sprite-0001.png" id="4_5q0nq"]
+[ext_resource type="Texture2D" uid="uid://j0uodtkukcni" path="res://2D/godot_gen_textures/ball.tres" id="4_5q0nq"]
 [ext_resource type="Texture2D" uid="uid://ch0ub3rdyc4km" path="res://2D/images/9_patch.png" id="4_qkpxi"]
 [ext_resource type="Script" uid="uid://dwaaneqwjxucc" path="res://scripts/play_area.gd" id="4_y6deb"]
 [ext_resource type="Script" uid="uid://b3pjlksxikx3q" path="res://scripts/UI/ball_nr_display.gd" id="5_qkpxi"]
@@ -144,20 +144,20 @@ script = ExtResource("1_sugp2")
 
 [node name="debugtxt" type="RichTextLabel" parent="CanvasLayer" unique_id=2095261542]
 unique_name_in_owner = true
-offset_left = 214.0
-offset_top = 37.0
-offset_right = 385.0
-offset_bottom = 153.0
+offset_left = 183.0
+offset_top = 88.0
+offset_right = 354.0
+offset_bottom = 204.0
 theme_override_font_sizes/normal_font_size = 41
 text = "debug"
 script = ExtResource("2_0wfyh")
 
 [node name="debugtxt2" type="RichTextLabel" parent="CanvasLayer" unique_id=469493948]
 unique_name_in_owner = true
-offset_left = 214.0
-offset_top = 98.0
-offset_right = 385.0
-offset_bottom = 214.0
+offset_left = 174.0
+offset_top = 147.0
+offset_right = 345.0
+offset_bottom = 263.0
 theme_override_font_sizes/normal_font_size = 41
 text = "debug"
 
@@ -173,7 +173,7 @@ color = Color(0.092913814, 0.102500565, 0.13584527, 1)
 texture_filter = 1
 offset_left = -1.0
 offset_top = -1.0000038
-offset_right = 19.9
+offset_right = 12.5
 offset_bottom = 85.399994
 scale = Vector2(10, 10)
 texture = ExtResource("4_qkpxi")
@@ -186,15 +186,37 @@ patch_margin_bottom = 6
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer/NinePatchRect" unique_id=559189221]
 show_behind_parent = true
 layout_mode = 0
+offset_right = 12.2
+offset_bottom = 86.299995
+color = Color(0.092913814, 0.102500565, 0.13584527, 1)
+
+[node name="NinePatchRect4" type="NinePatchRect" parent="CanvasLayer" unique_id=2004868871]
+texture_filter = 1
+offset_left = 1039.9999
+offset_top = -3.9999998
+offset_right = 1051.9999
+offset_bottom = 82.399994
+scale = Vector2(10, 10)
+texture = ExtResource("4_qkpxi")
+region_rect = Rect2(0, 0, 16, 16)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/NinePatchRect4" unique_id=1359254929]
+show_behind_parent = true
+layout_mode = 0
+offset_left = 1.6000061
 offset_right = 20.8
 offset_bottom = 86.299995
 color = Color(0.092913814, 0.102500565, 0.13584527, 1)
 
 [node name="NinePatchRect2" type="NinePatchRect" parent="CanvasLayer" unique_id=1863534285]
 texture_filter = 1
-offset_left = 204.99998
+offset_left = 99.99999
 offset_top = 716.0
-offset_right = 299.99997
+offset_right = 197.49998
 offset_bottom = 730.7
 scale = Vector2(10, 10)
 texture = ExtResource("4_qkpxi")
@@ -212,49 +234,21 @@ offset_right = 94.899994
 offset_bottom = 15.199997
 color = Color(0.092913814, 0.102500565, 0.13584527, 1)
 
-[node name="NinePatchRect3" type="NinePatchRect" parent="CanvasLayer" unique_id=1371473106]
-texture_filter = 1
-offset_left = 128.0
-offset_top = -82.99999
-offset_right = 178.2
-offset_bottom = -70.99999
-scale = Vector2(10, 10)
-texture = ExtResource("4_qkpxi")
-region_rect = Rect2(0, 0, 16, 16)
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
-
-[node name="NinePatchRect4" type="NinePatchRect" parent="CanvasLayer" unique_id=1150823843]
-texture_filter = 1
-offset_left = 1127.0
-offset_top = 52.000004
-offset_right = 1139.0
-offset_bottom = 123.09999
-scale = Vector2(10, 10)
-texture = ExtResource("4_qkpxi")
-region_rect = Rect2(0, 0, 16, 16)
-patch_margin_left = 6
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
-
 [node name="workshop_button" type="Button" parent="CanvasLayer" unique_id=1548444912]
 texture_filter = 1
-offset_left = 23.0
-offset_top = 203.0
-offset_right = 187.0
-offset_bottom = 322.0
+offset_left = 25.0
+offset_top = 739.0
+offset_right = 125.0
+offset_bottom = 828.0
 focus_mode = 0
 text = "WORKSHOP"
 
 [node name="ball_nr_display" type="Button" parent="CanvasLayer" unique_id=1678408169]
 texture_filter = 1
-offset_left = 1075.0
-offset_top = -4.0
-offset_right = 1160.0
-offset_bottom = 77.0
+offset_left = 1061.0
+offset_top = -2.0
+offset_right = 1146.0
+offset_bottom = 79.0
 theme_override_colors/font_outline_color = Color(0.186459, 0.18645903, 0.18645903, 1)
 theme_override_constants/outline_size = 16
 theme_override_font_sizes/font_size = 34
@@ -264,15 +258,16 @@ expand_icon = true
 script = ExtResource("5_qkpxi")
 
 [node name="money_display" parent="CanvasLayer" unique_id=523163818 instance=ExtResource("4_2wyq8")]
-offset_left = 30.0
-offset_top = 9.0
-offset_right = 70.0
-offset_bottom = 49.0
+offset_left = 7.0
+offset_top = 2.0
+offset_right = 47.0
+offset_bottom = 42.0
 
 [node name="play_area" type="ReferenceRect" parent="CanvasLayer" unique_id=20659669]
-offset_left = 207.0
-offset_right = 1154.0
-offset_bottom = 715.5
+offset_left = 113.0
+offset_top = 5.0
+offset_right = 1060.0
+offset_bottom = 720.5
 theme = SubResource("Theme_o6xl0")
 border_color = Color(0.9, 0.162, 0.6663, 0.48235294)
 border_width = 3.0
@@ -297,7 +292,7 @@ workshop_screen_node = NodePath("../workshop_node")
 position = Vector2(582, 430)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=969583906]
-position = Vector2(680.5, 689)
+position = Vector2(585, 689)
 scale = Vector2(14.828125, 1.03125)
 texture = SubResource("GradientTexture2D_tipki")
 
@@ -322,7 +317,7 @@ position = Vector2(-1161, -3247)
 position = Vector2(-1289, -2143)
 
 [node name="floor" type="Area2D" parent="stage_manager" unique_id=849525632 groups=["ball_kill"]]
-position = Vector2(685, 897)
+position = Vector2(591, 897)
 script = ExtResource("9_0ld40")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="stage_manager/floor" unique_id=894027766 groups=["ball_kill"]]
@@ -330,28 +325,28 @@ shape = SubResource("RectangleShape2D_trceg")
 debug_color = Color(0.5995648, 0.07345956, 0.34660336, 0.41960785)
 
 [node name="ceiling" type="Area2D" parent="stage_manager" unique_id=771170301]
-position = Vector2(3326, 1581)
+position = Vector2(3232, 1581)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="stage_manager/ceiling" unique_id=976610145]
 position = Vector2(-2632, -1682)
 shape = SubResource("RectangleShape2D_trceg")
 
 [node name="wall" type="Area2D" parent="stage_manager" unique_id=247683931]
-position = Vector2(202, 6)
+position = Vector2(108, 6)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="stage_manager/wall" unique_id=1428073987]
 position = Vector2(-4, 230)
 shape = SubResource("RectangleShape2D_a8y0u")
 
 [node name="wall2" type="Area2D" parent="stage_manager" unique_id=1987278941]
-position = Vector2(1163, 17)
+position = Vector2(1069, 17)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="stage_manager/wall2" unique_id=170739683]
 position = Vector2(-6, 240)
 shape = SubResource("RectangleShape2D_a8y0u")
 
 [node name="ball_cannon" parent="." unique_id=564166182 instance=ExtResource("5_tbgi4")]
-position = Vector2(701, 5)
+position = Vector2(587, 7)
 
 [node name="BallManager" type="Node2D" parent="." unique_id=1642780441 node_paths=PackedStringArray("adjustable_ball_multimesh", "adjustable_shadow_multimesh", "simulated_ball_multimesh", "adjustable_slidevfx_multimesh")]
 script = ExtResource("6_tefeu")
@@ -384,7 +379,7 @@ multimesh = SubResource("MultiMesh_jkv2x")
 texture = ExtResource("15_jkv2x")
 
 [node name="ball_factory" parent="." unique_id=149330198 instance=ExtResource("15_tel4y")]
-position = Vector2(86, -3)
+position = Vector2(14, 3)
 
 [node name="shock_wave_manager" type="Node2D" parent="." unique_id=707590614 node_paths=PackedStringArray("wave_multimesh")]
 script = ExtResource("20_gqmmt")

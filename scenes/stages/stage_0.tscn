@@ -17,12 +17,12 @@ metadata/_custom_type_script = "uid://rc1pswo54tv8"
 
 [node name="bg" type="Sprite2D" parent="." unique_id=1945480160]
 z_index = -1
-position = Vector2(683, 381.5)
-scale = Vector2(15.093751, 14.859375)
+position = Vector2(563.5, 387.5)
+scale = Vector2(17.765627, 14.859375)
 texture = SubResource("GradientTexture2D_o6xl0")
 
 [node name="pegs" type="Node2D" parent="." unique_id=482697035]
-position = Vector2(519, 244)
+position = Vector2(402.00003, 250)
 
 [node name="DestructiblePeg" parent="pegs" unique_id=1750133912 instance=ExtResource("2_whglb")]
 
