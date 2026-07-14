@@ -8,7 +8,7 @@ var start_speed: float = 700
 @export var test_upgrade: UpgradeData
 
 var time_since_last_shot: float = 0
-var shot_interval: float = 0.6
+var shot_interval: float = 0.01
 
 var upgrade_preloader: ResourcePreloader
 
@@ -48,8 +48,8 @@ func _physics_process(delta):
 		SignalBus.spawn_simulated_ball.emit(pos,vel,radius)
 	
 	
-	if Input.is_action_just_pressed("fire_ball") and BallFactoryManager.has_balls():
-	#if time_since_last_shot >= shot_interval:
+	#if Input.is_action_just_pressed("fire_ball") and BallFactoryManager.has_balls() and GlobalVars.mouse_is_in_play_area:
+	if time_since_last_shot >= shot_interval:
 		var anim_spd: float = 1
 		
 		if time_since_last_shot < 1:

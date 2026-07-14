@@ -7,15 +7,34 @@ func _ready():
 
 func set_money(new_amount: int):
 	$money.text = amount_to_string(new_amount)
-	
+	$money.tooltip_text = str(new_amount) + "$"
 
 
 func amount_to_string(money_amount: int):
-	pass
+	
+	var nr_length: int = str(abs(money_amount)).length()
+	
+	var with_decimal: float = money_amount/ 100.0
+	var no_decimal: int = round(with_decimal)
+	
+	
+	var return_val: String = str(money_amount)
+	
 	#var size_degree: int = log()
 	
+	if nr_length <= 2:
+		return_val = str(with_decimal)
+	elif nr_length <= 4:
+		return_val = str(with_decimal)
+	elif nr_length <= 6:
+		return_val = str(with_decimal)
+	elif nr_length <= 8:
+		return_val = str(snappedf(money_amount/100000.0,0.1)) + " K"
+	elif nr_length <= 12:
+		return_val = str(snappedf(money_amount/1000.0/1000.0/10.0, 0.1)) + " Mio."
 	
 	
+	return return_val
 	#var low_float: float = (float(money_amount))/100
 	#
 	#if money_amount < 10000:

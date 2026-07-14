@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://n45n0w275win"]
+
+[ext_resource type="Script" uid="uid://csqwulkyrg6s7" path="res://scenes/UI/stage_select_button.gd" id="1_qveyy"]
+
+[node name="select_button" type="Button" unique_id=1125111071]
+focus_mode = 0
+text = "level"
+script = ExtResource("1_qveyy")
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

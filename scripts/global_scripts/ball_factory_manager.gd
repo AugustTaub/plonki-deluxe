@@ -24,7 +24,7 @@ func _on_upgrade_preloader_loaded(preloader: ResourcePreloader):
 
 func _physics_process(delta: float) -> void:
 	delta_timer += delta
-	if delta_timer > ball_spawn_cooldown:
+	if delta_timer > ball_spawn_cooldown and upgrade_preloader:
 		
 		var radius_upgrade: UpgradeData = upgrade_preloader.get_resource("ball_size")
 		var radius_level: int = SaveManager.get_upgrade_level_by_name("ball_size")

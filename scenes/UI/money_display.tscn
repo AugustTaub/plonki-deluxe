@@ -11,8 +11,8 @@ Button/font_sizes/font_size = 32
 [node name="money_display" type="Control" unique_id=523163818]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 217.0
+offset_bottom = 68.0
 script = ExtResource("1_vr4hv")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=1519969660]

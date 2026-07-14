@@ -21,6 +21,7 @@ config/icon="res://2D/images/icon.svg"
 SignalBus="*uid://djee380ynnny2"
 SaveManager="*uid://d03l27pfkh31u"
 BallFactoryManager="*uid://btanyn2b3wtwh"
+GlobalVars="*uid://cwoxp4vyoq74f"
 
 [display]
 
@@ -31,6 +32,10 @@ window/vsync/vsync_mode=0
 [global_group]
 
 ball_kill=""
+
+[gui]
+
+timers/tooltip_delay_sec=0.2
 
 [input]
 
