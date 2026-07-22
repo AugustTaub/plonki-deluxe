@@ -19,7 +19,7 @@ var curr_peg_state: peg_state = peg_state.DEFAULT
 @export var preloaded_alive_tex: Texture2D = preload("res://2D/godot_gen_textures/alive_circle_peg.tres")
 @export var preloaded_dead_tex: Texture2D = preload("res://2D/godot_gen_textures/dead_circle_peg.tres")
 
-var HP: int = 3
+var HP: int = 2
 
 
 # Called when the node enters the scene tree for the first time.

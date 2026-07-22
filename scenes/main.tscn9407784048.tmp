@@ -27,14 +27,13 @@
 [ext_resource type="PackedScene" uid="uid://didcss5a6tuv4" path="res://scenes/UI/ball_factory.tscn" id="15_tel4y"]
 [ext_resource type="Shader" uid="uid://b8oco35fngtil" path="res://2D/shaders/fake3Dball_glowing.gdshader" id="16_0ld40"]
 [ext_resource type="Texture2D" uid="uid://dyd4oclypohv0" path="res://2D/images/flames.png" id="16_dp3eg"]
-[ext_resource type="PackedScene" uid="uid://c6f1nbs4ofhu2" path="res://scenes/stages/stage_4.tscn" id="17_c6pm6"]
 [ext_resource type="Texture2D" uid="uid://bcwj61mhugcmi" path="res://2D/images/ball3.png" id="20_fv21b"]
 [ext_resource type="Script" uid="uid://bpkun8bhfpwog" path="res://scripts/managers/shock_wave_manager.gd" id="20_gqmmt"]
 [ext_resource type="Script" uid="uid://chle44q2uweo0" path="res://scripts/script_importer.gd" id="20_kmb1v"]
 [ext_resource type="Script" uid="uid://c7r6c85l0br38" path="res://scripts/enemies/infested_peg_enemy_states/idle_infested_peg_state.gd" id="20_pibwh"]
-[ext_resource type="Script" uid="uid://blgmqpldlvn05" path="res://scripts/enemies/infested_peg_enemy_states/dodging_infested_peg_state.gd" id="21_5he1u"]
-[ext_resource type="Script" uid="uid://bf51sh8b7vo3c" path="res://scripts/enemies/infested_peg_enemy_states/walking_infested_peg_state.gd" id="21_c6pm6"]
+[ext_resource type="Script" uid="uid://bf51sh8b7vo3c" path="res://scripts/enemies/infested_peg_enemy_states/moving_infested_peg_state.gd" id="21_c6pm6"]
 [ext_resource type="Shader" uid="uid://66yohp1rod72" path="res://2D/shaders/shock_wave.gdshader" id="21_yc10j"]
+[ext_resource type="Shader" uid="uid://bnyhkko1xsxai" path="res://2D/shaders/infested_peg.gdshader" id="22_c6pm6"]
 [ext_resource type="Resource" uid="uid://v81rtw47g0f" path="res://custom_res/upgrades/ball_speed.tres" id="27_2f3dj"]
 [ext_resource type="Resource" uid="uid://du3eonw0shm4s" path="res://custom_res/upgrades/ball_size.tres" id="27_fv21b"]
 [ext_resource type="Script" uid="uid://r7b4etqxtw30" path="res://scripts/batch_resource_preloader.gd" id="27_vxglm"]
@@ -69,8 +68,10 @@ size = Vector2(964, 20)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a8y0u"]
 size = Vector2(28, 1300)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5he1u"]
+shader = ExtResource("22_c6pm6")
+
 [sub_resource type="QuadMesh" id="QuadMesh_kmb1v"]
-size = Vector2(32, 32)
 
 [sub_resource type="MultiMesh" id="MultiMesh_fuf3a"]
 use_colors = true
@@ -335,7 +336,7 @@ texture = SubResource("GradientTexture2D_tipki")
 
 [node name="stage_manager" type="Node2D" parent="." unique_id=1274292812 node_paths=PackedStringArray("stage_nodes")]
 script = ExtResource("6_ya4ey")
-stage_nodes = [NodePath("stages/stage_0"), NodePath("stages/stage1"), NodePath("stages/stage_2"), NodePath("stages/stage_3"), NodePath("stages/stage_4")]
+stage_nodes = [NodePath("stages/stage_0"), NodePath("stages/stage1"), NodePath("stages/stage_2"), NodePath("stages/stage_3"), NodePath("stages/FallBack")]
 
 [node name="stages" type="Node" parent="stage_manager" unique_id=1215066605]
 
@@ -352,9 +353,6 @@ position = Vector2(-1161, -3247)
 
 [node name="stage_3" parent="stage_manager/stages" unique_id=1425930095 instance=ExtResource("9_jscy8")]
 position = Vector2(-1289, -2143)
-
-[node name="stage_4" parent="stage_manager/stages" unique_id=329791335 instance=ExtResource("17_c6pm6")]
-position = Vector2(-2780, -2177)
 
 [node name="floor" type="Area2D" parent="stage_manager" unique_id=849525632 groups=["ball_kill"]]
 position = Vector2(591, 897)
@@ -390,11 +388,12 @@ position = Vector2(587, 7)
 
 [node name="InfestedPegManager" type="Node2D" parent="." unique_id=1497752460 node_paths=PackedStringArray("adjustable_peg_multimesh")]
 script = ExtResource("35_j8jky")
-state_script_arr = Array[Script]([ExtResource("21_5he1u"), ExtResource("20_pibwh"), ExtResource("21_c6pm6")])
+state_script_arr = Array[Script]([ExtResource("20_pibwh"), ExtResource("21_c6pm6")])
 adjustable_peg_multimesh = NodePath("adjustable_shadow_multimesh")
 metadata/_custom_type_script = "uid://c44acerkmynj2"
 
 [node name="adjustable_shadow_multimesh" type="MultiMeshInstance2D" parent="InfestedPegManager" unique_id=338303880]
+material = SubResource("ShaderMaterial_5he1u")
 multimesh = SubResource("MultiMesh_fuf3a")
 texture = SubResource("GradientTexture2D_c6pm6")
 
@@ -402,13 +401,14 @@ texture = SubResource("GradientTexture2D_c6pm6")
 script = ExtResource("20_kmb1v")
 folder_path = "res://scripts/enemies/infested_peg_enemy_states"
 
-[node name="BallManager" type="Node2D" parent="." unique_id=1642780441 node_paths=PackedStringArray("adjustable_ball_multimesh", "adjustable_shadow_multimesh", "simulated_ball_multimesh", "adjustable_slidevfx_multimesh", "infested_peg_manger")]
+[node name="AreaPoolParent" type="Node" parent="InfestedPegManager" unique_id=906976571]
+
+[node name="BallManager" type="Node2D" parent="." unique_id=1642780441 node_paths=PackedStringArray("adjustable_ball_multimesh", "adjustable_shadow_multimesh", "simulated_ball_multimesh", "adjustable_slidevfx_multimesh")]
 script = ExtResource("6_tefeu")
 adjustable_ball_multimesh = NodePath("adjustable_ball_multimesh")
 adjustable_shadow_multimesh = NodePath("adjustable_shadow_multimesh")
 simulated_ball_multimesh = NodePath("simulated_ball_multimesh")
 adjustable_slidevfx_multimesh = NodePath("adjustable_slidevfx_multimesh")
-infested_peg_manger = NodePath("../InfestedPegManager")
 
 [node name="adjustable_shadow_multimesh" type="MultiMeshInstance2D" parent="BallManager" unique_id=2074502449]
 material = SubResource("ShaderMaterial_85g3d")

@@ -7,8 +7,15 @@ var start_speed: float = 700
 
 @export var test_upgrade: UpgradeData
 
+@export var simulated_ball_frequency: float = 0.1
+
+var last_frame_mouse_pos: Vector2 = Vector2.ZERO
+var mouse_has_moved_this_frame: bool = false
+
 var time_since_last_shot: float = 0
-var shot_interval: float = 0.01
+var time_since_last_sim_shot: float = 0
+
+var shot_interval: float = 0.1
 
 var upgrade_preloader: ResourcePreloader
 
@@ -24,6 +31,17 @@ func _on_upgrade_preloader_loaded(preloader: ResourcePreloader):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
 	time_since_last_shot += delta
+	time_since_last_sim_shot += delta
+	
+	var mpos: Vector2 = get_global_mouse_position()
+	if last_frame_mouse_pos != mpos:
+		mouse_has_moved_this_frame = true
+	else:
+		mouse_has_moved_this_frame = false
+	
+	last_frame_mouse_pos = mpos
+	
+	
 	
 	$pivot.look_at(get_global_mouse_position())
 	$pivot.rotate(-PI/2)
@@ -38,18 +56,18 @@ func _physics_process(delta):
 	var radius_level: int = SaveManager.get_upgrade_level_by_name("ball_size")
 	
 	var radius = radius_upgrade.get_level_result(radius_level)
-	#print("radius: ",radius)
 	
 	var pos = ball_spawn_point.global_position
 	var vel = global_position.direction_to(ball_spawn_point.global_position) * start_speed
 	
 	
-	if sin(time_since_last_shot*(1/delta))>0:
+	if mouse_has_moved_this_frame or time_since_last_sim_shot > simulated_ball_frequency:
 		SignalBus.spawn_simulated_ball.emit(pos,vel,radius)
+		time_since_last_shot = 0.0
 	
 	
-	#if Input.is_action_just_pressed("fire_ball") and BallFactoryManager.has_balls() and GlobalVars.mouse_is_in_play_area:
-	if time_since_last_shot >= shot_interval:
+	if Input.is_action_just_pressed("fire_ball") and BallFactoryManager.has_balls() and GlobalVars.mouse_is_in_play_area:
+	#if time_since_last_shot >= shot_interval:
 		var anim_spd: float = 1
 		
 		if time_since_last_shot < 1:

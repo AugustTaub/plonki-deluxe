@@ -15,6 +15,7 @@ var max_allowed_ball_radius: float = 64
 
 var simulate_time: float = 0.6
 
+
 ### EXPORT VARS
 @export var adjustable_ball_multimesh: MultiMeshInstance2D
 
@@ -23,6 +24,8 @@ var simulate_time: float = 0.6
 @export var simulated_ball_multimesh: MultiMeshInstance2D
 
 @export var adjustable_slidevfx_multimesh: MultiMeshInstance2D
+
+@export var infested_peg_manger: InfestedPegManager
 
 ### DATA STRUCTURE
 class BallData extends RefCounted:
@@ -49,8 +52,6 @@ var simulated_positions: Array[Vector2]
 ###
 
 var delta_timer: float = 0
-var mouse_has_moved_this_frame: bool = false
-var last_frame_mouse_pos: Vector2 = Vector2.ZERO
 var sim_ball_point_distribution: int = 2
 
 @onready var physics_ticks_per_second: int = ProjectSettings.get_setting("physics/common/physics_ticks_per_second")
@@ -123,15 +124,6 @@ func spawn_simulated_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO,
 
 func _physics_process(delta):
 	
-	var mpos: Vector2 = get_global_mouse_position()
-	if last_frame_mouse_pos != mpos:
-		mouse_has_moved_this_frame = true
-	else:
-		mouse_has_moved_this_frame = false
-	
-	last_frame_mouse_pos = mpos
-	
-	
 	var space_state = get_world_2d().direct_space_state
 	
 	for ball in active_balls:
@@ -142,7 +134,8 @@ func _physics_process(delta):
 		update_ball_visuals(ball)
 	
 	
-	if mouse_has_moved_this_frame:
+	
+	if curr_simulated_ball != null : 
 		
 		for i in simulate_time*physics_ticks_per_second:
 			process_single_ball(curr_simulated_ball, delta, space_state)
@@ -265,7 +258,7 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 		
 		var result = space_state.intersect_ray(query)
 		
-		if result:
+		if result and not result.collider is StaticBody2D:
 			hit_something = true
 			
 			var dist = ball.pos.distance_squared_to(result.position)
@@ -284,6 +277,20 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 				return {
 					"is_valid": false}
 			
+			var hit_rid = result.rid 
+			
+			#check if infested peg is hit
+			var hit_id = infested_peg_manger.get_peg_area_id_from_rid(hit_rid)
+			
+			# if infested peg is hit make it dodge
+			if hit_id != "":
+				
+				var hit_peg: InfestedPegManager.PegData = infested_peg_manger.active_pegs[int(hit_id)]
+				
+				infested_peg_manger.change_peg_state(hit_peg,"dodging")
+				hit_peg.danger_dir = ball.pos.direction_to(hit_peg.pos)
+			
+			
 			#if collider.is_in_group("ball_kill"):
 				#ball.active = false
 			
@@ -292,7 +299,7 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 	
 	
 	# different logic here because the first approach only works for small colliders with simple shapes (pegs)
-	if has_hit_peg:
+	if has_hit_peg and closest_collider:
 		# Cast  ray from the ball center to the found collider
 		query.from = ball.pos
 		query.to = closest_collider.global_position
@@ -350,8 +357,6 @@ func perform_collision(ball: BallData, data: Dictionary):
 	
 	if ball.simulated and curr_simulated_ball.frames_simulated % sim_ball_point_distribution == 0:
 		simulated_positions.append(coll_pos)
-	
-	
 	
 	
 	if not ball.is_sliding:

@@ -3,6 +3,18 @@
 [ext_resource type="Script" uid="uid://dlyva8iecj0md" path="res://scripts/destructible_peg.gd" id="1_oouwb"]
 [ext_resource type="Texture2D" uid="uid://bqpjpiotynu2q" path="res://2D/godot_gen_textures/alive_circle_peg.tres" id="2_gqub4"]
 
+[sub_resource type="Gradient" id="Gradient_oouwb"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.6440678)
+colors = PackedColorArray(0.14, 0.0518, 0.05326998, 0.6745098, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gqub4"]
+gradient = SubResource("Gradient_oouwb")
+width = 32
+height = 32
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_jru8u"]
 radius = 15.0
 
@@ -16,6 +28,10 @@ peg_coll_shape = NodePath("peg_coll_shape")
 [node name="peg_sprite" type="Sprite2D" parent="." unique_id=1572766428]
 texture_filter = 1
 texture = ExtResource("2_gqub4")
+
+[node name="peg_damage_sprite" type="Sprite2D" parent="." unique_id=1054120760]
+texture_filter = 1
+texture = SubResource("GradientTexture2D_gqub4")
 
 [node name="peg_coll_shape" type="CollisionShape2D" parent="." unique_id=561766909]
 shape = SubResource("CircleShape2D_jru8u")

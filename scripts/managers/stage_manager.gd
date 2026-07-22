@@ -1,4 +1,5 @@
 extends Node2D
+class_name StageManager
 
 @export var stage_nodes: Array[StageNode]
 var stage_i: int = 0
@@ -24,7 +25,7 @@ func _ready():
 		#set_stage_node(stage_nodes[stage_i])
 
 func set_stage_node(new_stage_node: StageNode):
-	if new_stage_node:
+	if new_stage_node and new_stage_node != curr_stage_node:
 		new_stage_node.global_position = global_position
 		
 		if curr_stage_node:
