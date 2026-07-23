@@ -1,15 +1,15 @@
 class_name DodgingInfestedPegState
 extends InfestedPegState
 
-var dodge_time: float = 1.0
+var dodge_time: float = 0.5
 
 func _init() -> void:
-	color = Color.BLUE
+	color = Color.GREEN_YELLOW
 
 func enter(actor: InfestedPegManager.PegData) -> void:
 	actor.saved_time = actor.peg_timer
 	
-	var move_speed: float = 80.0 
+	var move_speed: float = 1500.0 
 	actor.agent_desired_velocity = actor.danger_dir * move_speed
 
 func exit(actor: InfestedPegManager.PegData) -> void:

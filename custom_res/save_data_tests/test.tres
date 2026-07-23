@@ -8,8 +8,8 @@
 
 [resource]
 script = ExtResource("1_mx8ne")
-money_amount = 8767
-ball_amount = 1
+money_amount = 8972
+ball_amount = 5
 upgrade_levels = Dictionary[ExtResource("2_j07jm"), int]({
 ExtResource("4_l3pva"): 4,
 ExtResource("5_42avq"): 2,

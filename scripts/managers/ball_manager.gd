@@ -227,6 +227,7 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 	
 	var query = PhysicsRayQueryParameters2D.new()
 	query.collide_with_areas = true
+	query.collision_mask = 1
 	
 	# more rays for bigger balls, so pegs cant go inbetween rays
 	# its still really buggy for anything bigger than 32 though
@@ -289,6 +290,9 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 				
 				infested_peg_manger.change_peg_state(hit_peg,"dodging")
 				hit_peg.danger_dir = ball.pos.direction_to(hit_peg.pos)
+				
+				if not ball.simulated:
+					infested_peg_manger.take_damage(hit_peg,1)
 			
 			
 			#if collider.is_in_group("ball_kill"):
@@ -363,18 +367,19 @@ func perform_collision(ball: BallData, data: Dictionary):
 		ball.vel *= bounciness
 
 func check_if_in_air(ball: BallData, space_state: PhysicsDirectSpaceState2D) -> bool:
-	# Cast a short ray downwards to check for floor
-	var query = PhysicsRayQueryParameters2D.new()
-	query.from = ball.pos
-	query.to = ball.pos + Vector2(0, 20)
+	var query = PhysicsRayQueryParameters2D.create(ball.pos, ball.pos + Vector2(0, 20))
+	query.collision_mask = 1
 	query.collide_with_areas = true
 	
-	var query2 = PhysicsRayQueryParameters2D.new()
-	query2.from = ball.pos
-	query2.to = ball.pos + Vector2(0, -20)
-	query2.collide_with_areas = true
+	#check if down
+	if not space_state.intersect_ray(query).is_empty():
+		return false
 	
-	return space_state.intersect_ray(query).is_empty() and space_state.intersect_ray(query2).is_empty()
+	#check if up
+	query.to = ball.pos + Vector2(0, -20)
+	
+	return space_state.intersect_ray(query).is_empty()
+
 
 func queue_pegs_for_destruction(pegs: Array[Node2D]):
 	for peg in pegs:

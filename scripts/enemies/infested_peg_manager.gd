@@ -20,6 +20,8 @@ var rid_to_agent_id: Dictionary = {}    # RID -> ID
 
 ### DATA STRUCTURE
 class PegData extends RefCounted:
+	var health: int = 1
+	
 	var active: bool = true
 	var pos: Vector2 = Vector2.ZERO
 	var vel: Vector2 = Vector2.ZERO
@@ -37,6 +39,9 @@ class PegData extends RefCounted:
 ###
 var active_pegs: Array[PegData] = []
 var delta_timer: float = 0
+
+### DEBUG
+var peg_nr_spawned: int = 0
 
 func _ready():
 	SignalBus.spawn_infested_peg.connect(spawn_infested_peg) 
@@ -139,6 +144,8 @@ func _perform_change_peg_state(peg: PegData, new_state_name: String):
 func spawn_infested_peg(spawn_pos: Vector2):
 	for peg in active_pegs:
 		if not peg.active:
+			peg.health = 1
+			
 			peg.active = true
 			peg.pos = spawn_pos
 			peg.state_name = "idle"
@@ -147,6 +154,7 @@ func spawn_infested_peg(spawn_pos: Vector2):
 			peg.agent_desired_velocity = Vector2.ZERO
 			peg.safe_velocity = Vector2.ZERO
 			peg.saved_time = 0.0
+			
 			
 			activate_area(peg.instance_id, peg.pos)
 			change_peg_state(peg, peg.state_name)
@@ -160,17 +168,27 @@ func spawn_infested_peg(spawn_pos: Vector2):
 	active_pegs.append(new_peg)
 
 func _physics_process(delta):
+	### DEBUG
+	if Input.is_action_pressed("ui_accept"):
+		spawn_infested_peg(Vector2(555,444)+ Vector2.UP.rotated(randf_range(0,2*PI))*100)
+		peg_nr_spawned += 1
+		print(peg_nr_spawned)
+	
+	
 	for peg in active_pegs:
+		
 		if not peg.active:
+			update_peg_visuals(peg)
 			continue
 		
 		peg.peg_timer += delta
-		process_single_peg(peg, delta)
+		
+		if (peg.instance_id + Engine.get_physics_frames()) % 10 == 0:
+			process_single_peg(peg, delta)
+		
 		update_peg_visuals(peg)
 	
-	### DEBUG
-	if Input.is_action_just_pressed("ui_accept"):
-		spawn_infested_peg(Vector2(555,444)+ Vector2.UP.rotated(randf_range(0,2*PI))*100)
+	
 
 
 func process_single_peg(peg: PegData, delta: float):
@@ -199,8 +217,20 @@ func update_peg_visuals(peg: PegData):
 		
 		var trans = Transform2D(0, peg.vis_scale * Vector2.ONE, 0, peg.pos)
 		adjustable_peg_multimesh.multimesh.set_instance_transform_2d(multmesh_i, trans)
+		
+		#set state color
 		if state_dict.has(peg.state_name):
 			adjustable_peg_multimesh.multimesh.set_instance_color(multmesh_i, state_dict[peg.state_name].color)
+
+func take_damage(peg: PegData, damage_amount: int):
+	peg.health -= damage_amount
+	if peg.health <= 0:
+		die(peg)
+
+
+func die(peg: PegData):
+	peg.active = false
+	deactivate_area(peg.instance_id)
 
 ###
 
