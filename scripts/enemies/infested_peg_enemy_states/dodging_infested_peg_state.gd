@@ -9,7 +9,8 @@ func _init() -> void:
 func enter(actor: InfestedPegManager.PegData) -> void:
 	actor.saved_time = actor.peg_timer
 	
-	var move_speed: float = 1500.0 
+	print("DodgingInfestedPegState")
+	var move_speed: float = 250.0 
 	actor.agent_desired_velocity = actor.danger_dir * move_speed
 
 func exit(actor: InfestedPegManager.PegData) -> void:

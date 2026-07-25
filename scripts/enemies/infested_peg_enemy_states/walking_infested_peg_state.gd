@@ -17,7 +17,6 @@ func exit(actor: InfestedPegManager.PegData) -> void:
 
 func physics_process(_delta: float, actor: InfestedPegManager.PegData) -> void:
 	var agent_rid: RID = peg_manager_node.pooled_agents[actor.instance_id]
-	var nav_map: RID = peg_manager_node.get_world_2d().navigation_map
 	
 	# ask the server for a path from current pos to goal
 	var path: PackedVector2Array = NavigationServer2D.map_get_path(
@@ -27,7 +26,7 @@ func physics_process(_delta: float, actor: InfestedPegManager.PegData) -> void:
 		true
 	)
 	
-	var move_speed: float = 500.0 
+	var move_speed: float = 50.0 
 	
 	if path.size() > 1:
 		var next_path_pos: Vector2 = path[1]

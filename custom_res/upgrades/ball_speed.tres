@@ -10,7 +10,8 @@ point_count = 3
 [resource]
 script = ExtResource("2_53lf0")
 name = "ball_speed"
+max_level = 6
 start_result = 200.0
-end_result = 800.0
+end_result = 8000.0
 result_scaling_curve = SubResource("Curve_aifwu")
 metadata/_custom_type_script = "uid://bbo5op84iqbom"

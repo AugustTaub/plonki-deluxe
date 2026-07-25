@@ -6,6 +6,7 @@ class_name BallManager
 var gravity: float = 900
 var bounciness: float = 0.95
 var max_bounces_per_frame: int = 3
+var max_bounces_per_life: int = 32
 var slipperiness: float = 1.2
 var spin_sensitivity: float = 1.0/140.0
 
@@ -25,7 +26,7 @@ var simulate_time: float = 0.6
 
 @export var adjustable_slidevfx_multimesh: MultiMeshInstance2D
 
-@export var infested_peg_manger: InfestedPegManager
+@export var infested_peg_manager: InfestedPegManager
 
 ### DATA STRUCTURE
 class BallData extends RefCounted:
@@ -43,6 +44,15 @@ class BallData extends RefCounted:
 	var radius: float = 16
 	var vis_scale: float = 1.0
 	var ray_offsets: Array[Vector2] = []
+	var bounces_made: int = 0
+	
+	# ray query
+	var query: PhysicsRayQueryParameters2D
+	
+	func _init():
+		query = PhysicsRayQueryParameters2D.new()
+		query.collide_with_areas = true
+		query.collision_mask = 1
 
 ###
 var active_balls: Array[BallData] = []
@@ -81,7 +91,6 @@ func _ready():
 
 
 func spawn_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO, spawn_radius: float = 16.0):
-	
 	for ball in active_balls:
 		if not ball.active:
 			# Revive ball if therers one available
@@ -94,7 +103,10 @@ func spawn_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO, spawn_rad
 			ball.inactive_time = 0.0
 			ball.is_sliding = false
 			ball.roll_offset = Vector2.ZERO
+			ball.bounces_made = 0
 			return
+	
+	
 	
 	# If no dead balls make new one
 	var new_ball = BallData.new()
@@ -164,14 +176,20 @@ func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirec
 	else:
 		ball.air_time = 0
 		
-	# Collision & Bouncing Loop
+	# collision + bouncing Loop
 	for i in max_bounces_per_frame:
 		var coll_result = run_coll_check(ball, move_vec, space_state)
 		
 		if coll_result.has("is_valid") and coll_result.is_valid:
+			
+			ball.bounces_made += 1
+			if ball.bounces_made > max_bounces_per_life:
+				ball.active = false
+				break
+			
 			has_bounced_this_frame = true
 			perform_collision(ball, coll_result)
-			# Recalculate move_vec for remaining bounces
+			
 			move_vec = ball.vel * delta
 			
 			if not ball.simulated:
@@ -222,23 +240,16 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 	var has_hit_peg: bool = false
 	
 	var closest_collider: Node2D
-	
 	var ray_rot = move_vec.angle() - (PI/2)
 	
-	var query = PhysicsRayQueryParameters2D.new()
-	query.collide_with_areas = true
-	query.collision_mask = 1
+	var query = ball.query
 	
-	# more rays for bigger balls, so pegs cant go inbetween rays
-	# its still really buggy for anything bigger than 32 though
 	if ball.radius >= 25: #big ball
 		ball.ray_offsets = [
 			Vector2(-ball.radius, 0), # Left
-			Vector2(-ball.radius*(1.0/3.0), 0), # Left
-			Vector2(-ball.radius*(2.0/3.0), 0), # Left
+			Vector2(-ball.radius*(2.0/3.0), 0), 
 			Vector2(0, ball.radius),  # Center
-			Vector2(ball.radius*(1.0/3.0), 0),   # Right
-			Vector2(ball.radius*(2.0/3.0), 0),   # Right
+			Vector2(ball.radius*(1.0/3.0), 0),   
 			Vector2(ball.radius, 0)   # Right
 			]
 	else: #normal ball
@@ -249,7 +260,7 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 		]
 	
 	for offset in ball.ray_offsets:
-		# Rotate offset to match movement direction
+		# rotate offset to match movement direction
 		var rotated_offset = offset.rotated(ray_rot)
 		var start_pos = ball.pos + rotated_offset
 		var end_pos = start_pos + move_vec
@@ -260,6 +271,13 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 		var result = space_state.intersect_ray(query)
 		
 		if result and not result.collider is StaticBody2D:
+			
+			var hit_rid = result.rid 
+			var hit_id = infested_peg_manager.get_peg_area_id_from_rid(hit_rid)
+			if hit_id != "":
+				return { "is_valid": false }
+			
+			
 			hit_something = true
 			
 			var dist = ball.pos.distance_squared_to(result.position)
@@ -274,39 +292,30 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 				has_hit_peg = true
 			
 			if collider is BallInteractibleObject:
-				ball =  collider.perform_interaction(ball)
-				return {
-					"is_valid": false}
+				ball = collider.perform_interaction(ball)
+				return { "is_valid": false }
 			
-			var hit_rid = result.rid 
 			
-			#check if infested peg is hit
-			var hit_id = infested_peg_manger.get_peg_area_id_from_rid(hit_rid)
 			
 			# if infested peg is hit make it dodge
-			if hit_id != "":
-				
-				var hit_peg: InfestedPegManager.PegData = infested_peg_manger.active_pegs[int(hit_id)]
-				
-				infested_peg_manger.change_peg_state(hit_peg,"dodging")
-				hit_peg.danger_dir = ball.pos.direction_to(hit_peg.pos)
-				
-				if not ball.simulated:
-					infested_peg_manger.take_damage(hit_peg,1)
-			
-			
-			#if collider.is_in_group("ball_kill"):
-				#ball.active = false
+			#if hit_id != "":
+				#var hit_peg: InfestedPegManager.PegData = infested_peg_manager.active_pegs[int(hit_id)]
+				#
+				#infested_peg_manager.call_deferred("change_peg_state", hit_peg, "dodging")
+				#hit_peg.danger_dir = ball.pos.direction_to(hit_peg.pos)
+				#
+				#if not ball.simulated:
+					#infested_peg_manager.call_deferred("take_damage", hit_peg, 1)
 			
 	if not hit_something:
 		return {"is_valid": false}
 	
-	
-	# different logic here because the first approach only works for small colliders with simple shapes (pegs)
 	if has_hit_peg and closest_collider:
-		# Cast  ray from the ball center to the found collider
 		query.from = ball.pos
-		query.to = closest_collider.global_position
+		if "thread_safe_pos" in closest_collider:
+			query.to = closest_collider.thread_safe_pos
+		else:
+			query.to = closest_hit_point
 	else:
 		var dir_to_hit = ball.pos.direction_to(closest_hit_point)
 		query.from = ball.pos
@@ -319,7 +328,6 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 		target_normal = final_result.normal
 		closest_hit_point = final_result.position
 	else:
-		# Fallback normal
 		target_normal = -move_vec.normalized()
 	
 	var bounce_vec = move_vec.bounce(target_normal).normalized()
@@ -367,17 +375,14 @@ func perform_collision(ball: BallData, data: Dictionary):
 		ball.vel *= bounciness
 
 func check_if_in_air(ball: BallData, space_state: PhysicsDirectSpaceState2D) -> bool:
-	var query = PhysicsRayQueryParameters2D.create(ball.pos, ball.pos + Vector2(0, 20))
-	query.collision_mask = 1
-	query.collide_with_areas = true
+	var query = ball.query
+	query.from = ball.pos
+	query.to = ball.pos + Vector2(0, 20)
 	
-	#check if down
 	if not space_state.intersect_ray(query).is_empty():
 		return false
 	
-	#check if up
 	query.to = ball.pos + Vector2(0, -20)
-	
 	return space_state.intersect_ray(query).is_empty()
 
 
@@ -394,6 +399,8 @@ func update_ball_visuals(ball: BallData):
 		# if ball is dead hide it, by setting its scale to 0
 		if not ball.active:
 			adjustable_ball_multimesh.multimesh.set_instance_transform_2d(multmesh_i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+			adjustable_shadow_multimesh.multimesh.set_instance_transform_2d(multmesh_i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+			adjustable_slidevfx_multimesh.multimesh.set_instance_transform_2d(multmesh_i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
 			return 
 		
 		# draw active ball

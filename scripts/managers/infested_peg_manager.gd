@@ -1,7 +1,7 @@
 extends Node2D
 class_name InfestedPegManager
 
-@export var max_number_of_pegs: int = 500
+@export var max_number_of_pegs: int = 1000
 var simulate_time: float = 0.6
 @export var state_script_arr: Array[Script] = []
 var state_dict: Dictionary = {} 
@@ -40,6 +40,10 @@ class PegData extends RefCounted:
 var active_pegs: Array[PegData] = []
 var delta_timer: float = 0
 
+### THREADING CACHED VARS
+var current_delta: float = 0.0
+var current_frame: int = 0
+
 ### DEBUG
 var peg_nr_spawned: int = 0
 
@@ -55,6 +59,7 @@ func _ready():
 	for script in state_script_arr:
 		var state_instance: InfestedPegState = script.new()
 		state_instance.peg_manager_node = self
+		state_instance.nav_map = get_world_2d().navigation_map
 		if state_instance:
 			var key = script.resource_path.get_file().get_basename().replacen("_infested_peg_state", "").to_lower()
 			add_state_to_dict(key, state_instance)
@@ -80,7 +85,7 @@ func _ready():
 		
 		NavigationServer2D.agent_set_radius(agent_rid, 16.0)
 		
-		NavigationServer2D.agent_set_max_speed(agent_rid, 100.0) 
+		NavigationServer2D.agent_set_max_speed(agent_rid, 1000.0) 
 		
 		NavigationServer2D.agent_set_avoidance_callback(
 			agent_rid, 
@@ -98,10 +103,14 @@ func create_internal_area() -> RID:
 	return area_rid
 
 func activate_area(id: int, pos: Vector2):
-	var area_RID = pooled_areas[id]
-	PhysicsServer2D.area_set_space(area_RID, get_world_2d().space)
-	var area_transform = Transform2D(0, pos)
-	PhysicsServer2D.area_set_transform(area_RID, area_transform)
+	if id <= pooled_areas.size() -1:
+		
+		var area_RID = pooled_areas[id]
+		PhysicsServer2D.area_set_space(area_RID, get_world_2d().space)
+		var area_transform = Transform2D(0, pos)
+		PhysicsServer2D.area_set_transform(area_RID, area_transform)
+	else:
+		push_warning("InfestedPegManager: Tried to activate an area outside the area pool size!")
 
 func deactivate_area(id: int):
 	var area_RID = pooled_areas[id]
@@ -142,6 +151,7 @@ func _perform_change_peg_state(peg: PegData, new_state_name: String):
 ### PEG LOGIC
 
 func spawn_infested_peg(spawn_pos: Vector2):
+	#revive pegs if possible
 	for peg in active_pegs:
 		if not peg.active:
 			peg.health = 1
@@ -155,11 +165,15 @@ func spawn_infested_peg(spawn_pos: Vector2):
 			peg.safe_velocity = Vector2.ZERO
 			peg.saved_time = 0.0
 			
-			
 			activate_area(peg.instance_id, peg.pos)
 			change_peg_state(peg, peg.state_name)
 			return
 	
+	# dont make make pegs if there are too many
+	if active_pegs.size()+1 > max_number_of_pegs:
+		return
+	
+	# create whole new peg
 	var new_peg = PegData.new()
 	new_peg.pos = spawn_pos
 	new_peg.instance_id = active_pegs.size()
@@ -174,33 +188,39 @@ func _physics_process(delta):
 		peg_nr_spawned += 1
 		print(peg_nr_spawned)
 	
+	# cache parameters for worker threads
+	current_delta = delta
+	current_frame = Engine.get_physics_frames()
 	
+	# add tasks for multithreading
+	if active_pegs.size() > 0:
+		var task_id = WorkerThreadPool.add_group_task(_process_peg_batch, active_pegs.size())
+		WorkerThreadPool.wait_for_group_task_completion(task_id)
+	
+	# visuals on main thread
 	for peg in active_pegs:
-		
-		if not peg.active:
-			update_peg_visuals(peg)
-			continue
-		
-		peg.peg_timer += delta
-		
-		if (peg.instance_id + Engine.get_physics_frames()) % 10 == 0:
-			process_single_peg(peg, delta)
-		
 		update_peg_visuals(peg)
-	
-	
 
-
-func process_single_peg(peg: PegData, delta: float):
-	# state machine logic
-	if state_dict.has(peg.state_name):
-		state_dict[peg.state_name].physics_process(delta, peg)
+func _process_peg_batch(index: int):
+	var peg = active_pegs[index]
+	if not peg.active:
+		return
 	
-	# movement logic
+	peg.peg_timer += current_delta
+	
+	var approx_fps: int = int(1 / current_delta)
+	
+	
+	# state machine and path finding (every X frames)
+	if (peg.instance_id + current_frame) % approx_fps/3 == 0:
+		if state_dict.has(peg.state_name):
+			state_dict[peg.state_name].physics_process(current_delta, peg)
+	
+	# movement
 	peg.vel = peg.safe_velocity
-	peg.pos += peg.vel * delta
+	peg.pos += peg.vel * current_delta
 	
-	# move hitbox
+	# update collision area pos
 	var id: int = peg.instance_id
 	if pooled_areas.has(id):
 		var area_rid = pooled_areas[id]
@@ -208,7 +228,7 @@ func process_single_peg(peg: PegData, delta: float):
 		PhysicsServer2D.area_set_transform(area_rid, area_transform)
 
 func update_peg_visuals(peg: PegData):
-	if adjustable_peg_multimesh and peg.instance_id >= 0:
+	if adjustable_peg_multimesh and peg.instance_id >= 0 and peg.instance_id <= active_pegs.size()-1:
 		var multmesh_i: int = peg.instance_id
 		
 		if not peg.active:
@@ -226,7 +246,6 @@ func take_damage(peg: PegData, damage_amount: int):
 	peg.health -= damage_amount
 	if peg.health <= 0:
 		die(peg)
-
 
 func die(peg: PegData):
 	peg.active = false
