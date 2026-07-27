@@ -1,4 +1,4 @@
-extends Resource
+extends Node2D
 
 class_name InfestedPegState
 
@@ -6,6 +6,7 @@ class_name InfestedPegState
 
 var peg_manager_node: InfestedPegManager
 var nav_map: RID
+var current_run_time: float = 0
 
 func enter(actor: InfestedPegManager.PegData) -> void:
 	pass

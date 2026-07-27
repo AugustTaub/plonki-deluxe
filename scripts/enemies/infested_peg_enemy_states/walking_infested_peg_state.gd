@@ -7,8 +7,6 @@ func _init() -> void:
 	color = Color.BLUE
 
 func enter(actor: InfestedPegManager.PegData) -> void:
-	actor.saved_time = actor.peg_timer
-	
 	var screen_size: Vector2 = peg_manager_node.get_viewport_rect().size
 	goal_pos = Vector2(screen_size.x / 2.0, 0.0)
 

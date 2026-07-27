@@ -272,12 +272,6 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 		
 		if result and not result.collider is StaticBody2D:
 			
-			var hit_rid = result.rid 
-			var hit_id = infested_peg_manager.get_peg_area_id_from_rid(hit_rid)
-			if hit_id != "":
-				return { "is_valid": false }
-			
-			
 			hit_something = true
 			
 			var dist = ball.pos.distance_squared_to(result.position)
@@ -295,17 +289,19 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 				ball = collider.perform_interaction(ball)
 				return { "is_valid": false }
 			
-			
+			var hit_rid = result.rid 
+			var hit_id = infested_peg_manager.get_peg_area_id_from_rid(hit_rid)
 			
 			# if infested peg is hit make it dodge
-			#if hit_id != "":
-				#var hit_peg: InfestedPegManager.PegData = infested_peg_manager.active_pegs[int(hit_id)]
-				#
-				#infested_peg_manager.call_deferred("change_peg_state", hit_peg, "dodging")
-				#hit_peg.danger_dir = ball.pos.direction_to(hit_peg.pos)
-				#
-				#if not ball.simulated:
-					#infested_peg_manager.call_deferred("take_damage", hit_peg, 1)
+			if hit_id != "":
+				if not ball.simulated:
+					var hit_peg: InfestedPegManager.PegData = infested_peg_manager.active_pegs[int(hit_id)]
+					
+					infested_peg_manager.call_deferred("change_peg_state", hit_peg, "dodging")
+					hit_peg.danger_dir = ball.pos.direction_to(hit_peg.pos)
+					
+					
+					infested_peg_manager.call_deferred("take_damage", hit_peg, 1)
 			
 	if not hit_something:
 		return {"is_valid": false}

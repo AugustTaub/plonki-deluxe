@@ -58,6 +58,9 @@ animations = [{
 "speed": 12.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5tpgd"]
+size = Vector2(60, 926)
+
 [node name="ball_cannon" type="Node2D" unique_id=564166182]
 z_index = 1
 script = ExtResource("1_587w4")
@@ -97,3 +100,11 @@ scale = Vector2(10.603024, 10.603024)
 sprite_frames = SubResource("SpriteFrames_x7ul6")
 frame = 6
 frame_progress = 1.0
+
+[node name="enemy_dodge_beam" type="Area2D" parent="pivot" unique_id=1462782345]
+unique_name_in_owner = true
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="pivot/enemy_dodge_beam" unique_id=110989412]
+position = Vector2(0, 453)
+shape = SubResource("RectangleShape2D_5tpgd")

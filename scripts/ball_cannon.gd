@@ -7,7 +7,9 @@ var start_speed: float = 700
 
 @export var test_upgrade: UpgradeData
 
-@export var simulated_ball_frequency: float = 0.2
+@export var infested_peg_manager: InfestedPegManager
+
+@export var simulated_ball_frequency: float = 0.1
 @export var auto_fire_hold_time: float = 0.3
 
 var last_frame_mouse_pos: Vector2 = Vector2.ZERO
@@ -25,14 +27,16 @@ var upgrade_preloader: ResourcePreloader
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	SignalBus.upgrade_preloader_loaded.connect(_on_upgrade_preloader_loaded)
-	
+	%enemy_dodge_beam.area_shape_entered.connect(_on_enemy_dodge_beam_area_entered)
 
 func _on_upgrade_preloader_loaded(preloader: ResourcePreloader):
 	upgrade_preloader = preloader
 
 
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
+	
 	# counting up timers
 	time_since_last_shot += delta
 	time_since_last_sim_shot += delta
@@ -99,3 +103,40 @@ func _physics_process(delta):
 		time_since_last_shot = 0
 		SignalBus.spawn_ball.emit(pos,vel,radius)
 		BallFactoryManager.remove_last_ball_from_queue()
+
+
+func _on_enemy_dodge_beam_area_entered(area_rid: RID, _area: Area2D, _area_shape_index: int, _local_shape_index: int) -> void:
+	if not infested_peg_manager:
+		push_warning("BallCannon: no infested peg manager attached!")
+		return
+	
+	# Your manager returns the ID as a String, or an empty string if not found
+	var id_str: String = infested_peg_manager.get_peg_area_id_from_rid(area_rid)
+	print(id_str)
+	
+	if id_str != "":
+		var id: int = id_str.to_int()
+		
+		# Ensure the ID is within the bounds of the active_pegs array
+		if id >= 0 and id < infested_peg_manager.active_pegs.size():
+			var hit_peg: InfestedPegManager.PegData = infested_peg_manager.active_pegs[id]
+			
+			# Only change state if the peg is currently active
+			if hit_peg.active:
+				infested_peg_manager.change_peg_state(hit_peg, "dodging")
+				hit_peg.danger_dir = get_direction_to_line_2d(hit_peg.pos, global_position, Vector2.UP.rotated($pivot.global_rotation))
+	
+
+
+func get_direction_to_line_2d(point: Vector2, line_point: Vector2, line_dir: Vector2) -> Vector2:
+	var v = line_dir.normalized()
+	var ap = point - line_point
+	
+	# Project vector onto the line to find the scalar distance along the line direction
+	var t = ap.dot(v)
+	
+	# Find the closest point on the line
+	var closest_point = line_point + (v * t)
+	
+	# Return the normalized direction vector to go from our point to the line
+	return (closest_point - point).normalized()

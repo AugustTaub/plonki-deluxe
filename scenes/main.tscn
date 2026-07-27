@@ -30,7 +30,6 @@
 [ext_resource type="PackedScene" uid="uid://c6f1nbs4ofhu2" path="res://scenes/stages/stage_4.tscn" id="17_c6pm6"]
 [ext_resource type="Texture2D" uid="uid://bcwj61mhugcmi" path="res://2D/images/ball3.png" id="20_fv21b"]
 [ext_resource type="Script" uid="uid://bpkun8bhfpwog" path="res://scripts/managers/shock_wave_manager.gd" id="20_gqmmt"]
-[ext_resource type="Script" uid="uid://chle44q2uweo0" path="res://scripts/script_importer.gd" id="20_kmb1v"]
 [ext_resource type="Script" uid="uid://c7r6c85l0br38" path="res://scripts/enemies/infested_peg_enemy_states/idle_infested_peg_state.gd" id="20_pibwh"]
 [ext_resource type="Script" uid="uid://blgmqpldlvn05" path="res://scripts/enemies/infested_peg_enemy_states/dodging_infested_peg_state.gd" id="21_5he1u"]
 [ext_resource type="Script" uid="uid://bf51sh8b7vo3c" path="res://scripts/enemies/infested_peg_enemy_states/walking_infested_peg_state.gd" id="21_c6pm6"]
@@ -81,7 +80,7 @@ buffer = PackedFloat32Array(0.5, 3.9999998, 0.10787, 0.10787, 0.10787, 1, 0.0093
 
 [sub_resource type="Gradient" id="Gradient_pibwh"]
 offsets = PackedFloat32Array(0.21186441, 0.43220338, 0.6315789, 0.7592593)
-colors = PackedColorArray(0.75238633, 0, 0.25615203, 0.8862745, 0.0333333, 0, 1, 0.8862745, 1, 0, 0, 0.8862745, 1, 1, 1, 0)
+colors = PackedColorArray(1, 1, 1, 0.8862745, 0, 0, 0, 0.8862745, 1, 1, 1, 0.8862745, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_c6pm6"]
 gradient = SubResource("Gradient_pibwh")
@@ -385,22 +384,33 @@ position = Vector2(1069, 17)
 position = Vector2(-6, 240)
 shape = SubResource("RectangleShape2D_a8y0u")
 
-[node name="ball_cannon" parent="." unique_id=564166182 instance=ExtResource("5_tbgi4")]
+[node name="ball_cannon" parent="." unique_id=564166182 node_paths=PackedStringArray("infested_peg_manager") instance=ExtResource("5_tbgi4")]
 position = Vector2(587, 7)
+infested_peg_manager = NodePath("../InfestedPegManager")
 
 [node name="InfestedPegManager" type="Node2D" parent="." unique_id=479551931 node_paths=PackedStringArray("adjustable_peg_multimesh")]
 script = ExtResource("35_j8jky")
 state_script_arr = Array[Script]([ExtResource("21_5he1u"), ExtResource("20_pibwh"), ExtResource("21_c6pm6")])
-adjustable_peg_multimesh = NodePath("adjustable_shadow_multimesh")
+adjustable_peg_multimesh = NodePath("adjustable_peg_multimesh")
 metadata/_custom_type_script = "uid://c44acerkmynj2"
 
-[node name="adjustable_shadow_multimesh" type="MultiMeshInstance2D" parent="InfestedPegManager" unique_id=338303880]
+[node name="adjustable_peg_multimesh" type="MultiMeshInstance2D" parent="InfestedPegManager" unique_id=338303880]
 multimesh = SubResource("MultiMesh_fuf3a")
 texture = SubResource("GradientTexture2D_c6pm6")
 
-[node name="ScriptImporter" type="Node2D" parent="InfestedPegManager" unique_id=1217454076]
-script = ExtResource("20_kmb1v")
-folder_path = "res://scripts/enemies/infested_peg_enemy_states"
+[node name="states" type="Node2D" parent="InfestedPegManager" unique_id=600875094]
+
+[node name="dodging" type="Node2D" parent="InfestedPegManager/states" unique_id=644678476]
+script = ExtResource("21_5he1u")
+metadata/_custom_type_script = "uid://blgmqpldlvn05"
+
+[node name="idle" type="Node2D" parent="InfestedPegManager/states" unique_id=290911941]
+script = ExtResource("20_pibwh")
+metadata/_custom_type_script = "uid://c7r6c85l0br38"
+
+[node name="walking" type="Node2D" parent="InfestedPegManager/states" unique_id=2124955281]
+script = ExtResource("21_c6pm6")
+metadata/_custom_type_script = "uid://bf51sh8b7vo3c"
 
 [node name="BallManager" type="Node2D" parent="." unique_id=1642780441 node_paths=PackedStringArray("adjustable_ball_multimesh", "adjustable_shadow_multimesh", "simulated_ball_multimesh", "adjustable_slidevfx_multimesh", "infested_peg_manager")]
 script = ExtResource("6_tefeu")

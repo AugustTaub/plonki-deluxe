@@ -48,8 +48,9 @@ fire_ball={
 [physics]
 
 2d/run_on_separate_thread=true
-common/physics_ticks_per_second=144
+2d/physics_engine="GodotPhysics2D"
 3d/physics_engine="Jolt Physics"
+common/physics_interpolation=true
 
 [rendering]
 

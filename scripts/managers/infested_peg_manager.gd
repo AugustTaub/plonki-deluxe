@@ -27,8 +27,9 @@ class PegData extends RefCounted:
 	var vel: Vector2 = Vector2.ZERO
 	var instance_id: int = -1 
 	var vis_scale: float = 1.0
-	var state_name: String = "idle"
+	var state_name: String = ""
 	
+	var life_time: float = 0.0
 	var peg_timer: float = 0.0
 	var saved_time: float = 0.0
 	var danger_dir: Vector2 = Vector2.ZERO
@@ -43,6 +44,7 @@ var delta_timer: float = 0
 ### THREADING CACHED VARS
 var current_delta: float = 0.0
 var current_frame: int = 0
+var run_time: float = 0.0
 
 ### DEBUG
 var peg_nr_spawned: int = 0
@@ -56,13 +58,14 @@ func _ready():
 		adjustable_peg_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
 	
 	# fill state dict
-	for script in state_script_arr:
-		var state_instance: InfestedPegState = script.new()
-		state_instance.peg_manager_node = self
-		state_instance.nav_map = get_world_2d().navigation_map
-		if state_instance:
-			var key = script.resource_path.get_file().get_basename().replacen("_infested_peg_state", "").to_lower()
-			add_state_to_dict(key, state_instance)
+	var state_parent_node: Node2D = get_node("states")
+	if state_parent_node:
+		for state_node in state_parent_node.get_children():
+			state_node.peg_manager_node = self
+			state_node.nav_map = get_world_2d().navigation_map
+			if state_node:
+				var key = state_node.name
+				add_state_to_dict(key, state_node)
 	
 	# create circle shape for coll
 	shared_shape_rid = PhysicsServer2D.circle_shape_create()
@@ -83,9 +86,11 @@ func _ready():
 		
 		NavigationServer2D.agent_set_avoidance_enabled(agent_rid, true)
 		
-		NavigationServer2D.agent_set_radius(agent_rid, 16.0)
+		NavigationServer2D.agent_set_radius(agent_rid, 10.0)
 		
 		NavigationServer2D.agent_set_max_speed(agent_rid, 1000.0) 
+		
+		NavigationServer2D.agent_set_max_neighbors(agent_rid,3)
 		
 		NavigationServer2D.agent_set_avoidance_callback(
 			agent_rid, 
@@ -100,6 +105,7 @@ func create_internal_area() -> RID:
 	var area_rid = PhysicsServer2D.area_create()
 	PhysicsServer2D.area_add_shape(area_rid, shared_shape_rid)
 	PhysicsServer2D.area_set_collision_layer(area_rid, 1)
+	PhysicsServer2D.area_set_monitorable(area_rid, true)
 	return area_rid
 
 func activate_area(id: int, pos: Vector2):
@@ -140,10 +146,17 @@ func change_peg_state(peg: PegData, new_state_name: String):
 	call_deferred("_perform_change_peg_state", peg, new_state_name)
 
 func _perform_change_peg_state(peg: PegData, new_state_name: String):
-	if peg.state_name != "" and state_dict.has(peg.state_name):
+	if not state_dict.has(new_state_name): 
+		push_warning("InfestedPegManager: Tried to enter unknown state: " + new_state_name )
+		return
+	
+	if peg.state_name == new_state_name: 
+		return
+	
+	if state_dict.has(peg.state_name):
 		var old_state: InfestedPegState = state_dict[peg.state_name]
 		old_state.exit(peg)
-		
+	
 	var new_state: InfestedPegState = state_dict[new_state_name]
 	new_state.enter(peg)
 	peg.state_name = new_state_name
@@ -160,13 +173,14 @@ func spawn_infested_peg(spawn_pos: Vector2):
 			peg.pos = spawn_pos
 			peg.state_name = "idle"
 			peg.peg_timer = 0.0
+			peg.life_time = 0.0
 			peg.vel = Vector2.ZERO
 			peg.agent_desired_velocity = Vector2.ZERO
 			peg.safe_velocity = Vector2.ZERO
 			peg.saved_time = 0.0
 			
 			activate_area(peg.instance_id, peg.pos)
-			change_peg_state(peg, peg.state_name)
+			change_peg_state(peg, "idle")
 			return
 	
 	# dont make make pegs if there are too many
@@ -178,7 +192,7 @@ func spawn_infested_peg(spawn_pos: Vector2):
 	new_peg.pos = spawn_pos
 	new_peg.instance_id = active_pegs.size()
 	activate_area(new_peg.instance_id, new_peg.pos)
-	change_peg_state(new_peg, new_peg.state_name)
+	change_peg_state(new_peg, "idle")
 	active_pegs.append(new_peg)
 
 func _physics_process(delta):
@@ -190,7 +204,8 @@ func _physics_process(delta):
 	
 	# cache parameters for worker threads
 	current_delta = delta
-	current_frame = Engine.get_physics_frames()
+	current_frame = Engine.get_frames_drawn()
+	run_time += delta
 	
 	# add tasks for multithreading
 	if active_pegs.size() > 0:
@@ -206,26 +221,27 @@ func _process_peg_batch(index: int):
 	if not peg.active:
 		return
 	
-	peg.peg_timer += current_delta
+	peg.life_time += current_delta
+	peg.peg_timer += current_delta 
 	
-	var approx_fps: int = int(1 / current_delta)
+	# run logic every 0.2 seconds
+	if peg.peg_timer >= 0.2:
+		peg.peg_timer -= 0.2 
 	
+	if state_dict.has(peg.state_name):
+		state_dict[peg.state_name].current_run_time = run_time
+		state_dict[peg.state_name].physics_process(current_delta, peg)
 	
-	# state machine and path finding (every X frames)
-	if (peg.instance_id + current_frame) % approx_fps/3 == 0:
-		if state_dict.has(peg.state_name):
-			state_dict[peg.state_name].physics_process(current_delta, peg)
+		# update collision area pos
+		var id: int = peg.instance_id
+		if pooled_areas.has(id):
+			var area_rid = pooled_areas[id]
+			var area_transform = Transform2D(0, peg.pos)
+			PhysicsServer2D.area_set_transform(area_rid, area_transform)
 	
 	# movement
 	peg.vel = peg.safe_velocity
 	peg.pos += peg.vel * current_delta
-	
-	# update collision area pos
-	var id: int = peg.instance_id
-	if pooled_areas.has(id):
-		var area_rid = pooled_areas[id]
-		var area_transform = Transform2D(0, peg.pos)
-		PhysicsServer2D.area_set_transform(area_rid, area_transform)
 
 func update_peg_visuals(peg: PegData):
 	if adjustable_peg_multimesh and peg.instance_id >= 0 and peg.instance_id <= active_pegs.size()-1:

@@ -8,8 +8,7 @@
 
 [resource]
 script = ExtResource("1_mx8ne")
-money_amount = 1274759
-ball_amount = 5
+money_amount = 1275038
 unlocked_upgrades = Array[ExtResource("2_j07jm")]([ExtResource("3_l3pva"), ExtResource("4_l3pva"), ExtResource("5_42avq")])
 upgrade_levels = Dictionary[ExtResource("2_j07jm"), int]({
 ExtResource("4_l3pva"): 3,
