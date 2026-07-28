@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://c54xglrxo5btw"]
+
+[ext_resource type="Curve" uid="uid://d3vjg4q23dchj" path="res://2D/curves/standard.tres" id="1_rc63j"]
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="2_vicae"]
+
+[resource]
+script = ExtResource("2_vicae")
+name = "stage2_unlock"
+max_level = 1
+metadata/_custom_type_script = "uid://bbo5op84iqbom"

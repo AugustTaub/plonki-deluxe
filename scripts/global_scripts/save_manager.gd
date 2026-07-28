@@ -1,7 +1,7 @@
 extends Node
 
-const SAVE_PATH := "user://plonki_save2fgd8teho.tres"
-#const SAVE_PATH := "res://custom_res/save_data_tests/test.tres"
+#const SAVE_PATH := "user://plonki_save2fgd8teho.tres"
+const SAVE_PATH := "res://custom_res/save_data_tests/test.tres"
 
 var save_game: SaveGame = null
 
@@ -58,7 +58,8 @@ func change_money_with_vis_nr(change_amount: int, vis_nr_pos: Vector2):
 	SignalBus.spawn_coin_get_nr.emit(change_amount,vis_nr_pos)
 
 func set_ball_amount(new_amount: int):
-	save_game.ball_amount = new_amount
+	save_game.ball_amount = max(new_amount,0)
+	SignalBus.set_ball_counter.emit(new_amount)
 
 
 func add_upgrade(new_upgrade: UpgradeData):

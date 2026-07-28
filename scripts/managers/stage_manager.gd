@@ -15,15 +15,6 @@ func _ready():
 	set_stage_node(stage_nodes[0])
 	
 
-#func _process(delta):
-	#
-	#if Input.is_action_just_pressed("ui_accept"):
-		#stage_i += 1
-		#if stage_i > stage_nodes.size()-1:
-			#stage_i = 0
-		#
-		#set_stage_node(stage_nodes[stage_i])
-
 func set_stage_node(new_stage_node: StageNode):
 	if new_stage_node and new_stage_node != curr_stage_node:
 		new_stage_node.global_position = global_position

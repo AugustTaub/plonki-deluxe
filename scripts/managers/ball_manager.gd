@@ -316,6 +316,9 @@ func run_coll_check(ball: BallData, move_vec: Vector2, space_state: PhysicsDirec
 		var dir_to_hit = ball.pos.direction_to(closest_hit_point)
 		query.from = ball.pos
 		query.to = closest_hit_point + (dir_to_hit * 2.0)
+		
+		if not ball.simulated:
+			SignalBus.play_sound.emit("thunk")
 	
 	var final_result = space_state.intersect_ray(query)
 	var target_normal = Vector2.ZERO

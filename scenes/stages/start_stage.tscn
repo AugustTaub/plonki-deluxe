@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://brln3uw4rbarc"]
 
 [ext_resource type="Script" uid="uid://rc1pswo54tv8" path="res://scripts/stage_node.gd" id="1_whglb"]
+[ext_resource type="Resource" uid="uid://dgumkow6fk3pb" path="res://custom_res/upgrades/stage1_pegs.tres" id="2_wgon0"]
 [ext_resource type="PackedScene" uid="uid://c4ashcsbyavdi" path="res://scenes/destructible_peg_round.tscn" id="2_whglb"]
 
 [sub_resource type="Gradient" id="Gradient_tefeu"]
@@ -11,8 +12,9 @@ gradient = SubResource("Gradient_tefeu")
 fill_from = Vector2(0.5, 1)
 fill_to = Vector2(0.5, 0)
 
-[node name="stage_0" type="Node2D" unique_id=16661170]
+[node name="start_stage" type="Node2D" unique_id=16661170]
 script = ExtResource("1_whglb")
+associated_peg_upgrade = ExtResource("2_wgon0")
 metadata/_custom_type_script = "uid://rc1pswo54tv8"
 
 [node name="bg" type="Sprite2D" parent="." unique_id=1945480160]
@@ -25,9 +27,10 @@ texture = SubResource("GradientTexture2D_o6xl0")
 position = Vector2(402.00003, 250)
 
 [node name="DestructiblePeg" parent="pegs" unique_id=1750133912 instance=ExtResource("2_whglb")]
+position = Vector2(68.99997, -31)
 
 [node name="DestructiblePeg2" parent="pegs" unique_id=762931387 instance=ExtResource("2_whglb")]
-position = Vector2(442, 95)
+position = Vector2(231, 50)
 
 [node name="DestructiblePeg3" parent="pegs" unique_id=410851450 instance=ExtResource("2_whglb")]
 position = Vector2(-222, 187)

@@ -10,24 +10,28 @@ var perpetrator_ball: Ball
 enum peg_state {DEFAULT, DYING, REANIMATING}
 var curr_peg_state: peg_state = peg_state.DEFAULT
 
-@export_category("nodes")
-@export var peg_sprite: Node2D
-@export var peg_coll_shape: Node2D
+@export var peg_sprite: Sprite2D 
+@export var peg_coll_shape: CollisionShape2D 
+
+var peg_sprite_start_scale: Vector2
 
 @export_category("textures")
 @export var preloaded_alive_tex: Texture2D = preload("res://2D/godot_gen_textures/alive_circle_peg.tres")
 @export var preloaded_dead_tex: Texture2D = preload("res://2D/godot_gen_textures/dead_circle_peg.tres")
 
+@export_category("gameplay")
 @export var HP: int = 2
 @export var value: int = 1
 @export var reanimate_time: float = 2.0
+@export var is_unlocked: bool = true
 
-@onready var peg_sprite_start_scale: Vector2 = peg_sprite.scale
 
 var reanimate_timer: float = 0.0
 
 func _ready():
-	pass
+	if peg_sprite:
+		peg_sprite_start_scale = peg_sprite.scale
+	set_unlock_state(is_unlocked)
 
 func _process(delta):
 	if destruction_queued:
@@ -57,7 +61,20 @@ func destroy_without_payout():
 
 func destroy():
 	SaveManager.change_money_with_vis_nr(1, global_position)
+	SignalBus.play_sound.emit("plonk",1.0)
 	destroy_without_payout()
+
+func set_unlock_state(new_is_unlocked: bool):
+	if not peg_coll_shape: return
+	
+	if new_is_unlocked == true:
+		show()
+		peg_coll_shape.disabled = false
+	else:
+		hide()
+		peg_coll_shape.disabled = true
+	
+	is_unlocked = new_is_unlocked
 
 #region State Machine
 

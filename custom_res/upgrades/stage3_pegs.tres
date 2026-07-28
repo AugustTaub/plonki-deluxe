@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://bpk8l30is7poq"]
+
+[ext_resource type="Curve" uid="uid://d3vjg4q23dchj" path="res://2D/curves/standard.tres" id="1_1hmq2"]
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="2_qxgrc"]
+
+[resource]
+script = ExtResource("2_qxgrc")
+name = "stage3_pegs"
+max_level = 10
+start_price = 1
+start_result = 5.0
+end_result = 18.0
+metadata/_custom_type_script = "uid://bbo5op84iqbom"

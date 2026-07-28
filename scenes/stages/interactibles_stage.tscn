@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://rc1pswo54tv8" path="res://scripts/stage_node.gd" id="1_3847s"]
 [ext_resource type="PackedScene" uid="uid://d1f7gqwmdc8fk" path="res://scenes/destructible_peg_rect.tscn" id="2_cuow7"]
+[ext_resource type="Resource" uid="uid://bpk8l30is7poq" path="res://custom_res/upgrades/stage3_pegs.tres" id="2_l1pay"]
+[ext_resource type="Resource" uid="uid://b2bdjv67ejl0n" path="res://custom_res/upgrades/stage3_unlock.tres" id="3_1tge3"]
 [ext_resource type="Script" uid="uid://c33idtn4w1ory" path="res://scripts/ball_interactibles/ball_teleporter.gd" id="3_8q8ih"]
 [ext_resource type="Script" uid="uid://gyalaocvdi10" path="res://scripts/ball_interactibles/ball_exploder.gd" id="4_k45mu"]
 
@@ -35,82 +37,84 @@ fill_from = Vector2(0.5, 0.5)
 [sub_resource type="CircleShape2D" id="CircleShape2D_ncvry"]
 radius = 128.0
 
-[node name="stage1" type="Node2D" unique_id=1777195591]
+[node name="interactibles_stage" type="Node2D" unique_id=1777195591]
 script = ExtResource("1_3847s")
+associated_peg_upgrade = ExtResource("2_l1pay")
+unlock_upgrade = ExtResource("3_1tge3")
 metadata/_custom_type_script = "uid://rc1pswo54tv8"
 
 [node name="pegs" type="Node2D" parent="." unique_id=494298063]
 position = Vector2(2, 6)
 
-[node name="Node2D" parent="pegs" unique_id=1423066092 instance=ExtResource("2_cuow7")]
+[node name="peg" parent="pegs" unique_id=1423066092 instance=ExtResource("2_cuow7")]
 position = Vector2(554, 298)
 rotation = -1.2037057
 
-[node name="Node2D2" parent="pegs" unique_id=1952507547 instance=ExtResource("2_cuow7")]
+[node name="peg2" parent="pegs" unique_id=1952507547 instance=ExtResource("2_cuow7")]
 position = Vector2(533, 327)
 rotation = -0.76211786
 
-[node name="Node2D3" parent="pegs" unique_id=531258507 instance=ExtResource("2_cuow7")]
+[node name="peg3" parent="pegs" unique_id=531258507 instance=ExtResource("2_cuow7")]
 position = Vector2(499, 350)
 rotation = -0.34905934
 
-[node name="Node2D8" parent="pegs" unique_id=1191389254 instance=ExtResource("2_cuow7")]
+[node name="peg8" parent="pegs" unique_id=1191389254 instance=ExtResource("2_cuow7")]
 position = Vector2(857.00006, 290)
 rotation = -1.5455248
 
-[node name="Node2D17" parent="pegs" unique_id=233207341 instance=ExtResource("2_cuow7")]
+[node name="peg17" parent="pegs" unique_id=233207341 instance=ExtResource("2_cuow7")]
 position = Vector2(852.99994, 250.99997)
 rotation = -1.8059489
 
-[node name="Node2D18" parent="pegs" unique_id=1119109603 instance=ExtResource("2_cuow7")]
+[node name="peg18" parent="pegs" unique_id=1119109603 instance=ExtResource("2_cuow7")]
 position = Vector2(836, 216.00003)
 rotation = -2.483918
 
-[node name="Node2D9" parent="pegs" unique_id=1124889162 instance=ExtResource("2_cuow7")]
+[node name="peg9" parent="pegs" unique_id=1124889162 instance=ExtResource("2_cuow7")]
 position = Vector2(839, 324)
 rotation = -0.76211786
 
-[node name="Node2D10" parent="pegs" unique_id=1959090001 instance=ExtResource("2_cuow7")]
+[node name="peg10" parent="pegs" unique_id=1959090001 instance=ExtResource("2_cuow7")]
 position = Vector2(805, 347)
 rotation = -0.34905934
 
-[node name="Node2D11" parent="pegs" unique_id=888157855 instance=ExtResource("2_cuow7")]
+[node name="peg11" parent="pegs" unique_id=888157855 instance=ExtResource("2_cuow7")]
 position = Vector2(766, 354.00003)
 rotation = -0.028853446
 
-[node name="Node2D12" parent="pegs" unique_id=1715408932 instance=ExtResource("2_cuow7")]
+[node name="peg12" parent="pegs" unique_id=1715408932 instance=ExtResource("2_cuow7")]
 position = Vector2(727, 346.00003)
 rotation = 0.47987133
 
-[node name="Node2D13" parent="pegs" unique_id=170757135 instance=ExtResource("2_cuow7")]
+[node name="peg13" parent="pegs" unique_id=170757135 instance=ExtResource("2_cuow7")]
 position = Vector2(698, 317.99997)
 rotation = 1.1049707
 
-[node name="Node2D14" parent="pegs" unique_id=1377971125 instance=ExtResource("2_cuow7")]
+[node name="peg14" parent="pegs" unique_id=1377971125 instance=ExtResource("2_cuow7")]
 position = Vector2(688, 281)
 rotation = 1.6037552
 
-[node name="Node2D15" parent="pegs" unique_id=1161374311 instance=ExtResource("2_cuow7")]
+[node name="peg15" parent="pegs" unique_id=1161374311 instance=ExtResource("2_cuow7")]
 position = Vector2(694, 241)
 rotation = 1.9136679
 
-[node name="Node2D16" parent="pegs" unique_id=85023389 instance=ExtResource("2_cuow7")]
+[node name="peg16" parent="pegs" unique_id=85023389 instance=ExtResource("2_cuow7")]
 position = Vector2(714.00006, 209)
 rotation = 2.5130205
 
-[node name="Node2D4" parent="pegs" unique_id=1708760838 instance=ExtResource("2_cuow7")]
+[node name="peg4" parent="pegs" unique_id=1708760838 instance=ExtResource("2_cuow7")]
 position = Vector2(461, 357.00003)
 rotation = 0.00011190772
 
-[node name="Node2D5" parent="pegs" unique_id=598567506 instance=ExtResource("2_cuow7")]
+[node name="peg5" parent="pegs" unique_id=598567506 instance=ExtResource("2_cuow7")]
 position = Vector2(422, 357.00003)
 rotation = 0.00011190772
 
-[node name="Node2D6" parent="pegs" unique_id=279739632 instance=ExtResource("2_cuow7")]
+[node name="peg6" parent="pegs" unique_id=279739632 instance=ExtResource("2_cuow7")]
 position = Vector2(382, 357.00003)
 rotation = 0.00011190772
 
-[node name="Node2D7" parent="pegs" unique_id=1925709118 instance=ExtResource("2_cuow7")]
+[node name="peg7" parent="pegs" unique_id=1925709118 instance=ExtResource("2_cuow7")]
 position = Vector2(342, 357)
 rotation = 0.00011190772
 

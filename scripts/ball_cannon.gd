@@ -90,18 +90,27 @@ func _physics_process(delta):
 	last_frame_mouse_pos = mpos
 	
 	
+	
 	var has_held_long_enough: bool = fire_button_held_time > auto_fire_hold_time
 	var fire_input_accepted: bool = Input.is_action_just_pressed("fire_ball") or has_held_long_enough
 	
+	var ball_available: bool = BallFactoryManager.has_balls()
 	
-	if fire_input_accepted and BallFactoryManager.has_balls() and GlobalVars.mouse_is_in_play_area:
+	if fire_input_accepted and ball_available and GlobalVars.mouse_is_in_play_area and time_since_last_shot >= shot_interval:
 	#if time_since_last_shot >= shot_interval:
-		var anim_spd: float = 1
+		var anim_spd: float = 1.0
+		var volume_mod: float = 1.0
 		
-		if time_since_last_shot < 1:
+		if time_since_last_shot < 1.0:
 			anim_spd /= time_since_last_shot
 		
+		
+		if time_since_last_shot < 0.1:
+			volume_mod = 0.5
+		
 		%cannon_sprite.play("default",anim_spd)
+		
+		SignalBus.play_sound.emit("blup",volume_mod)
 		
 		if shot_particles_one.emitting:
 			shot_particles_more.emitting = true
@@ -109,7 +118,7 @@ func _physics_process(delta):
 			shot_particles_one.emitting = true
 		
 		
-		time_since_last_shot = 0
+		time_since_last_shot = 0.0
 		SignalBus.spawn_ball.emit(pos,vel,radius)
 		BallFactoryManager.remove_last_ball_from_queue()
 	

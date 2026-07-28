@@ -23,8 +23,10 @@ func get_level_price(level: int) -> int:
 	return result
 
 func get_level_result(level: int) -> float:
-	var result = start_price
+	var result = start_result
 	
-	result = start_result + end_result * result_scaling_curve.sample(level/float(max_level))
+	var total_dist = end_result - start_result
+	
+	result = start_result + total_dist * result_scaling_curve.sample(level/float(max_level))
 	
 	return result

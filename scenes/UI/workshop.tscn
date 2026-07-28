@@ -3,12 +3,22 @@
 [ext_resource type="Script" uid="uid://cbjxqgoycl1rc" path="res://scripts/workshop.gd" id="1_4xjol"]
 [ext_resource type="Texture2D" uid="uid://davsnx3h8isch" path="res://2D/images/workshop_base.png" id="1_acb0r"]
 [ext_resource type="Texture2D" uid="uid://c3ffht6hyaf1" path="res://2D/images/workshop_cannon.png" id="3_cy215"]
-[ext_resource type="Resource" uid="uid://cvslx5sb28pf5" path="res://custom_res/upgrades/test.tres" id="4_15wdr"]
+[ext_resource type="Resource" uid="uid://hjia5v5y46i2" path="res://custom_res/upgrades/ball_cannon_unlocked.tres" id="4_02dfl"]
 [ext_resource type="Script" uid="uid://d2wnh3mtqdeu4" path="res://scripts/workshop_upgrade_zone.gd" id="6_cy215"]
 [ext_resource type="PackedScene" uid="uid://cpha31pc0s008" path="res://scenes/UI/workshop_upgrade_button.tscn" id="6_f1oc0"]
 [ext_resource type="Resource" uid="uid://v81rtw47g0f" path="res://custom_res/upgrades/ball_speed.tres" id="7_cy215"]
 [ext_resource type="Resource" uid="uid://du3eonw0shm4s" path="res://custom_res/upgrades/ball_size.tres" id="8_4xjol"]
+[ext_resource type="Resource" uid="uid://4xn8ym82suxm" path="res://custom_res/upgrades/factory_unlocked.tres" id="9_7qq22"]
 [ext_resource type="PackedScene" uid="uid://dxofmr5dxupur" path="res://scenes/UI/money_display.tscn" id="10_gdjy1"]
+[ext_resource type="Texture2D" uid="uid://q0lyelgpf0e8" path="res://2D/images/workshop_enchanter.png" id="10_mjyub"]
+[ext_resource type="Resource" uid="uid://2st62fguw873" path="res://custom_res/upgrades/ball_production_speed.tres" id="11_ehqah"]
+[ext_resource type="Resource" uid="uid://vts2014lkpqh" path="res://custom_res/upgrades/stage_upgrades_unlocked.tres" id="12_ehqah"]
+[ext_resource type="Texture2D" uid="uid://f7qgdm50n8r4" path="res://2D/images/workshop_stages.png" id="13_uxmtj"]
+[ext_resource type="Resource" uid="uid://dgumkow6fk3pb" path="res://custom_res/upgrades/stage1_pegs.tres" id="14_qq4e4"]
+[ext_resource type="Resource" uid="uid://dmjiwt5k2bve4" path="res://custom_res/upgrades/stage2_pegs.tres" id="15_k0reo"]
+[ext_resource type="Resource" uid="uid://c54xglrxo5btw" path="res://custom_res/upgrades/stage2_unlock.tres" id="15_uxmtj"]
+[ext_resource type="Resource" uid="uid://b2bdjv67ejl0n" path="res://custom_res/upgrades/stage3_unlock.tres" id="16_qq4e4"]
+[ext_resource type="Resource" uid="uid://bpk8l30is7poq" path="res://custom_res/upgrades/stage3_pegs.tres" id="17_toekv"]
 
 [node name="workshop" type="Control" unique_id=1661245154]
 process_mode = 3
@@ -49,13 +59,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(868.515, 111.515)
-mouse_filter = 1
+mouse_filter = 2
 script = ExtResource("6_cy215")
 sprite = NodePath("cannon_sprite")
 button_parent = NodePath("upgrade_buttons")
 coll_area = NodePath("mouse_coll_area")
 unlock_cost_text = NodePath("unlock_cost_text")
-associated_upgrade = ExtResource("4_15wdr")
+associated_upgrade = ExtResource("4_02dfl")
 
 [node name="cannon_sprite" type="TextureRect" parent="cannon" unique_id=133343073]
 texture_filter = 1
@@ -66,6 +76,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(871.03, 113.79)
+mouse_filter = 2
 texture = ExtResource("3_cy215")
 
 [node name="upgrade_buttons" type="Control" parent="cannon" unique_id=1015434802]
@@ -102,6 +113,161 @@ offset_left = 697.0
 offset_top = 14.0
 offset_right = 1045.0
 offset_bottom = 83.0
+mouse_filter = 1
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 48
+text = "Unlock: 0000"
+
+[node name="ball_factory" type="Control" parent="." unique_id=1827778502 node_paths=PackedStringArray("sprite", "button_parent", "coll_area", "unlock_cost_text")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(868.515, 111.515)
+mouse_filter = 2
+script = ExtResource("6_cy215")
+sprite = NodePath("factory_sprite")
+button_parent = NodePath("upgrade_buttons")
+coll_area = NodePath("mouse_coll_area")
+unlock_cost_text = NodePath("unlock_cost_text")
+associated_upgrade = ExtResource("9_7qq22")
+
+[node name="factory_sprite" type="TextureRect" parent="ball_factory" unique_id=748775680]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(871.03, 113.79)
+mouse_filter = 2
+texture = ExtResource("10_mjyub")
+
+[node name="upgrade_buttons" type="Control" parent="ball_factory" unique_id=13237459]
+anchors_preset = 0
+mouse_filter = 1
+
+[node name="UpgradeButton" parent="ball_factory/upgrade_buttons" unique_id=149998191 instance=ExtResource("6_f1oc0")]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 381.0
+offset_right = 164.0
+offset_bottom = 445.0
+mouse_filter = 1
+associated_upgrade = ExtResource("11_ehqah")
+
+[node name="mouse_coll_area" type="Area2D" parent="ball_factory" unique_id=1705159147]
+position = Vector2(288, 408)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ball_factory/mouse_coll_area" unique_id=1996219385]
+polygon = PackedVector2Array(-287, -122, -289, -4, -286, 460, -8, 459, 2, 247, 7, -74, 3, -110)
+
+[node name="unlock_cost_text" type="RichTextLabel" parent="ball_factory" unique_id=1170475573]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 308.0
+offset_right = 358.0
+offset_bottom = 377.0
+mouse_filter = 1
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 48
+text = "Unlock: 0000"
+
+[node name="stage_upgrades" type="Control" parent="." unique_id=1885261197 node_paths=PackedStringArray("sprite", "button_parent", "coll_area", "unlock_cost_text")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(868.515, 111.515)
+mouse_filter = 2
+script = ExtResource("6_cy215")
+sprite = NodePath("factory_sprite")
+button_parent = NodePath("upgrade_buttons")
+coll_area = NodePath("mouse_coll_area")
+unlock_cost_text = NodePath("unlock_cost_text")
+associated_upgrade = ExtResource("12_ehqah")
+
+[node name="factory_sprite" type="TextureRect" parent="stage_upgrades" unique_id=1587194863]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(871.03, 113.79)
+mouse_filter = 2
+texture = ExtResource("13_uxmtj")
+
+[node name="upgrade_buttons" type="Control" parent="stage_upgrades" unique_id=278616900]
+anchors_preset = 0
+mouse_filter = 1
+
+[node name="stage1_pegs" parent="stage_upgrades/upgrade_buttons" unique_id=256508176 instance=ExtResource("6_f1oc0")]
+layout_mode = 0
+offset_left = 833.0
+offset_top = 492.0
+offset_right = 897.0
+offset_bottom = 556.0
+mouse_filter = 1
+associated_upgrade = ExtResource("14_qq4e4")
+
+[node name="stage2_pegs" parent="stage_upgrades/upgrade_buttons" unique_id=1854673278 instance=ExtResource("6_f1oc0")]
+layout_mode = 0
+offset_left = 807.0
+offset_top = 629.0
+offset_right = 871.0
+offset_bottom = 693.0
+mouse_filter = 1
+associated_upgrade = ExtResource("15_k0reo")
+required_upgrade = ExtResource("15_uxmtj")
+
+[node name="stage3_pegs" parent="stage_upgrades/upgrade_buttons" unique_id=1802717805 instance=ExtResource("6_f1oc0")]
+layout_mode = 0
+offset_left = 883.0
+offset_top = 714.0
+offset_right = 947.0
+offset_bottom = 778.0
+mouse_filter = 1
+associated_upgrade = ExtResource("17_toekv")
+required_upgrade = ExtResource("16_qq4e4")
+
+[node name="stage2unlock" parent="stage_upgrades/upgrade_buttons" unique_id=88480059 instance=ExtResource("6_f1oc0")]
+layout_mode = 0
+offset_left = 906.0
+offset_top = 577.0
+offset_right = 970.0
+offset_bottom = 641.0
+mouse_filter = 1
+associated_upgrade = ExtResource("15_uxmtj")
+
+[node name="stage3unlock" parent="stage_upgrades/upgrade_buttons" unique_id=1677632559 instance=ExtResource("6_f1oc0")]
+layout_mode = 0
+offset_left = 962.0
+offset_top = 640.0
+offset_right = 1026.0
+offset_bottom = 704.0
+mouse_filter = 1
+associated_upgrade = ExtResource("16_qq4e4")
+required_upgrade = ExtResource("15_uxmtj")
+
+[node name="mouse_coll_area" type="Area2D" parent="stage_upgrades" unique_id=1837242938]
+position = Vector2(1093, 420)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="stage_upgrades/mouse_coll_area" unique_id=185202909]
+polygon = PackedVector2Array(-204, -25, -349, 151, -346, 321, -253, 424, -66, 437, 42, 317, 56, 142, -81, -10)
+
+[node name="unlock_cost_text" type="RichTextLabel" parent="stage_upgrades" unique_id=480825272]
+layout_mode = 0
+offset_left = 778.0
+offset_top = 414.0
+offset_right = 1126.0
+offset_bottom = 483.0
 mouse_filter = 1
 theme_override_constants/outline_size = 16
 theme_override_font_sizes/normal_font_size = 48

@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://ckwyru26h53ce"]
+
+[ext_resource type="Texture2D" uid="uid://dxl16j46p0p01" path="res://2D/images/ball_factory_cog.png" id="2_gnw0c"]
+[ext_resource type="Script" uid="uid://b3pjlksxikx3q" path="res://scripts/UI/ball_nr_display.gd" id="2_wsso4"]
+[ext_resource type="Shader" uid="uid://cmfav6h8cfo7d" path="res://2D/shaders/fake3Dball_static.gdshader" id="3_wsso4"]
+[ext_resource type="Texture2D" uid="uid://bcwj61mhugcmi" path="res://2D/images/ball3.png" id="4_xj1n7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gnw0c"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xj1n7"]
+shader = ExtResource("3_wsso4")
+
+[node name="ball_nr_display" type="PanelContainer" unique_id=76101870]
+texture_filter = 1
+offset_left = 967.0
+offset_top = 1.0
+offset_right = 1219.0
+offset_bottom = 97.0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+theme_override_styles/panel = SubResource("StyleBoxEmpty_gnw0c")
+script = ExtResource("2_wsso4")
+
+[node name="bg_tex" type="TextureRect" parent="." unique_id=288850309]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("2_gnw0c")
+stretch_mode = 5
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=2056597362]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer" unique_id=871653777]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="nr_label" type="RichTextLabel" parent="CenterContainer/HBoxContainer" unique_id=1581402971]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/normal_font_size = 38
+text = "+999"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ColorRect" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=1855275692]
+material = SubResource("ShaderMaterial_xj1n7")
+custom_minimum_size = Vector2(29.245, 0)
+layout_mode = 2
+texture = ExtResource("4_xj1n7")
+stretch_mode = 5

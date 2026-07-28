@@ -92,7 +92,7 @@ func take_ball_from_end():
 	
 	adjustable_ball_multimesh.multimesh.set_instance_transform_2d(ball.instance_id, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
 	
-	animate_ball_exit(ball.pos, ball.roll_offset, ball.rotation_offset, ball.radius)
+	animate_ball_exit(ball.instance_id , ball.pos, ball.roll_offset, ball.rotation_offset, ball.radius)
 
 
 func _physics_process(delta):
@@ -155,13 +155,13 @@ func update_ball_visuals(ball: BallData):
 	var custom_data = Color(-ball.roll_offset.x, ball.roll_offset.y, ball.radius, deg_to_rad(ball.rotation_offset))
 	adjustable_ball_multimesh.multimesh.set_instance_custom_data(ball.instance_id, custom_data)
 
-func animate_ball_exit(ball_pos: Vector2, ball_roll_offset: Vector2, ball_rot_offset: float, ball_radius):
+func animate_ball_exit(instance_id: int, ball_pos: Vector2, ball_roll_offset: Vector2, ball_rot_offset: float, ball_radius):
 	
 	for child in $bands.get_children():
 		if child is AnimatedSprite2D:
 			child.speed_scale = -5.5
 	
-	var i: int = 0
+	var i: int = instance_id
 	
 	var start_trans = Transform2D(0, Vector2.ONE, 0, ball_pos)
 	var end_trans = Transform2D(2*PI, Vector2.ONE, 0, despawn_point + (height_dir * ball_radius))

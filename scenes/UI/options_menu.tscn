@@ -3,9 +3,13 @@
 [ext_resource type="Texture2D" uid="uid://ckp6h4cuw88tj" path="res://2D/godot_gen_textures/hold_reset_gradient_tex.tres" id="1_3t8k5"]
 [ext_resource type="Script" uid="uid://7n2yo6j16r38" path="res://scripts/UI/reset_progress_button.gd" id="1_m3vow"]
 [ext_resource type="Script" uid="uid://dlny1bbk7nwiy" path="res://scripts/UI/options_close_button.gd" id="1_qgort"]
+[ext_resource type="Script" uid="uid://cj3mtfsfejgh7" path="res://scripts/UI/console.gd" id="4_ijsq6"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qgort"]
 texture = ExtResource("1_3t8k5")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ijsq6"]
+bg_color = Color(0.47553003, 0.66, 0.40260002, 0.09803922)
 
 [node name="settings_menu" type="PanelContainer" unique_id=1264954009]
 offset_right = 385.0
@@ -47,6 +51,20 @@ notification_label = NodePath("../notification")
 
 [node name="notification" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=586087598]
 layout_mode = 2
+fit_content = true
+horizontal_alignment = 1
+
+[node name="console" type="TextEdit" parent="MarginContainer/VBoxContainer" unique_id=1943315190 node_paths=PackedStringArray("notification_label")]
+custom_minimum_size = Vector2(0, 39.5)
+layout_mode = 2
+placeholder_text = "type commands here..."
+script = ExtResource("4_ijsq6")
+notification_label = NodePath("../console_notification")
+
+[node name="console_notification" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=758700733]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_ijsq6")
 fit_content = true
 horizontal_alignment = 1
 
