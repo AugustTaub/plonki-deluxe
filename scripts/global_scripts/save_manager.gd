@@ -1,7 +1,7 @@
 extends Node
 
-#const SAVE_PATH := "user://plonki_save2fgd8teho.tres"
-const SAVE_PATH := "res://custom_res/save_data_tests/test.tres"
+const SAVE_PATH := "user://plonki_save2fgd8teho.tres"
+#const SAVE_PATH := "res://custom_res/save_data_tests/test.tres"
 
 var save_game: SaveGame = null
 
@@ -31,7 +31,7 @@ func _ready() -> void:
 		
 	
 	set_money(save_game.money_amount)
-	
+	set_ball_amount(save_game.ball_amount)
 	
 
 func _process(delta: float) -> void:
@@ -39,7 +39,6 @@ func _process(delta: float) -> void:
 	if delta_timer > auto_save_time:
 		delta_timer = 0
 		ResourceSaver.save(save_game, SAVE_PATH)
-
 
 
 func _on_upgrade_preloader_loaded(preloader: ResourcePreloader):
@@ -52,6 +51,11 @@ func set_money(new_money: int):
 
 func change_money(change_amount: int):
 	set_money(save_game.money_amount+change_amount)
+
+func change_money_with_vis_nr(change_amount: int, vis_nr_pos: Vector2):
+	set_money(save_game.money_amount+change_amount)
+	
+	SignalBus.spawn_coin_get_nr.emit(change_amount,vis_nr_pos)
 
 func set_ball_amount(new_amount: int):
 	save_game.ball_amount = new_amount
@@ -97,3 +101,11 @@ func get_upgrade_level_by_name(upgrade_name: String):
 		upgrade_level = 0
 	
 	return upgrade_level
+
+func reset_save_game():
+	save_game = SaveGame.new()
+	set_money(save_game.money_amount)
+	set_ball_amount(save_game.ball_amount)
+	
+	ResourceSaver.save(save_game, SAVE_PATH)
+	

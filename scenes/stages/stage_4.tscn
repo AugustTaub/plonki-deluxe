@@ -1,15 +1,9 @@
 [gd_scene format=3 uid="uid://c6f1nbs4ofhu2"]
 
 [ext_resource type="Script" uid="uid://rc1pswo54tv8" path="res://scripts/stage_node.gd" id="1_lg08p"]
-[ext_resource type="Texture2D" uid="uid://d26rn6i8boyh7" path="res://2D/images/texture_08.png" id="2_t8527"]
-
-[sub_resource type="Gradient" id="Gradient_tefeu"]
-colors = PackedColorArray(0.37, 0.35421336, 0.1332, 1, 0.34199998, 0.36986664, 0.76, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_o6xl0"]
-gradient = SubResource("Gradient_tefeu")
-fill_from = Vector2(0.5, 1)
-fill_to = Vector2(0.5, 0)
+[ext_resource type="Texture2D" uid="uid://c34lwk7d86j4h" path="res://2D/images/bg4.png" id="2_lg08p"]
+[ext_resource type="Texture2D" uid="uid://ccked5bmexgrt" path="res://2D/images/crack.png" id="2_mm8m8"]
+[ext_resource type="PackedScene" uid="uid://c4ashcsbyavdi" path="res://scenes/destructible_peg_round.tscn" id="3_mm8m8"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_lg08p"]
 vertices = PackedVector2Array(9, 2.7734375, 4.53125, -84, 1160.9766, -84, 778.5, 142, 8.3515625, 142, 1159.9219, 418, 778.5, 258, 378.5, 418, 7.8125, 258, 5.0390625, 850.9297, 378.5, 534, 1159.0234, 843.0625, 1159.6719, 534)
@@ -26,9 +20,10 @@ metadata/_custom_type_script = "uid://rc1pswo54tv8"
 
 [node name="bg" type="Sprite2D" parent="." unique_id=1945480160]
 z_index = -1
-position = Vector2(583.99994, 381.5)
-scale = Vector2(18.1875, 14.859375)
-texture = SubResource("GradientTexture2D_o6xl0")
+texture_filter = 1
+position = Vector2(576, 495)
+scale = Vector2(4.6061254, 4.2109942)
+texture = ExtResource("2_lg08p")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=184242789]
 navigation_polygon = SubResource("NavigationPolygon_lg08p")
@@ -38,9 +33,10 @@ z_index = -1
 position = Vector2(773, 476)
 
 [node name="Sprite2D" type="Sprite2D" parent="NavigationRegion2D/Area2D2" unique_id=489165627]
-position = Vector2(1.1444092e-05, -1.5258789e-05)
-scale = Vector2(0.7519531, 0.09570313)
-texture = ExtResource("2_t8527")
+texture_filter = 1
+position = Vector2(31.000008, 17.000008)
+scale = Vector2(5, 5)
+texture = ExtResource("2_mm8m8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="NavigationRegion2D/Area2D2" unique_id=1904555619]
 shape = SubResource("RectangleShape2D_mm8m8")
@@ -49,10 +45,43 @@ shape = SubResource("RectangleShape2D_mm8m8")
 z_index = -1
 position = Vector2(384, 200)
 
-[node name="Sprite2D" type="Sprite2D" parent="NavigationRegion2D/Area2D" unique_id=1848469613]
-position = Vector2(1.1444092e-05, -1.5258789e-05)
-scale = Vector2(0.7519531, 0.09570313)
-texture = ExtResource("2_t8527")
+[node name="Sprite2D2" type="Sprite2D" parent="NavigationRegion2D/Area2D" unique_id=82877156]
+texture_filter = 1
+position = Vector2(-38, -12.999998)
+scale = Vector2(5, 5)
+texture = ExtResource("2_mm8m8")
+flip_h = true
+flip_v = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="NavigationRegion2D/Area2D" unique_id=1292446345]
 shape = SubResource("RectangleShape2D_mm8m8")
+
+[node name="pegs" type="Node2D" parent="." unique_id=1689529823]
+position = Vector2(2, 0)
+
+[node name="DestructiblePeg8" parent="pegs" unique_id=733872926 instance=ExtResource("3_mm8m8")]
+position = Vector2(876, 614)
+
+[node name="DestructiblePeg3" parent="pegs" unique_id=2095918806 instance=ExtResource("3_mm8m8")]
+position = Vector2(266, 674)
+
+[node name="DestructiblePeg5" parent="pegs" unique_id=1750133912 instance=ExtResource("3_mm8m8")]
+position = Vector2(903, 572)
+
+[node name="DestructiblePeg4" parent="pegs" unique_id=2121681343 instance=ExtResource("3_mm8m8")]
+position = Vector2(569, 680)
+
+[node name="DestructiblePeg6" parent="pegs" unique_id=1390423113 instance=ExtResource("3_mm8m8")]
+position = Vector2(713, 648)
+
+[node name="DestructiblePeg7" parent="pegs" unique_id=1997601134 instance=ExtResource("3_mm8m8")]
+position = Vector2(677, 591)
+
+[node name="DestructiblePeg10" parent="pegs" unique_id=891456541 instance=ExtResource("3_mm8m8")]
+position = Vector2(570, 588)
+
+[node name="DestructiblePeg11" parent="pegs" unique_id=563371084 instance=ExtResource("3_mm8m8")]
+position = Vector2(281, 582)
+
+[node name="DestructiblePeg13" parent="pegs" unique_id=145472934 instance=ExtResource("3_mm8m8")]
+position = Vector2(414, 627)

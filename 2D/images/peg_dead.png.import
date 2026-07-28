@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://davsnx3h8isch"
-path="res://.godot/imported/workshop_base.png-13e23cbe8c8c0f7d5b3d167c69705ccf.ctex"
+uid="uid://cgntn2ehxiisb"
+path="res://.godot/imported/peg_dead.png-73ab92333b77eee21a995742914c0a91.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://2D/godot_gen_textures/workshop_base.png"
-dest_files=["res://.godot/imported/workshop_base.png-13e23cbe8c8c0f7d5b3d167c69705ccf.ctex"]
+source_file="res://2D/images/peg_dead.png"
+dest_files=["res://.godot/imported/peg_dead.png-73ab92333b77eee21a995742914c0a91.ctex"]
 
 [params]
 

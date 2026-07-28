@@ -14,9 +14,7 @@ func amount_to_string(money_amount: int):
 	
 	var nr_length: int = str(abs(money_amount)).length()
 	
-	var with_decimal: float = money_amount/ 100.0
-	var no_decimal: int = round(with_decimal)
-	
+	var with_decimal: float = money_amount/ 100.0	
 	
 	var return_val: String = str(money_amount)
 	
@@ -46,5 +44,6 @@ func amount_to_string(money_amount: int):
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
+@warning_ignore("unused_parameter")
 func _process(delta):
 	pass

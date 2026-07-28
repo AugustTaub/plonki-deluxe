@@ -232,6 +232,7 @@ func run_coll_check(move_vec: Vector2):
 	_coll_data.is_valid = true
 	return _coll_data
 
+@warning_ignore("unused_parameter")
 func perform_collision(collision_data: CollData,delta: float):
 	if not collision_data.is_valid: return
 	

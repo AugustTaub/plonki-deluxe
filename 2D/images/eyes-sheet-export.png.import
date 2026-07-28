@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://q0lyelgpf0e8"
-path="res://.godot/imported/workshop_enchanter.png-c7b8ab0a142a0d55a30e17e61cb349a8.ctex"
+uid="uid://c1604su2gvh8c"
+path="res://.godot/imported/eyes-sheet-export.png-2d6b6e08747b174f9f17c77d92c0ec45.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://2D/godot_gen_textures/workshop_enchanter.png"
-dest_files=["res://.godot/imported/workshop_enchanter.png-c7b8ab0a142a0d55a30e17e61cb349a8.ctex"]
+source_file="res://2D/images/eyes-sheet-export.png"
+dest_files=["res://.godot/imported/eyes-sheet-export.png-2d6b6e08747b174f9f17c77d92c0ec45.ctex"]
 
 [params]
 

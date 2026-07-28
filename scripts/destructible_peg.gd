@@ -7,8 +7,7 @@ var destruct_timer: float = 0
 var destruct_timer_length: float = 0
 var perpetrator_ball: Ball
 
-
-enum peg_state{DEFAULT,DEAD,REANIMATING}
+enum peg_state {DEFAULT, DYING, REANIMATING}
 var curr_peg_state: peg_state = peg_state.DEFAULT
 
 @export_category("nodes")
@@ -19,66 +18,85 @@ var curr_peg_state: peg_state = peg_state.DEFAULT
 @export var preloaded_alive_tex: Texture2D = preload("res://2D/godot_gen_textures/alive_circle_peg.tres")
 @export var preloaded_dead_tex: Texture2D = preload("res://2D/godot_gen_textures/dead_circle_peg.tres")
 
-var HP: int = 2
+@export var HP: int = 2
+@export var value: int = 1
+@export var reanimate_time: float = 2.0
 
+@onready var peg_sprite_start_scale: Vector2 = peg_sprite.scale
 
-# Called when the node enters the scene tree for the first time.
+var reanimate_timer: float = 0.0
+
 func _ready():
-	pass # Replace with function body.
+	pass
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if destruction_queued:
 		destruct_timer += delta
 		if destruct_timer >= destruct_timer_length:
 			destroy()
-		
-
+	
+	match curr_peg_state:
+		peg_state.DEFAULT:
+			pass
+		peg_state.DYING:
+			pass
+		peg_state.REANIMATING:
+			reanimate_timer += delta
+			if reanimate_timer >= reanimate_time:
+				reanimate_timer = 0.0
+				change_peg_state(peg_state.DEFAULT)
 
 func queue_destruction():
 	destroy()
 
-
+func destroy_without_payout():
+	if curr_peg_state != peg_state.DEFAULT:
+		return
+	
+	change_peg_state(peg_state.DYING)
 
 func destroy():
-	SaveManager.change_money(1)
-	change_peg_state(peg_state.DEAD)
-
-
+	SaveManager.change_money_with_vis_nr(1, global_position)
+	destroy_without_payout()
 
 #region State Machine
 
 func change_peg_state(new_state: peg_state):
 	exit_peg_state(curr_peg_state)
 	enter_peg_state(new_state)
-	
 	curr_peg_state = new_state
 
 func exit_peg_state(exit_state: peg_state):
 	match exit_state:
 		peg_state.DEFAULT:
 			pass
-		peg_state.DEAD:
+		peg_state.DYING:
+			pass
+		peg_state.REANIMATING:
+			
 			peg_sprite.texture = preloaded_alive_tex
 			peg_coll_shape.disabled = false
-			
-			
-		peg_state.REANIMATING:
-			pass
 
 func enter_peg_state(enter_state: peg_state):
 	match enter_state:
 		peg_state.DEFAULT:
 			pass
-		peg_state.DEAD:
+		peg_state.DYING:
 			
-			peg_sprite.texture = preloaded_dead_tex
 			peg_coll_shape.disabled = true
 			
+			var tween: Tween = create_tween()
+			tween.tween_property(peg_sprite, "scale", peg_sprite_start_scale * 1.3, 0.1).set_trans(Tween.TRANS_BOUNCE)
+			tween.tween_property(peg_sprite, "scale", peg_sprite_start_scale, 0.1)
+			
+			await tween.finished
+			
+			peg_sprite.scale = peg_sprite_start_scale
+			peg_sprite.texture = preloaded_dead_tex
+			
 			change_peg_state(peg_state.REANIMATING)
+			
 		peg_state.REANIMATING:
-			await get_tree().create_timer(0.5).timeout
-			change_peg_state(peg_state.DEFAULT)
-
+			reanimate_timer = 0.0
+			
 #endregion

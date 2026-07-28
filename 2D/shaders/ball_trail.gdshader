@@ -25,9 +25,9 @@ vec4 get_trail_sample(sampler2D tex, vec2 uv, vec2 offset, float scale_multiplie
 void fragment() {
     vec4 input_tint = COLOR;
     
-    vec4 t0 = get_trail_sample(TEXTURE, UV, svec * 0.15, 1.0);
-    vec4 t1 = get_trail_sample(TEXTURE, UV, svec * 0.35, 1.2);
-    vec4 t2 = get_trail_sample(TEXTURE, UV, svec * 0.65, 1.4);
+    vec4 t0 = get_trail_sample(TEXTURE, UV, svec * 0.05, 1.0);
+    vec4 t1 = get_trail_sample(TEXTURE, UV, svec * 0.15, 1.2);
+    vec4 t2 = get_trail_sample(TEXTURE, UV, svec * 0.35, 1.4);
     
     vec4 final_sample = t0 + t1 + t2;
     

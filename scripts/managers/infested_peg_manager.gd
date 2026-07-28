@@ -1,9 +1,12 @@
 extends Node2D
 class_name InfestedPegManager
 
+#global settings
 @export var max_number_of_pegs: int = 1000
-var simulate_time: float = 0.6
-@export var state_script_arr: Array[Script] = []
+@export var death_explosion_radius: float = 250
+
+
+
 var state_dict: Dictionary = {} 
 
 # RID Area vars
@@ -17,10 +20,19 @@ var rid_to_agent_id: Dictionary = {}    # RID -> ID
 
 ### EXPORT VARS
 @export var adjustable_peg_multimesh: MultiMeshInstance2D
+@export var stage_manager: StageManager
+
+var death_explo_shape: RID
 
 ### DATA STRUCTURE
 class PegData extends RefCounted:
 	var health: int = 1
+	var curr_value: int = 1
+	var has_eaten: bool = false
+	var fear: float = 0.0 # 0-100
+	
+	var goal_peg: DestructiblePeg
+	var goal_peg_pos: Vector2 = Vector2.ZERO
 	
 	var active: bool = true
 	var pos: Vector2 = Vector2.ZERO
@@ -99,6 +111,11 @@ func _ready():
 		
 		pooled_agents[i] = agent_rid
 		rid_to_agent_id[agent_rid] = i
+	
+	# make explo shape
+	death_explo_shape = PhysicsServer2D.circle_shape_create()
+	PhysicsServer2D.shape_set_data(death_explo_shape, death_explosion_radius)
+
 
 ### COLL AREA 
 func create_internal_area() -> RID:
@@ -164,10 +181,19 @@ func _perform_change_peg_state(peg: PegData, new_state_name: String):
 ### PEG LOGIC
 
 func spawn_infested_peg(spawn_pos: Vector2):
+	
+	var curr_stage_node: StageNode = stage_manager.curr_stage_node
+	if curr_stage_node.navigation_region == null : return
+	
 	#revive pegs if possible
 	for peg in active_pegs:
 		if not peg.active:
 			peg.health = 1
+			peg.has_eaten = false
+			peg.fear = 0.0
+			
+			peg.goal_peg = get_random_goal_peg()
+			peg.goal_peg_pos = peg.goal_peg.global_position
 			
 			peg.active = true
 			peg.pos = spawn_pos
@@ -178,6 +204,7 @@ func spawn_infested_peg(spawn_pos: Vector2):
 			peg.agent_desired_velocity = Vector2.ZERO
 			peg.safe_velocity = Vector2.ZERO
 			peg.saved_time = 0.0
+			peg.vis_scale = 1.0
 			
 			activate_area(peg.instance_id, peg.pos)
 			change_peg_state(peg, "idle")
@@ -189,7 +216,12 @@ func spawn_infested_peg(spawn_pos: Vector2):
 	
 	# create whole new peg
 	var new_peg = PegData.new()
+	
 	new_peg.pos = spawn_pos
+	
+	new_peg.goal_peg = get_random_goal_peg()
+	new_peg.goal_peg_pos = new_peg.goal_peg.global_position
+	
 	new_peg.instance_id = active_pegs.size()
 	activate_area(new_peg.instance_id, new_peg.pos)
 	change_peg_state(new_peg, "idle")
@@ -198,9 +230,9 @@ func spawn_infested_peg(spawn_pos: Vector2):
 func _physics_process(delta):
 	### DEBUG
 	if Input.is_action_pressed("ui_accept"):
-		spawn_infested_peg(Vector2(555,444)+ Vector2.UP.rotated(randf_range(0,2*PI))*100)
+		spawn_infested_peg(Vector2(randf_range(0,800),0))
 		peg_nr_spawned += 1
-		print(peg_nr_spawned)
+		#print(peg_nr_spawned)
 	
 	# cache parameters for worker threads
 	current_delta = delta
@@ -240,7 +272,9 @@ func _process_peg_batch(index: int):
 			PhysicsServer2D.area_set_transform(area_rid, area_transform)
 	
 	# movement
-	peg.vel = peg.safe_velocity
+	if peg.state_name == "walking" or peg.state_name == "dodging":
+		peg.vel = peg.safe_velocity
+	
 	peg.pos += peg.vel * current_delta
 
 func update_peg_visuals(peg: PegData):
@@ -251,23 +285,109 @@ func update_peg_visuals(peg: PegData):
 			adjustable_peg_multimesh.multimesh.set_instance_transform_2d(multmesh_i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
 			return 
 		
+		
 		var trans = Transform2D(0, peg.vis_scale * Vector2.ONE, 0, peg.pos)
 		adjustable_peg_multimesh.multimesh.set_instance_transform_2d(multmesh_i, trans)
+	
+		# set color
+		var centi_fear: float = peg.fear/100.0
+		var inverse_fear: float = 1-centi_fear
 		
-		#set state color
-		if state_dict.has(peg.state_name):
-			adjustable_peg_multimesh.multimesh.set_instance_color(multmesh_i, state_dict[peg.state_name].color)
+		var peg_color: Color = Color(inverse_fear/2, inverse_fear/2, centi_fear, 1.0)
+		adjustable_peg_multimesh.multimesh.set_instance_color(multmesh_i, peg_color)
+		
+		# set custom data
+		var noise_seed: float = float(multmesh_i)
+		
+		var eye_angle: float = 0.0 
+		
+		if peg.fear >= 50.0:
+			eye_angle += 1.0
+		if peg.has_eaten:
+			eye_angle += 2.0
+		
+		# 0 - 0.9 = low fear, low food
+		# 1 - 1.9 = high fear, low food
+		# 2 - 2.9 = low fear, high food
+		# 3 - 3.9 = high fear, high food 
+		
+		#overwrite for death
+		if peg.state_name == "dying":
+			eye_angle = 3.5
+		
+		
+		var donut_mode: float = 0.0
+		if peg.has_eaten: donut_mode = 1.0
+		
+		var custom_data: Color = Color(noise_seed, eye_angle, donut_mode, 0)
+		adjustable_peg_multimesh.multimesh.set_instance_custom_data(multmesh_i, custom_data)
 
 func take_damage(peg: PegData, damage_amount: int):
+	# Prevent multi-hits triggering death multiple times on the same frame
+	if not peg.active: 
+		return 
+	
 	peg.health -= damage_amount
 	if peg.health <= 0:
-		die(peg)
+		call_deferred("die", peg)
 
 func die(peg: PegData):
-	peg.active = false
+	
+	SaveManager.change_money_with_vis_nr(peg.curr_value, peg.pos)
 	deactivate_area(peg.instance_id)
+	
+	# explode and cause fear
+	SignalBus.spawn_shock_wave.emit(peg.pos, death_explosion_radius, 0.3)
+	
+	
+	var space_state = get_world_2d().direct_space_state
+	
+	var query = PhysicsShapeQueryParameters2D.new()
+	query.shape_rid = death_explo_shape 
+	query.transform = Transform2D(0, peg.pos)
+	query.collision_mask = 1
+	query.collide_with_areas = true
+	
+	var results = space_state.intersect_shape(query)
+	
+	for hit in results:
+		
+		var found_rid: RID = hit["rid"]
+		if rid_to_area_id.has(found_rid):
+			var found_id = rid_to_area_id[found_rid]
+			var hit_peg: InfestedPegManager.PegData = active_pegs[found_id]
+			
+			if not hit_peg.active or hit_peg == peg:
+				continue
+			
+			change_fear(hit_peg, 35.0)
+	
+	change_peg_state(peg, "dying")
+
+func despawn(peg: PegData):
+	deactivate_area(peg.instance_id)
+	peg.active = false
+
+
+func change_fear(peg: PegData, amount: float):
+	peg.fear += amount
+	peg.fear = clamp(peg.fear, 0.0, 100.0)
 
 ###
+
+func get_random_goal_peg():
+	
+	if not stage_manager:
+		push_warning("InfestedPegManager: No stage Manager node attached!")
+		return 
+	
+	
+	var peg_arr: Array[DestructiblePeg] = stage_manager.curr_stage_node.peg_nodes
+	
+	var rand_i: int = randi_range(0, peg_arr.size()-1)
+	
+	return peg_arr[rand_i]
+
 
 func _exit_tree():
 	for id in pooled_areas:

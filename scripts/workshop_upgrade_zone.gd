@@ -31,6 +31,7 @@ func _ready():
 	if unlock_cost_text and associated_upgrade:
 		unlock_cost_text.text = "Unlock: " + str(associated_upgrade.start_price)
 
+@warning_ignore("unused_parameter")
 func _process(delta):
 	match curr_vis_state:
 		vis_state.LOCKED:

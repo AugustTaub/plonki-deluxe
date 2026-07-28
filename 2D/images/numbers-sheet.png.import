@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b05bgoxuf4bac"
-path="res://.godot/imported/workshop_bucket.png-53c1c7f2a039688bb28ee19162f795ef.ctex"
+uid="uid://3frbfq787cyc"
+path="res://.godot/imported/numbers-sheet.png-dee0ad5adc63c410c9a56b16b5053992.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://2D/godot_gen_textures/workshop_bucket.png"
-dest_files=["res://.godot/imported/workshop_bucket.png-53c1c7f2a039688bb28ee19162f795ef.ctex"]
+source_file="res://2D/images/numbers-sheet.png"
+dest_files=["res://.godot/imported/numbers-sheet.png-dee0ad5adc63c410c9a56b16b5053992.ctex"]
 
 [params]
 

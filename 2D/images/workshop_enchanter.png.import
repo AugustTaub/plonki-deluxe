@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3ffht6hyaf1"
-path="res://.godot/imported/workshop_cannon.png-6122440bc1cabf5f489ec8e594e794d9.ctex"
+uid="uid://q0lyelgpf0e8"
+path="res://.godot/imported/workshop_enchanter.png-4fef346ce00beb7b26f1a39500206ea1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://2D/godot_gen_textures/workshop_cannon.png"
-dest_files=["res://.godot/imported/workshop_cannon.png-6122440bc1cabf5f489ec8e594e794d9.ctex"]
+source_file="res://2D/images/workshop_enchanter.png"
+dest_files=["res://.godot/imported/workshop_enchanter.png-4fef346ce00beb7b26f1a39500206ea1.ctex"]
 
 [params]
 

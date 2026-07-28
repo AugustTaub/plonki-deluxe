@@ -6,3 +6,11 @@ class_name StageNode
 @export var is_unlocked: bool = true
 @export var stage_name: String = "ERROR - FALLBACK"
 @export var navigation_region: NavigationRegion2D
+
+var peg_nodes: Array[DestructiblePeg]
+
+func _ready():
+	if $pegs:
+		for child in $pegs.get_children():
+			if child is DestructiblePeg:
+				peg_nodes.append(child)

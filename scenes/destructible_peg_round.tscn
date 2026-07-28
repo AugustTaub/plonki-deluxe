@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c4ashcsbyavdi"]
 
 [ext_resource type="Script" uid="uid://dlyva8iecj0md" path="res://scripts/destructible_peg.gd" id="1_oouwb"]
-[ext_resource type="Texture2D" uid="uid://bqpjpiotynu2q" path="res://2D/godot_gen_textures/alive_circle_peg.tres" id="2_gqub4"]
+[ext_resource type="Texture2D" uid="uid://cy1q20a3g3tnb" path="res://2D/images/peg.png" id="2_oouwb"]
 
 [sub_resource type="Gradient" id="Gradient_oouwb"]
 interpolation_mode = 1
@@ -24,14 +24,16 @@ collision_mask = 3
 script = ExtResource("1_oouwb")
 peg_sprite = NodePath("peg_sprite")
 peg_coll_shape = NodePath("peg_coll_shape")
-
-[node name="peg_sprite" type="Sprite2D" parent="." unique_id=1572766428]
-texture_filter = 1
-texture = ExtResource("2_gqub4")
+preloaded_alive_tex = ExtResource("2_oouwb")
 
 [node name="peg_damage_sprite" type="Sprite2D" parent="." unique_id=1054120760]
 texture_filter = 1
 texture = SubResource("GradientTexture2D_gqub4")
+
+[node name="peg_sprite" type="Sprite2D" parent="." unique_id=1572766428]
+texture_filter = 1
+scale = Vector2(1.8829112, 1.8829112)
+texture = ExtResource("2_oouwb")
 
 [node name="peg_coll_shape" type="CollisionShape2D" parent="." unique_id=561766909]
 shape = SubResource("CircleShape2D_jru8u")

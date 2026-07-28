@@ -1,14 +1,15 @@
-[gd_resource type="Resource" script_class="SaveGame" format=3]
+[gd_resource type="Resource" script_class="SaveGame" format=3 uid="uid://drv3su8bjppow"]
 
-[ext_resource type="Script" path="res://scripts/managers/save_game.gd" id="1_mx8ne"]
-[ext_resource type="Script" path="res://scripts/upgrade_data.gd" id="2_j07jm"]
-[ext_resource type="Resource" path="res://custom_res/upgrades/test.tres" id="3_l3pva"]
-[ext_resource type="Resource" path="res://custom_res/upgrades/ball_size.tres" id="4_l3pva"]
-[ext_resource type="Resource" path="res://custom_res/upgrades/ball_speed.tres" id="5_42avq"]
+[ext_resource type="Script" uid="uid://drfxtc5ceokld" path="res://scripts/managers/save_game.gd" id="1_mx8ne"]
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="2_j07jm"]
+[ext_resource type="Resource" uid="uid://cvslx5sb28pf5" path="res://custom_res/upgrades/test.tres" id="3_l3pva"]
+[ext_resource type="Resource" uid="uid://du3eonw0shm4s" path="res://custom_res/upgrades/ball_size.tres" id="4_l3pva"]
+[ext_resource type="Resource" uid="uid://v81rtw47g0f" path="res://custom_res/upgrades/ball_speed.tres" id="5_42avq"]
 
 [resource]
 script = ExtResource("1_mx8ne")
-money_amount = 1275038
+money_amount = 39344
+ball_amount = 3
 unlocked_upgrades = Array[ExtResource("2_j07jm")]([ExtResource("3_l3pva"), ExtResource("4_l3pva"), ExtResource("5_42avq")])
 upgrade_levels = Dictionary[ExtResource("2_j07jm"), int]({
 ExtResource("4_l3pva"): 3,

@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://d3qvpypax1xk8"]
+
+[ext_resource type="Shader" uid="uid://dthbjanl3w6nl" path="res://2D/shaders/number_display.gdshader" id="1_c2bto"]
+[ext_resource type="Texture2D" uid="uid://3frbfq787cyc" path="res://2D/images/numbers-sheet.png" id="2_5dkeo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_orncu"]
+shader = ExtResource("1_c2bto")
+shader_parameter/atlas_texture = ExtResource("2_5dkeo")
+shader_parameter/number = 1.0000000475
+
+[node name="Node2D" type="Node2D" unique_id=1434304474]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1081830022]
+texture_filter = 1
+material = SubResource("ShaderMaterial_orncu")
+offset_right = 125.0
+offset_bottom = 25.0

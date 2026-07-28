@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://evdkxdmrfgxx"
-path="res://.godot/imported/workshop_ballfactory.png-2585d8311658d6c3fe5cd7b95822e322.ctex"
+uid="uid://bi0wij204dlam"
+path="res://.godot/imported/eyes-sheet.png-9882f4f0c0815bc008d9c7f3290cb4b2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://2D/godot_gen_textures/workshop_ballfactory.png"
-dest_files=["res://.godot/imported/workshop_ballfactory.png-2585d8311658d6c3fe5cd7b95822e322.ctex"]
+source_file="res://2D/images/eyes-sheet.png"
+dest_files=["res://.godot/imported/eyes-sheet.png-9882f4f0c0815bc008d9c7f3290cb4b2.ctex"]
 
 [params]
 

@@ -20,7 +20,13 @@ var fire_button_held_time: float = 0
 var time_since_last_shot: float = 0
 var time_since_last_sim_shot: float = 0
 
-var shot_interval: float = 0.01
+var shot_interval: float = 0.05
+
+@onready var shot_particles_one: GPUParticles2D = %shot_particles_one
+@onready var shot_particles_more: GPUParticles2D = %shot_particles_more
+
+
+
 
 var upgrade_preloader: ResourcePreloader
 
@@ -41,10 +47,7 @@ func _physics_process(delta):
 	time_since_last_shot += delta
 	time_since_last_sim_shot += delta
 	
-	
-	# rotating the cannon
-	$pivot.look_at(get_global_mouse_position())
-	$pivot.rotate(-PI/2)
+	look_at_mouse()
 	
 	
 	var speed_upgrade: UpgradeData = upgrade_preloader.get_resource("ball_speed")
@@ -100,43 +103,55 @@ func _physics_process(delta):
 		
 		%cannon_sprite.play("default",anim_spd)
 		
+		if shot_particles_one.emitting:
+			shot_particles_more.emitting = true
+		else:
+			shot_particles_one.emitting = true
+		
+		
 		time_since_last_shot = 0
 		SignalBus.spawn_ball.emit(pos,vel,radius)
 		BallFactoryManager.remove_last_ball_from_queue()
-
+	
+	if Input.is_action_just_released("fire_ball") or not BallFactoryManager.has_balls():
+		shot_particles_more.emitting = false
+	
 
 func _on_enemy_dodge_beam_area_entered(area_rid: RID, _area: Area2D, _area_shape_index: int, _local_shape_index: int) -> void:
 	if not infested_peg_manager:
 		push_warning("BallCannon: no infested peg manager attached!")
 		return
 	
-	# Your manager returns the ID as a String, or an empty string if not found
+	
 	var id_str: String = infested_peg_manager.get_peg_area_id_from_rid(area_rid)
-	print(id_str)
 	
 	if id_str != "":
 		var id: int = id_str.to_int()
 		
-		# Ensure the ID is within the bounds of the active_pegs array
+		
 		if id >= 0 and id < infested_peg_manager.active_pegs.size():
 			var hit_peg: InfestedPegManager.PegData = infested_peg_manager.active_pegs[id]
 			
-			# Only change state if the peg is currently active
-			if hit_peg.active:
+			var fear_high_enough: bool = hit_peg.fear > 85
+			
+			if hit_peg.active and fear_high_enough and not hit_peg.has_eaten:
 				infested_peg_manager.change_peg_state(hit_peg, "dodging")
-				hit_peg.danger_dir = get_direction_to_line_2d(hit_peg.pos, global_position, Vector2.UP.rotated($pivot.global_rotation))
+				hit_peg.danger_dir = -get_direction_to_line_2d(hit_peg.pos, global_position, Vector2.UP.rotated($pivot.global_rotation))
 	
+
+func look_at_mouse():
+	# rotating the cannon
+	$pivot.look_at(get_global_mouse_position())
+	$pivot.rotate(-PI/2)
+
 
 
 func get_direction_to_line_2d(point: Vector2, line_point: Vector2, line_dir: Vector2) -> Vector2:
 	var v = line_dir.normalized()
 	var ap = point - line_point
 	
-	# Project vector onto the line to find the scalar distance along the line direction
 	var t = ap.dot(v)
 	
-	# Find the closest point on the line
 	var closest_point = line_point + (v * t)
 	
-	# Return the normalized direction vector to go from our point to the line
 	return (closest_point - point).normalized()
