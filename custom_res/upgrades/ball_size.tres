@@ -1,10 +1,13 @@
 [gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://du3eonw0shm4s"]
 
-[ext_resource type="Curve" uid="uid://d3vjg4q23dchj" path="res://2D/curves/standard.tres" id="1_gsqlm"]
 [ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/save_data/upgrade_data.gd" id="2_v7rgg"]
 
+[sub_resource type="Curve" id="Curve_o0etd"]
+_data = [Vector2(0, 0), 0.0, 0.007910157, 0, 0, Vector2(0.759542, 0.25120008), 1.0218, 1.0218, 0, 0, Vector2(1, 1), 4.5413337, 0.0, 0, 0]
+point_count = 3
+
 [sub_resource type="Curve" id="Curve_gsqlm"]
-_data = [Vector2(0, 0), 0.0, 0.26005962, 0, 0, Vector2(0.8053435, 0.17840004), 1.0899193, 1.0899193, 0, 0, Vector2(1, 1), 10.29368, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 0.8015134, 0, 0, Vector2(0.05925926, 0.049927592), 1.2177805, 1.2177805, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
 point_count = 3
 
 [resource]
@@ -12,9 +15,9 @@ script = ExtResource("2_v7rgg")
 name = "ball_size"
 pretty_name = "Ball Radius"
 unit = "px"
-max_level = 5
-start_price = 200
-price_scaling_curve = SubResource("Curve_gsqlm")
+end_price = 300000
+price_scaling_curve = SubResource("Curve_o0etd")
 start_result = 8.0
-end_result = 24.0
+end_result = 18.0
+result_scaling_curve = SubResource("Curve_gsqlm")
 metadata/_custom_type_script = "uid://bbo5op84iqbom"

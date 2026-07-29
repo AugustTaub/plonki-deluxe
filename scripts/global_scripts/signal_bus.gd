@@ -63,3 +63,6 @@ signal play_sound(sound_name: String, volume_modifier: float)
 
 @warning_ignore("unused_signal")
 signal upgrade_preloader_loaded(preloader_node: ResourcePreloader)
+
+@warning_ignore("unused_signal")
+signal coins_increased(increase_amount)

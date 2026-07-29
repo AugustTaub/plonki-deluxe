@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://dx84p5wi2xcii"]
+
+[ext_resource type="Curve" uid="uid://d3vjg4q23dchj" path="res://2D/curves/standard.tres" id="1_4kaoc"]
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/save_data/upgrade_data.gd" id="2_uobr0"]
+
+[resource]
+script = ExtResource("2_uobr0")
+name = "ball_bucket_unlocked"
+pretty_name = "ball_bucket_unlocked"
+max_level = 1
+start_price = 25
+metadata/_custom_type_script = "uid://bbo5op84iqbom"

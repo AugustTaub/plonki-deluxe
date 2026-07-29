@@ -22,6 +22,7 @@ SignalBus="*uid://djee380ynnny2"
 SaveManager="*uid://d03l27pfkh31u"
 BallFactoryManager="*uid://btanyn2b3wtwh"
 GlobalVars="*uid://cwoxp4vyoq74f"
+CsCalculator="*uid://b4jekncudnine"
 
 [display]
 
@@ -65,7 +66,6 @@ send_console_command={
 2d/run_on_separate_thread=true
 2d/physics_engine="GodotPhysics2D"
 3d/physics_engine="Jolt Physics"
-common/physics_interpolation=true
 
 [rendering]
 

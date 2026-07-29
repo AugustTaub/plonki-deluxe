@@ -9,6 +9,7 @@ var known_commands: Dictionary[String, Callable] = {
 	"add coins": add_money,
 	"add balls": add_balls,
 	"load full save": load_full_save,
+	"reset progress": reset_progress,
 }
 
 var commands_with_variables: Array[String] = ["add coins","add balls"]
@@ -67,3 +68,7 @@ func load_full_save():
 		SaveManager.load_save_game(full_save)
 		SignalBus.enable_piercing_button.emit()
 		push_notification("Loaded complete save game with all Unlocks")
+
+func reset_progress():
+	SaveManager.reset_save_game()
+	push_notification("Progress was reset. Savegame overwritten")

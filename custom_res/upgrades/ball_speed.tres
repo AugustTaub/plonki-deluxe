@@ -7,7 +7,7 @@ _data = [Vector2(0, 0), 0.0, 0.072201334, 0, 0, Vector2(0.8167939, 0.22000003), 
 point_count = 3
 
 [sub_resource type="Curve" id="Curve_53lf0"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.6, 0.5), 0.6187041, 0.6187041, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 1.1207188, 0, 0, Vector2(0.6, 0.5), 0.6187041, 0.6187041, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
 point_count = 3
 
 [resource]

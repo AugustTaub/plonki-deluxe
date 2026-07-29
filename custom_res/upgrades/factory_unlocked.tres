@@ -5,4 +5,5 @@
 
 [resource]
 script = ExtResource("2_g67oh")
+start_price = 7
 metadata/_custom_type_script = "uid://bbo5op84iqbom"

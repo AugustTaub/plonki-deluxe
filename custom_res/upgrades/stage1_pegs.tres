@@ -1,7 +1,14 @@
 [gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://dgumkow6fk3pb"]
 
-[ext_resource type="Curve" uid="uid://d3vjg4q23dchj" path="res://2D/curves/standard.tres" id="1_vh43r"]
 [ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/save_data/upgrade_data.gd" id="2_umgbl"]
+
+[sub_resource type="Curve" id="Curve_fh0my"]
+_data = [Vector2(0, 0), 0.0, 0.8015134, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_vh43r"]
+_data = [Vector2(0, 0), 0.0, 2.605029, 0, 0, Vector2(1, 1), 1.6146957, 0.0, 0, 0]
+point_count = 2
 
 [resource]
 script = ExtResource("2_umgbl")
@@ -10,7 +17,10 @@ pretty_name = "Stage 1 Pegs"
 unit = "nr. of Pegs"
 max_level = 10
 start_price = 1
-start_result = 3.0
-end_result = 37.0
+end_price = 50
+price_scaling_curve = SubResource("Curve_fh0my")
+start_result = 7.0
+end_result = 53.0
+result_scaling_curve = SubResource("Curve_vh43r")
 wants_integer_result = true
 metadata/_custom_type_script = "uid://bbo5op84iqbom"

@@ -21,7 +21,6 @@
 [ext_resource type="PackedScene" uid="uid://b8d6p1eawp5e" path="res://scenes/UI/options_menu.tscn" id="11_nvyfr"]
 [ext_resource type="Texture2D" uid="uid://dupvpasgqfy1j" path="res://2D/images/gear_icon.png" id="11_ty1g6"]
 [ext_resource type="Texture2D" uid="uid://dj7aryelt4xny" path="res://2D/godot_gen_textures/white_circle.tres" id="13_yc10j"]
-[ext_resource type="PackedScene" uid="uid://dxowdq7qo4vr5" path="res://scenes/ball_bucket.tscn" id="13_ygd8o"]
 [ext_resource type="Shader" uid="uid://d2d3h755xlejn" path="res://2D/shaders/sim_ball_trans.gdshader" id="15_jbj1t"]
 [ext_resource type="Texture2D" uid="uid://cj8bbt23rgiqq" path="res://2D/godot_gen_textures/blu_ball.tres" id="15_jkv2x"]
 [ext_resource type="PackedScene" uid="uid://didcss5a6tuv4" path="res://scenes/UI/ball_factory.tscn" id="15_tel4y"]
@@ -268,15 +267,6 @@ random_volume_offset_db = 2.0
 streams_count = 1
 stream_0/stream = SubResource("AudioStreamMP3_od4ux")
 
-[sub_resource type="AudioStreamMP3" id="AudioStreamMP3_ygd8o"]
-data = PackedByteArray("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YXtMcRiJQdpTpaOUOrSRVYVk5sSIVJbNFBPcN6OHfspT9x950+YAojBE0aE0JMSu///9GS3N//+O/Of4UaeU7//7UMT0AA04hynvaSNhjRClPe0kbBG9K3NsHJWlwABIjypCt+DEYdDDs2DrlhzDsOibqJZKYtciAIhsHvy8sIoR22CETml9o4eVfCY9TssnPYHFnv1hrrSUPLiZQdGEf//////////4ytv//soAAjd4Ykd+AAAMLyaMR0NNv5AMMx1FFDAS7gNGOi0AgSmjsR6ISekHHgAnEJHHg4DMJSiNMyMgZ9hqxFCSR6LrbOf//////////+7+/99YAJK0tCHP8DCsLTIhEz3QvzFoNAn/+1DE6wBLZGEp7uGC4YGQ5P3ssFx5EEMEm+PES2Q1h0MCBO86MC9HWiRCYLkL0JGm4nSjRlArrSBXYfFzpHlQpd/////////////8huXVABIYh3MpvgAADFY8Qpx70eY6Mlvba/Eei4cVUspxKIC/SI9OgyFER04V6SNGojY2kPH+b2Uov4iCxNHAJAoZCDRv////+v////0WVTu27+ymqkAQ1h4lDM2OTLZc5sgjAAOC4WSKVsLJJNK1I5Oq16PkKEEUZoElVSIdOCiTSoZ0//tQxOqATOxpI69lguE8jGU93DBc9GFHVzc0g0HwCDGB9aoARFZngjm9AAAMECKEJIhpoGAgRmUovQt0MoCgGUK/kN+xUeIxGE00SzV1etQKsK1i6/zXmV2rM15jSBFAgcsA/////+z////+n+r69e1k6sARDiIZCm/EAAKlx9XHZDuYIDhbMugosFQETANp7D4GaodmbJIiiR1zI0QsxPIrehy775GG4MBg4YFx4gBN71GW/68yiz////////o//RUAQ0eIgzv+AAAMhOx0YP/7UMTsgEnUXynu4MNhNgxlPdwkXOtVRYzAyQwTSUNwId/0rZOu0cTTBZQjRCpVmJQwQwdRZuOkWNoHJtLkGgE+Bl3RX//////////T/m/+2hitQApxDRJpN+Bg6mHWicRFgQFg9BNdiCBFSAMCr9p1e+gkHA1xqg5bfZaZL64/dyODZpF5nK3RcICUkCjmLGLu//////////+///+lAGdYeHJb/7AGAIQGV/pliQSA4hJTMwAXi77RC67zM5sGyIFDQgBmGJpD5IkCECiJia7/+zDE+4DKSGsn7aRroO+KpTm+JCRs/RPhMeBYYEjIaGGzLHAV77FVqQR3f///43S5X///U3//z1YA6NDs6HP+DCxwBMTNdB9AIa4hnX3JaEk2UCQmPBlOpK0qPj4qIkMUI8SuptA5AkjWnE+5lg4ktCFd+h9YUDjgRON///Z///////8UTEDf+zTcOQCBNmdjOfUAgAydMNg4TsD/+0DE94AKCF8n7uGC4TiKpT2eJCQxYMA8AIW2HCFunnW8zcIZ0kkoBsViKCMWgj6jKwNEKuY9JGYRQdqqzI5IcrTFXf//0XXdP////9W7tKKp7/2bK0ACoUO7ml/wCo3MSE044GiIGBokSW2MtggNRYaOhma6JRGecI6eVUjAPAeiXTHBxQ++RsWWi3uNzhie6o9LlqU7///////////1/s1cqgBVaIaEO/4AAAdWzCEg+4rQJP/7QMT4gEmMVynt4SLhKYrlPcwwXCV2mkIwKEYAmaEAbCDSFJ/mQE6FAykjBEVwijgDYK9lBMgB5CxJNjEO5V53cSG1oLr//////////+jRt+wU7uLgDIkPEGV3wBSiY3bH/yqkFBwUsxEtyTBMHZ+4COPWOAtQID4PLKQQszNat2BslhJmnvZlC3QDTRP3Y3//////////19LP/9MAWUmYhT3/AAAAJcZOdBMOi2EJLpEggNcR//tAxP2ASrxVKe3hIuFLjST9zCRchaUFpMTOte/BCvIo4MvIiEY5HVhBKy96YGDgytjASUZNbC9ofd///////////U5v//rAHhXh4Nr/oAAQuZAgdONKnXMwE9QMYpagCLSpn21kxVZ08K40Dt6dcuEAG52VYL0jibbWtpE98m7gScXO6Dxcjj+Hv////////9fcmQf6Pr60KgBmKIeEaf+AAA6bQZqeBijBIEIh0lFBygdjyEz/+0DE+YBKNFsl7eEi4TQNZP3MJFxoks5ZvRbJAH+zo2I8V+FCfQgRc2Jjj51nD9tVG2yWnzCSQlhYNwOWPM9//////////931//QYM5q0GzAzozBKEwACOBwAd9OmaCpggmiQpU2cWZzABcx8qZ9ZrOkywzUAMaHd6UgrEDFjzP9k4u9TY72C6geLf+sxdkAxcKBXyiKnN//8vqWJZdeJtmsui9v///nnhzDcalVHSymi6biwdP/7QMT6gEpMbSft4SLhHgvlPbykJBUBdLHJh0FTIdcq1Q3ypkOgFJ61Vv9YBSeAJEKgH/jQofCwr/iZASExJT5MQU1FMy45OS4zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjk5LjOqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//swxP4ACWhXK+3hgqFHi6U9vDBcqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//tgxPKACkRfKfWXgCJWkiS/N4AAqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//sQxNYDwAAB/hwAACAAADSAAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqo=")
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_2s0kr"]
-random_pitch = 1.0728264
-random_volume_offset_db = 2.0
-streams_count = 1
-stream_0/stream = SubResource("AudioStreamMP3_ygd8o")
-
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_y57op"]
 random_pitch = 1.1981705
 random_volume_offset_db = 2.0
@@ -375,7 +365,6 @@ toggle_mode = true
 text = "piercing"
 autowrap_mode = 1
 script = ExtResource("3_ksmap")
-associated_upgrade = ExtResource("59_j4bwh")
 
 [node name="workshop_button" type="Button" parent="CanvasLayer" unique_id=1548444912]
 texture_filter = 1
@@ -477,9 +466,6 @@ position = Vector2(582, 430)
 position = Vector2(585, 689)
 scale = Vector2(14.828125, 1.03125)
 texture = SubResource("GradientTexture2D_tipki")
-
-[node name="ball_bucket" parent="." unique_id=825087764 instance=ExtResource("13_ygd8o")]
-position = Vector2(534, 674)
 
 [node name="ball_factory" parent="." unique_id=149330198 instance=ExtResource("15_tel4y")]
 position = Vector2(14, 3)
@@ -641,11 +627,6 @@ max_polyphony = 3
 [node name="plomp_low" type="AudioStreamPlayer2D" parent="SoundManager" unique_id=1636569475]
 stream = SubResource("AudioStreamRandomizer_r4e17")
 pitch_scale = 0.81
-max_polyphony = 3
-
-[node name="plomp_lower" type="AudioStreamPlayer2D" parent="SoundManager" unique_id=1212448718]
-stream = SubResource("AudioStreamRandomizer_2s0kr")
-pitch_scale = 0.59
 max_polyphony = 3
 
 [node name="eat" type="AudioStreamPlayer2D" parent="SoundManager" unique_id=1495750748]

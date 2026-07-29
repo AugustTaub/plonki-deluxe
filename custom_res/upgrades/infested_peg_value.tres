@@ -2,13 +2,13 @@
 
 [ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/save_data/upgrade_data.gd" id="1_460by"]
 
-[sub_resource type="Curve" id="Curve_n0vx3"]
-_data = [Vector2(0, 0), 0.0, 0.8015134, 0, 0, Vector2(0.05925926, 0.049927592), 0.24188545, 0.24188545, 0, 0, Vector2(0.6185185, 0.3509406), 1.3606056, 1.3606056, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
-point_count = 4
+[sub_resource type="Curve" id="Curve_460by"]
+_data = [Vector2(0, 0), 0.0, 0.4331737, 0, 0, Vector2(0.58778626, 0.30320007), 1.0899204, 1.0899204, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
+point_count = 3
 
-[sub_resource type="Curve" id="Curve_fnlif"]
-_data = [Vector2(0, 0), 0.0, 0.8015134, 0, 0, Vector2(0.05925926, 0.049927592), 1.2177805, 1.2177805, 0, 0, Vector2(0.5703703, 0.51085377), 1.1093986, 1.1093986, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
-point_count = 4
+[sub_resource type="Curve" id="Curve_i6wvd"]
+_data = [Vector2(0, 0), 0.0, 0.8015134, 0, 0, Vector2(0.36641222, 0.7296), 1.1093986, 1.1093986, 0, 0, Vector2(1, 1), 0.20959993, 0.0, 0, 0]
+point_count = 3
 
 [resource]
 script = ExtResource("1_460by")
@@ -16,8 +16,10 @@ name = "infested_peg_value"
 pretty_name = "Infested Peg Value"
 unit = "Coins"
 max_level = 10
-price_scaling_curve = SubResource("Curve_n0vx3")
+start_price = 1000
+end_price = 25000
+price_scaling_curve = SubResource("Curve_460by")
 start_result = 1.0
 end_result = 32.0
-result_scaling_curve = SubResource("Curve_fnlif")
+result_scaling_curve = SubResource("Curve_i6wvd")
 metadata/_custom_type_script = "uid://bbo5op84iqbom"

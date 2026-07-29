@@ -9,6 +9,7 @@ name = "stage3_unlock"
 pretty_name = "Unlock Stage 3"
 unit = "Stages Unlocked"
 max_level = 1
+start_price = 10000
 start_result = 0.0
 end_result = 1.0
 metadata/_custom_type_script = "uid://bbo5op84iqbom"

@@ -24,8 +24,6 @@ func _ready() -> void:
 	
 	update_visuals()
 	
-	if unlock_cost_text and associated_upgrade:
-		unlock_cost_text.text = zone_name + " \n Buy for: " + str(associated_upgrade.start_price)
 
 func update_visuals():
 	if is_zone_unlocked():
@@ -66,6 +64,10 @@ func _process(delta: float) -> void:
 func change_vis_state(new_state: vis_state) -> void:
 	exit_vis_state(curr_vis_state)
 	enter_vis_state(new_state)
+	
+	if new_state == vis_state.UNLOCKED and curr_vis_state == vis_state.LOCKED_HOVERED:
+		SignalBus.play_sound.emit("paid")
+	
 	curr_vis_state = new_state
 
 func exit_vis_state(exit_state: vis_state) -> void:
@@ -79,6 +81,8 @@ func enter_vis_state(enter_state: vis_state) -> void:
 		vis_state.LOCKED:
 			modulate = Color.DARK_SLATE_GRAY
 			_set_buttons_disabled(true)
+			if unlock_cost_text and associated_upgrade:
+				unlock_cost_text.text = zone_name + " \n Buy for: " + str(associated_upgrade.start_price)
 			
 		vis_state.LOCKED_HOVERED:
 			modulate = Color.DIM_GRAY
@@ -88,6 +92,8 @@ func enter_vis_state(enter_state: vis_state) -> void:
 			if unlock_cost_text:
 				unlock_cost_text.hide()
 			_set_buttons_disabled(false)
+			
+			
 			
 		vis_state.UNLOCKED_HOVERED:
 			if sprite:

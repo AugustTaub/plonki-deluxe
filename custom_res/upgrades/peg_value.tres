@@ -3,12 +3,12 @@
 [ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/save_data/upgrade_data.gd" id="2_wj8uq"]
 
 [sub_resource type="Curve" id="Curve_n0vx3"]
-_data = [Vector2(0, 0), 0.0, 0.8015134, 0, 0, Vector2(0.05925926, 0.049927592), 0.24188545, 0.24188545, 0, 0, Vector2(0.6185185, 0.3509406), 1.3606056, 1.3606056, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
-point_count = 4
+_data = [Vector2(0, 0), 0.0, 0.74766165, 0, 0, Vector2(0.78518516, 0.39907563), 1.6702157, 1.6702157, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Curve" id="Curve_fnlif"]
-_data = [Vector2(0, 0), 0.0, 0.8015134, 0, 0, Vector2(0.05925926, 0.049927592), 1.2177805, 1.2177805, 0, 0, Vector2(0.5703703, 0.51085377), 1.1093986, 1.1093986, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
-point_count = 4
+_data = [Vector2(0, 0), 0.0, 0.082737416, 0, 0, Vector2(0.5801527, 0.58400005), 0.8112482, 0.8112482, 0, 0, Vector2(1, 1), 0.25950474, 0.0, 0, 0]
+point_count = 3
 
 [resource]
 script = ExtResource("2_wj8uq")
@@ -16,8 +16,11 @@ name = "peg_value"
 pretty_name = "Peg Value"
 unit = "Coins"
 max_level = 10
+start_price = 48
+end_price = 50000
 price_scaling_curve = SubResource("Curve_n0vx3")
 start_result = 1.0
 end_result = 64.0
 result_scaling_curve = SubResource("Curve_fnlif")
+wants_integer_result = true
 metadata/_custom_type_script = "uid://bbo5op84iqbom"

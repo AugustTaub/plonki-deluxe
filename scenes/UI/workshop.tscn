@@ -26,6 +26,8 @@
 [ext_resource type="Resource" uid="uid://ephrii2u0dar" path="res://custom_res/upgrades/peg_value.tres" id="22_5j37t"]
 [ext_resource type="Resource" uid="uid://bamlm0828kx7y" path="res://custom_res/upgrades/infested_peg_value.tres" id="23_qysch"]
 [ext_resource type="Resource" uid="uid://dqr5o5n7665pk" path="res://custom_res/upgrades/peg_respawn_time.tres" id="25_1kisw"]
+[ext_resource type="Texture2D" uid="uid://b05bgoxuf4bac" path="res://2D/images/workshop_bucket.png" id="25_4efwq"]
+[ext_resource type="Resource" uid="uid://dx84p5wi2xcii" path="res://custom_res/upgrades/ball_bucket_unlocked.tres" id="25_sceab"]
 
 [sub_resource type="Theme" id="Theme_toekv"]
 RichTextLabel/constants/outline_size = 16
@@ -270,10 +272,10 @@ associated_upgrade = ExtResource("15_uxmtj")
 
 [node name="stage3unlock" parent="stage_upgrades/upgrade_buttons" unique_id=1677632559 instance=ExtResource("6_f1oc0")]
 layout_mode = 0
-offset_left = 962.0
-offset_top = 640.0
-offset_right = 1026.0
-offset_bottom = 704.0
+offset_left = 1004.0
+offset_top = 670.0
+offset_right = 1068.0
+offset_bottom = 734.0
 mouse_filter = 1
 associated_upgrade = ExtResource("16_qq4e4")
 required_upgrade = ExtResource("15_uxmtj")
@@ -355,6 +357,7 @@ offset_right = 130.0
 offset_bottom = 194.0
 mouse_filter = 1
 associated_upgrade = ExtResource("23_qysch")
+required_upgrade = ExtResource("15_uxmtj")
 
 [node name="peg_respawn_time" parent="economy/upgrade_buttons" unique_id=1246329364 instance=ExtResource("6_f1oc0")]
 layout_mode = 0
@@ -378,6 +381,57 @@ offset_left = 21.0
 offset_top = 8.0
 offset_right = 369.0
 offset_bottom = 116.0
+mouse_filter = 2
+theme = SubResource("Theme_toekv")
+text = "Unlock: 0000"
+horizontal_alignment = 1
+
+[node name="ball_bucket" type="Control" parent="." unique_id=798100442 node_paths=PackedStringArray("sprite", "button_parent", "coll_area", "unlock_cost_text")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(868.515, 111.515)
+mouse_filter = 2
+script = ExtResource("6_cy215")
+zone_name = "Ball Bucket"
+sprite = NodePath("factory_sprite")
+button_parent = NodePath("upgrade_buttons")
+coll_area = NodePath("mouse_coll_area")
+unlock_cost_text = NodePath("unlock_cost_text")
+associated_upgrade = ExtResource("25_sceab")
+
+[node name="factory_sprite" type="TextureRect" parent="ball_bucket" unique_id=523923654]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(729.425, 382.73)
+mouse_filter = 2
+texture = ExtResource("25_4efwq")
+
+[node name="upgrade_buttons" type="Control" parent="ball_bucket" unique_id=976691505]
+anchors_preset = 0
+mouse_filter = 1
+
+[node name="mouse_coll_area" type="Area2D" parent="ball_bucket" unique_id=1942788990]
+position = Vector2(1672, 702)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ball_bucket/mouse_coll_area" unique_id=248097502]
+position = Vector2(-754, -552)
+polygon = PackedVector2Array(-189, 121, -340, 133, -290, 266, -243, 335, -198, 346, -147, 339, -86, 289, -60, 217, -57, 120)
+
+[node name="unlock_cost_text" type="RichTextLabel" parent="ball_bucket" unique_id=609500090]
+layout_mode = 0
+offset_left = 548.0
+offset_top = 292.0
+offset_right = 896.0
+offset_bottom = 400.0
 mouse_filter = 2
 theme = SubResource("Theme_toekv")
 text = "Unlock: 0000"

@@ -56,7 +56,7 @@ func _process(delta):
 			
 			if peg_reanimating_sprite:
 				var progress: float = reanimate_timer / reanimate_time
-				print(progress)
+				
 				peg_reanimating_sprite.scale = Vector2.ONE * progress
 			
 			if reanimate_timer >= reanimate_time:

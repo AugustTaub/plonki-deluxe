@@ -3,18 +3,20 @@
 [ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/save_data/upgrade_data.gd" id="2_0h1ls"]
 
 [sub_resource type="Curve" id="Curve_f01yo"]
-_data = [Vector2(0, 0), 0.0, 0.8015134, 0, 0, Vector2(0.6037037, 0.31895232), 1.0061992, 1.0061992, 0, 0, Vector2(1, 1), 4.120626, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 1.4907558, 0, 0, Vector2(0.5703703, 0.30390728), 1.0106926, 1.0106926, 0, 0, Vector2(0.98854965, 0.9272), 3.0653985, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="Curve" id="Curve_rhxjb"]
-_data = [Vector2(0, 0), 0.0, 0.8015134, 0, 0, Vector2(0.05925926, 0.049927592), 1.2177805, 1.2177805, 0, 0, Vector2(0.59999996, 0.30390728), 1.1093986, 1.1093986, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
-point_count = 4
+_data = [Vector2(0.015267178, 0.02240014), 0.0, 0.27247962, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
+point_count = 2
 
 [resource]
 script = ExtResource("2_0h1ls")
 name = "infested_spawn_time"
 pretty_name = "Enemy Spawn Time"
 unit = "sec."
+start_price = 200
+end_price = 12000
 price_scaling_curve = SubResource("Curve_f01yo")
 start_result = 0.7
 end_result = 0.02

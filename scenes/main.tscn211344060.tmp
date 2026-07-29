@@ -21,7 +21,6 @@
 [ext_resource type="PackedScene" uid="uid://b8d6p1eawp5e" path="res://scenes/UI/options_menu.tscn" id="11_nvyfr"]
 [ext_resource type="Texture2D" uid="uid://dupvpasgqfy1j" path="res://2D/images/gear_icon.png" id="11_ty1g6"]
 [ext_resource type="Texture2D" uid="uid://dj7aryelt4xny" path="res://2D/godot_gen_textures/white_circle.tres" id="13_yc10j"]
-[ext_resource type="PackedScene" uid="uid://dxowdq7qo4vr5" path="res://scenes/ball_bucket.tscn" id="13_ygd8o"]
 [ext_resource type="Shader" uid="uid://d2d3h755xlejn" path="res://2D/shaders/sim_ball_trans.gdshader" id="15_jbj1t"]
 [ext_resource type="Texture2D" uid="uid://cj8bbt23rgiqq" path="res://2D/godot_gen_textures/blu_ball.tres" id="15_jkv2x"]
 [ext_resource type="PackedScene" uid="uid://didcss5a6tuv4" path="res://scenes/UI/ball_factory.tscn" id="15_tel4y"]
@@ -30,7 +29,6 @@
 [ext_resource type="PackedScene" uid="uid://c6f1nbs4ofhu2" path="res://scenes/stages/enemy_stage.tscn" id="17_c6pm6"]
 [ext_resource type="Texture2D" uid="uid://bcwj61mhugcmi" path="res://2D/images/ball3.png" id="20_fv21b"]
 [ext_resource type="Script" uid="uid://bpkun8bhfpwog" path="res://scripts/managers/shock_wave_manager.gd" id="20_gqmmt"]
-[ext_resource type="Script" uid="uid://c44acerkmynj2" path="res://scripts/enemies/infested_peg/infested_peg_manager.gd" id="20_ksmap"]
 [ext_resource type="Script" uid="uid://c7r6c85l0br38" path="res://scripts/enemies/infested_peg/infested_peg_enemy_states/idle_infested_peg_state.gd" id="20_pibwh"]
 [ext_resource type="Script" uid="uid://blgmqpldlvn05" path="res://scripts/enemies/infested_peg/infested_peg_enemy_states/dodging_infested_peg_state.gd" id="21_5he1u"]
 [ext_resource type="Script" uid="uid://bf51sh8b7vo3c" path="res://scripts/enemies/infested_peg/infested_peg_enemy_states/walking_infested_peg_state.gd" id="21_c6pm6"]
@@ -103,6 +101,463 @@ size = Vector2(964, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a8y0u"]
 size = Vector2(28, 1300)
+
+[sub_resource type="GDScript" id="GDScript_j4bwh"]
+script/source = "extends Node2D
+class_name InfestedPegManager
+
+#global settings
+@export var max_number_of_pegs: int = 1000
+@export var desired_max_number_of_pegs: int = 600
+@export var death_explosion_radius: float = 250
+# bounding box for active pegs 
+@onready var peg_bounding_box = Rect2($enemy_bounding_area.global_position,$enemy_bounding_area.size)
+
+var state_dict: Dictionary = {} 
+
+# RID Area vars
+var shared_shape_rid: RID
+var pooled_areas: Dictionary = {} # ID -> RID
+var rid_to_area_id: Dictionary = {}    # RID -> ID 
+
+# RID Nav Agent Vars
+var pooled_agents: Dictionary = {} # ID -> RID
+var rid_to_agent_id: Dictionary = {}    # RID -> ID 
+
+### EXPORT VARS
+@export var adjustable_peg_multimesh: MultiMeshInstance2D
+@export var stage_manager: StageManager
+
+var death_explo_shape: RID
+
+var time_since_last_spawn: float = 0.0
+var active_peg_amount: int = 0
+
+### DATA STRUCTURE
+class PegData extends RefCounted:
+	var health: int = 1
+	var curr_value: int = 1
+	var has_eaten: bool = false
+	var fear: float = 0.0 # 0-100
+	
+	var goal_peg: DestructiblePeg
+	var goal_peg_pos: Vector2 = Vector2.ZERO
+	
+	var active: bool = true
+	var pos: Vector2 = Vector2.ZERO
+	var vel: Vector2 = Vector2.ZERO
+	var instance_id: int = -1 
+	var vis_scale: float = 1.0
+	var state_name: String = \"\"
+	
+	var life_time: float = 0.0
+	var peg_timer: float = 0.0
+	var saved_time: float = 0.0
+	var danger_dir: Vector2 = Vector2.ZERO
+	
+	var safe_velocity: Vector2 = Vector2.ZERO
+	var agent_desired_velocity: Vector2 = Vector2.ZERO
+
+###
+var active_pegs: Array[PegData] = []
+var delta_timer: float = 0
+
+### THREADING CACHED VARS
+var current_delta: float = 0.0
+var current_frame: int = 0
+var run_time: float = 0.0
+
+### DEBUG
+var peg_nr_spawned: int = 0
+
+var upgrade_preloader: ResourcePreloader
+
+func _on_upgrade_preloader_loaded(preloader: ResourcePreloader):
+	upgrade_preloader = preloader
+
+func _ready():
+	SignalBus.spawn_infested_peg.connect(spawn_infested_peg)
+	SignalBus.upgrade_preloader_loaded.connect(_on_upgrade_preloader_loaded)
+	
+	# set up multimesh
+	adjustable_peg_multimesh.multimesh.instance_count = max_number_of_pegs
+	for i in range(max_number_of_pegs):
+		adjustable_peg_multimesh.multimesh.set_instance_transform_2d(i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+	
+	# fill state dict
+	var state_parent_node: Node2D = get_node(\"states\")
+	if state_parent_node:
+		for state_node in state_parent_node.get_children():
+			state_node.peg_manager_node = self
+			state_node.nav_map = get_world_2d().navigation_map
+			if state_node:
+				var key = state_node.name
+				add_state_to_dict(key, state_node)
+	
+	# create circle shape for coll
+	shared_shape_rid = PhysicsServer2D.circle_shape_create()
+	PhysicsServer2D.shape_set_data(shared_shape_rid, 16.0)
+	
+	# fill area pool
+	for i in range(max_number_of_pegs):
+		var new_area = create_internal_area()
+		pooled_areas[i] = new_area
+		rid_to_area_id[new_area] = i
+	
+	# fill agent pool
+	for i in range(max_number_of_pegs):
+		var agent_rid = NavigationServer2D.agent_create()
+		
+		var nav_map: RID = get_world_2d().navigation_map
+		NavigationServer2D.agent_set_map(agent_rid, nav_map)
+		
+		NavigationServer2D.agent_set_avoidance_enabled(agent_rid, true)
+		
+		NavigationServer2D.agent_set_radius(agent_rid, 10.0)
+		
+		NavigationServer2D.agent_set_max_speed(agent_rid, 1000.0) 
+		
+		NavigationServer2D.agent_set_max_neighbors(agent_rid,3)
+		
+		NavigationServer2D.agent_set_avoidance_callback(
+			agent_rid, 
+			Callable(self, \"_on_velocity_computed\").bind(agent_rid) 
+		)
+		
+		pooled_agents[i] = agent_rid
+		rid_to_agent_id[agent_rid] = i
+	
+	# make explo shape
+	death_explo_shape = PhysicsServer2D.circle_shape_create()
+	PhysicsServer2D.shape_set_data(death_explo_shape, death_explosion_radius)
+
+
+### COLL AREA 
+func create_internal_area() -> RID:
+	var area_rid = PhysicsServer2D.area_create()
+	PhysicsServer2D.area_add_shape(area_rid, shared_shape_rid)
+	PhysicsServer2D.area_set_collision_layer(area_rid, 1)
+	PhysicsServer2D.area_set_monitorable(area_rid, true)
+	return area_rid
+
+func activate_area(id: int, pos: Vector2):
+	if id <= pooled_areas.size() -1:
+		
+		var area_RID = pooled_areas[id]
+		PhysicsServer2D.area_set_space(area_RID, get_world_2d().space)
+		var area_transform = Transform2D(0, pos)
+		PhysicsServer2D.area_set_transform(area_RID, area_transform)
+	else:
+		push_warning(\"InfestedPegManager: Tried to activate an area outside the area pool size!\")
+
+func deactivate_area(id: int):
+	var area_RID = pooled_areas[id]
+	PhysicsServer2D.area_set_space(area_RID, RID())
+
+func get_peg_area_id_from_rid(hit_rid: RID) -> String:
+	return str(rid_to_area_id.get(hit_rid, \"\"))
+
+### AGENT
+
+func _on_velocity_computed(safe_velocity: Vector2, agent_rid: RID):
+	var id: int = get_agent_id_from_rid(agent_rid)
+	if id >= 0 and id < active_pegs.size():
+		active_pegs[id].safe_velocity = safe_velocity
+
+
+func get_agent_id_from_rid(hit_rid: RID) -> int:
+	return rid_to_agent_id.get(hit_rid, -1)
+
+
+### STATE MACHINE
+
+func add_state_to_dict(state_name: String, state_instance: InfestedPegState):
+	state_dict[state_name] = state_instance
+
+func change_peg_state(peg: PegData, new_state_name: String):
+	call_deferred(\"_perform_change_peg_state\", peg, new_state_name)
+
+func _perform_change_peg_state(peg: PegData, new_state_name: String):
+	if not state_dict.has(new_state_name): 
+		push_warning(\"InfestedPegManager: Tried to enter unknown state: \" + new_state_name )
+		return
+	
+	if peg.state_name == new_state_name: 
+		return
+	
+	if state_dict.has(peg.state_name):
+		var old_state: InfestedPegState = state_dict[peg.state_name]
+		old_state.exit(peg)
+	
+	var new_state: InfestedPegState = state_dict[new_state_name]
+	new_state.enter(peg)
+	peg.state_name = new_state_name
+
+### PEG LOGIC
+
+func spawn_infested_peg(spawn_pos: Vector2):
+	
+	var curr_stage_node: StageNode = stage_manager.curr_stage_node
+	if curr_stage_node.navigation_region == null : return
+	
+	active_peg_amount += 1
+	
+	
+	var upgrade: UpgradeData = upgrade_preloader.get_resource(\"infested_peg_value\")
+	var level: int = SaveManager.get_upgrade_level_by_name(\"infested_peg_value\")
+	
+	var upgraded_value: int = int(upgrade.get_level_result(level))
+	
+	
+	#revive pegs if possible
+	for peg in active_pegs:
+		if not peg.active:
+			peg.health = 1
+			peg.has_eaten = false
+			peg.fear = 0.0
+			
+			peg.curr_value = upgraded_value
+			
+			peg.goal_peg = get_random_goal_peg()
+			peg.goal_peg_pos = peg.goal_peg.global_position
+			
+			peg.active = true
+			peg.pos = spawn_pos
+			peg.state_name = \"idle\"
+			peg.peg_timer = 0.0
+			peg.life_time = 0.0
+			peg.vel = Vector2.ZERO
+			peg.agent_desired_velocity = Vector2.ZERO
+			peg.safe_velocity = Vector2.ZERO
+			peg.saved_time = 0.0
+			peg.vis_scale = 1.0
+			
+			activate_area(peg.instance_id, peg.pos)
+			change_peg_state(peg, \"idle\")
+			
+			
+			return
+	
+	# dont make make pegs if there are too many
+	if active_pegs.size()+1 > max_number_of_pegs:
+		return
+	
+	# create whole new peg
+	var new_peg = PegData.new()
+	
+	new_peg.pos = spawn_pos
+	
+	new_peg.curr_value = upgraded_value
+	
+	new_peg.goal_peg = get_random_goal_peg()
+	new_peg.goal_peg_pos = new_peg.goal_peg.global_position
+	
+	new_peg.instance_id = active_pegs.size()
+	activate_area(new_peg.instance_id, new_peg.pos)
+	change_peg_state(new_peg, \"idle\")
+	active_pegs.append(new_peg)
+
+func _physics_process(delta):
+	## DEBUG
+	#if Input.is_action_pressed(\"ui_accept\"):
+		#spawn_infested_peg(Vector2(randf_range(0,400),0))
+		#peg_nr_spawned += 1
+		##print(peg_nr_spawned)
+	
+	SignalBus.set_debug_txt.emit(str(active_peg_amount) + \"\\nEnemies\")
+	
+	## spawn infested pegs
+	
+	var intervall_upgrade: UpgradeData = upgrade_preloader.get_resource(\"infested_spawn_time\")
+	var level: int = SaveManager.get_upgrade_level_by_name(\"infested_spawn_time\")
+	
+	var spawn_time: float = intervall_upgrade.get_level_result(level)
+	
+	time_since_last_spawn += delta
+	if time_since_last_spawn > spawn_time and active_peg_amount < desired_max_number_of_pegs:
+		time_since_last_spawn = 0.0
+		spawn_infested_peg(Vector2(randf_range(0,300),-100))
+		spawn_infested_peg(Vector2(randf_range(900,1000),-100))
+	
+	
+	
+	# cache parameters for worker threads
+	current_delta = delta
+	current_frame = Engine.get_frames_drawn()
+	run_time += delta
+	
+	# add tasks for multithreading
+	if active_pegs.size() > 0:
+		var task_id = WorkerThreadPool.add_group_task(_process_peg_batch, active_pegs.size())
+		WorkerThreadPool.wait_for_group_task_completion(task_id)
+	
+	# visuals on main thread
+	for peg in active_pegs:
+		update_peg_visuals(peg)
+
+func _process_peg_batch(index: int):
+	var peg = active_pegs[index]
+	if not peg.active:
+		return
+	
+	peg.life_time += current_delta
+	peg.peg_timer += current_delta 
+	
+	# run logic every 0.2 seconds
+	if peg.peg_timer >= 0.2:
+		peg.peg_timer -= 0.2 
+	
+	if state_dict.has(peg.state_name):
+		state_dict[peg.state_name].current_run_time = run_time
+		state_dict[peg.state_name].physics_process(current_delta, peg)
+	
+		# update collision area pos
+		var id: int = peg.instance_id
+		if pooled_areas.has(id):
+			var area_rid = pooled_areas[id]
+			var area_transform = Transform2D(0, peg.pos)
+			PhysicsServer2D.area_set_transform(area_rid, area_transform)
+	
+	# movement
+	if peg.state_name == \"walking\" or peg.state_name == \"dodging\":
+		peg.vel = peg.safe_velocity
+	
+	peg.pos += peg.vel * current_delta
+	
+	# check if oob
+	if not peg_bounding_box.has_point(peg.pos):
+		call_deferred(\"despawn\", peg)
+
+func update_peg_visuals(peg: PegData):
+	if adjustable_peg_multimesh and peg.instance_id >= 0 and peg.instance_id <= active_pegs.size()-1:
+		var multmesh_i: int = peg.instance_id
+		
+		if not peg.active:
+			adjustable_peg_multimesh.multimesh.set_instance_transform_2d(multmesh_i, Transform2D(0, Vector2.ZERO, 0, Vector2.ZERO))
+			return 
+		
+		
+		var trans = Transform2D(0, peg.vis_scale * Vector2.ONE, 0, peg.pos)
+		adjustable_peg_multimesh.multimesh.set_instance_transform_2d(multmesh_i, trans)
+	
+		# set color
+		var centi_fear: float = peg.fear/100.0
+		var inverse_fear: float = 1-centi_fear
+		
+		var peg_color: Color = Color(inverse_fear/2, inverse_fear/2, centi_fear, 1.0)
+		adjustable_peg_multimesh.multimesh.set_instance_color(multmesh_i, peg_color)
+		
+		# set custom data
+		var noise_seed: float = float(multmesh_i)
+		
+		var eye_angle: float = 0.0 
+		
+		if peg.fear >= 50.0:
+			eye_angle += 1.0
+		if peg.has_eaten:
+			eye_angle += 2.0
+		
+		# 0 - 0.9 = low fear, low food
+		# 1 - 1.9 = high fear, low food
+		# 2 - 2.9 = low fear, high food
+		# 3 - 3.9 = high fear, high food 
+		
+		#overwrite for death
+		if peg.state_name == \"dying\":
+			eye_angle = 3.5
+		
+		
+		var donut_mode: float = 0.0
+		if peg.has_eaten: donut_mode = 1.0
+		
+		var custom_data: Color = Color(noise_seed, eye_angle, donut_mode, 0)
+		adjustable_peg_multimesh.multimesh.set_instance_custom_data(multmesh_i, custom_data)
+
+func take_damage(peg: PegData, damage_amount: int):
+	# Prevent multi-hits triggering death multiple times on the same frame
+	if not peg.active: 
+		return 
+	
+	peg.health -= damage_amount
+	if peg.health <= 0:
+		call_deferred(\"die\", peg)
+
+func die(peg: PegData):
+	
+	SaveManager.change_money_with_vis_nr(peg.curr_value, peg.pos)
+	deactivate_area(peg.instance_id)
+	
+	# explode and cause fear
+	SignalBus.spawn_shock_wave.emit(peg.pos, death_explosion_radius, 0.3)
+	
+	
+	var space_state = get_world_2d().direct_space_state
+	
+	var query = PhysicsShapeQueryParameters2D.new()
+	query.shape_rid = death_explo_shape 
+	query.transform = Transform2D(0, peg.pos)
+	query.collision_mask = 1
+	query.collide_with_areas = true
+	
+	var results = space_state.intersect_shape(query)
+	
+	for hit in results:
+		
+		var found_rid: RID = hit[\"rid\"]
+		if rid_to_area_id.has(found_rid):
+			var found_id = rid_to_area_id[found_rid]
+			var hit_peg: InfestedPegManager.PegData = active_pegs[found_id]
+			
+			if not hit_peg.active or hit_peg == peg:
+				continue
+			
+			change_fear(hit_peg, 35.0)
+	
+	if peg.has_eaten:
+		SignalBus.play_sound.emit(\"plomp_low\",0.8)
+	else:
+		SignalBus.play_sound.emit(\"plomp_high\",0.8)
+	
+	change_peg_state(peg, \"dying\")
+
+func despawn(peg: PegData):
+	deactivate_area(peg.instance_id)
+	peg.active = false
+	active_peg_amount -= 1
+
+
+func change_fear(peg: PegData, amount: float):
+	peg.fear += amount
+	peg.fear = clamp(peg.fear, 0.0, 100.0)
+
+###
+
+func get_random_goal_peg():
+	
+	if not stage_manager:
+		push_warning(\"InfestedPegManager: No stage Manager node attached!\")
+		return 
+	
+	
+	var peg_arr: Array[DestructiblePeg] = stage_manager.curr_stage_node.peg_nodes
+	
+	var rand_i: int = randi_range(0, peg_arr.size()-1)
+	
+	return peg_arr[rand_i]
+
+
+func _exit_tree():
+	for id in pooled_areas:
+		PhysicsServer2D.free_rid(pooled_areas[id])
+	
+	if shared_shape_rid.is_valid():
+		PhysicsServer2D.free_rid(shared_shape_rid)
+	
+	for id in pooled_agents:
+		var agent_rid = pooled_agents[id]
+		if agent_rid.is_valid():
+			NavigationServer2D.free_rid(agent_rid)
+"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vchkt"]
 shader = ExtResource("24_cjqg0")
@@ -268,15 +723,6 @@ random_volume_offset_db = 2.0
 streams_count = 1
 stream_0/stream = SubResource("AudioStreamMP3_od4ux")
 
-[sub_resource type="AudioStreamMP3" id="AudioStreamMP3_ygd8o"]
-data = PackedByteArray("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YXtMcRiJQdpTpaOUOrSRVYVk5sSIVJbNFBPcN6OHfspT9x950+YAojBE0aE0JMSu///9GS3N//+O/Of4UaeU7//7UMT0AA04hynvaSNhjRClPe0kbBG9K3NsHJWlwABIjypCt+DEYdDDs2DrlhzDsOibqJZKYtciAIhsHvy8sIoR22CETml9o4eVfCY9TssnPYHFnv1hrrSUPLiZQdGEf//////////4ytv//soAAjd4Ykd+AAAMLyaMR0NNv5AMMx1FFDAS7gNGOi0AgSmjsR6ISekHHgAnEJHHg4DMJSiNMyMgZ9hqxFCSR6LrbOf//////////+7+/99YAJK0tCHP8DCsLTIhEz3QvzFoNAn/+1DE6wBLZGEp7uGC4YGQ5P3ssFx5EEMEm+PES2Q1h0MCBO86MC9HWiRCYLkL0JGm4nSjRlArrSBXYfFzpHlQpd/////////////8huXVABIYh3MpvgAADFY8Qpx70eY6Mlvba/Eei4cVUspxKIC/SI9OgyFER04V6SNGojY2kPH+b2Uov4iCxNHAJAoZCDRv////+v////0WVTu27+ymqkAQ1h4lDM2OTLZc5sgjAAOC4WSKVsLJJNK1I5Oq16PkKEEUZoElVSIdOCiTSoZ0//tQxOqATOxpI69lguE8jGU93DBc9GFHVzc0g0HwCDGB9aoARFZngjm9AAAMECKEJIhpoGAgRmUovQt0MoCgGUK/kN+xUeIxGE00SzV1etQKsK1i6/zXmV2rM15jSBFAgcsA/////+z////+n+r69e1k6sARDiIZCm/EAAKlx9XHZDuYIDhbMugosFQETANp7D4GaodmbJIiiR1zI0QsxPIrehy775GG4MBg4YFx4gBN71GW/68yiz////////o//RUAQ0eIgzv+AAAMhOx0YP/7UMTsgEnUXynu4MNhNgxlPdwkXOtVRYzAyQwTSUNwId/0rZOu0cTTBZQjRCpVmJQwQwdRZuOkWNoHJtLkGgE+Bl3RX//////////T/m/+2hitQApxDRJpN+Bg6mHWicRFgQFg9BNdiCBFSAMCr9p1e+gkHA1xqg5bfZaZL64/dyODZpF5nK3RcICUkCjmLGLu//////////+///+lAGdYeHJb/7AGAIQGV/pliQSA4hJTMwAXi77RC67zM5sGyIFDQgBmGJpD5IkCECiJia7/+zDE+4DKSGsn7aRroO+KpTm+JCRs/RPhMeBYYEjIaGGzLHAV77FVqQR3f///43S5X///U3//z1YA6NDs6HP+DCxwBMTNdB9AIa4hnX3JaEk2UCQmPBlOpK0qPj4qIkMUI8SuptA5AkjWnE+5lg4ktCFd+h9YUDjgRON///Z///////8UTEDf+zTcOQCBNmdjOfUAgAydMNg4TsD/+0DE94AKCF8n7uGC4TiKpT2eJCQxYMA8AIW2HCFunnW8zcIZ0kkoBsViKCMWgj6jKwNEKuY9JGYRQdqqzI5IcrTFXf//0XXdP////9W7tKKp7/2bK0ACoUO7ml/wCo3MSE044GiIGBokSW2MtggNRYaOhma6JRGecI6eVUjAPAeiXTHBxQ++RsWWi3uNzhie6o9LlqU7///////////1/s1cqgBVaIaEO/4AAAdWzCEg+4rQJP/7QMT4gEmMVynt4SLhKYrlPcwwXCV2mkIwKEYAmaEAbCDSFJ/mQE6FAykjBEVwijgDYK9lBMgB5CxJNjEO5V53cSG1oLr//////////+jRt+wU7uLgDIkPEGV3wBSiY3bH/yqkFBwUsxEtyTBMHZ+4COPWOAtQID4PLKQQszNat2BslhJmnvZlC3QDTRP3Y3//////////19LP/9MAWUmYhT3/AAAAJcZOdBMOi2EJLpEggNcR//tAxP2ASrxVKe3hIuFLjST9zCRchaUFpMTOte/BCvIo4MvIiEY5HVhBKy96YGDgytjASUZNbC9ofd///////////U5v//rAHhXh4Nr/oAAQuZAgdONKnXMwE9QMYpagCLSpn21kxVZ08K40Dt6dcuEAG52VYL0jibbWtpE98m7gScXO6Dxcjj+Hv////////9fcmQf6Pr60KgBmKIeEaf+AAA6bQZqeBijBIEIh0lFBygdjyEz/+0DE+YBKNFsl7eEi4TQNZP3MJFxoks5ZvRbJAH+zo2I8V+FCfQgRc2Jjj51nD9tVG2yWnzCSQlhYNwOWPM9//////////931//QYM5q0GzAzozBKEwACOBwAd9OmaCpggmiQpU2cWZzABcx8qZ9ZrOkywzUAMaHd6UgrEDFjzP9k4u9TY72C6geLf+sxdkAxcKBXyiKnN//8vqWJZdeJtmsui9v///nnhzDcalVHSymi6biwdP/7QMT6gEpMbSft4SLhHgvlPbykJBUBdLHJh0FTIdcq1Q3ypkOgFJ61Vv9YBSeAJEKgH/jQofCwr/iZASExJT5MQU1FMy45OS4zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjk5LjOqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//swxP4ACWhXK+3hgqFHi6U9vDBcqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//tgxPKACkRfKfWXgCJWkiS/N4AAqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//sQxNYDwAAB/hwAACAAADSAAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqo=")
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_2s0kr"]
-random_pitch = 1.0728264
-random_volume_offset_db = 2.0
-streams_count = 1
-stream_0/stream = SubResource("AudioStreamMP3_ygd8o")
-
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_y57op"]
 random_pitch = 1.1981705
 random_volume_offset_db = 2.0
@@ -375,7 +821,6 @@ toggle_mode = true
 text = "piercing"
 autowrap_mode = 1
 script = ExtResource("3_ksmap")
-associated_upgrade = ExtResource("59_j4bwh")
 
 [node name="workshop_button" type="Button" parent="CanvasLayer" unique_id=1548444912]
 texture_filter = 1
@@ -478,9 +923,6 @@ position = Vector2(585, 689)
 scale = Vector2(14.828125, 1.03125)
 texture = SubResource("GradientTexture2D_tipki")
 
-[node name="ball_bucket" parent="." unique_id=825087764 instance=ExtResource("13_ygd8o")]
-position = Vector2(534, 674)
-
 [node name="ball_factory" parent="." unique_id=149330198 instance=ExtResource("15_tel4y")]
 position = Vector2(14, 3)
 
@@ -532,7 +974,7 @@ position = Vector2(-6, 240)
 shape = SubResource("RectangleShape2D_a8y0u")
 
 [node name="InfestedPegManager" type="Node2D" parent="." unique_id=479551931 node_paths=PackedStringArray("adjustable_peg_multimesh", "stage_manager")]
-script = ExtResource("20_ksmap")
+script = SubResource("GDScript_j4bwh")
 adjustable_peg_multimesh = NodePath("adjustable_peg_multimesh")
 stage_manager = NodePath("../stage_manager")
 metadata/_custom_type_script = "uid://c44acerkmynj2"
@@ -641,11 +1083,6 @@ max_polyphony = 3
 [node name="plomp_low" type="AudioStreamPlayer2D" parent="SoundManager" unique_id=1636569475]
 stream = SubResource("AudioStreamRandomizer_r4e17")
 pitch_scale = 0.81
-max_polyphony = 3
-
-[node name="plomp_lower" type="AudioStreamPlayer2D" parent="SoundManager" unique_id=1212448718]
-stream = SubResource("AudioStreamRandomizer_2s0kr")
-pitch_scale = 0.59
 max_polyphony = 3
 
 [node name="eat" type="AudioStreamPlayer2D" parent="SoundManager" unique_id=1495750748]

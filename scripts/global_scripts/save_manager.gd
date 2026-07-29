@@ -1,7 +1,7 @@
 extends Node
 
 const SAVE_PATH := "user://plonki_save_1.tres"
-#const SAVE_PATH := "res://custom_res/save_data_tests/test.tres"
+#const SAVE_PATH := "res://custom_res/save_data_tests/full_save.tres"
 
 var save_game: SaveGame = null
 
@@ -53,6 +53,16 @@ func change_money(change_amount: int):
 	set_money(save_game.money_amount+change_amount)
 
 func change_money_with_vis_nr(change_amount: int, vis_nr_pos: Vector2):
+	if change_amount == 0: return
+	
+	set_money(save_game.money_amount+change_amount)
+	
+	SignalBus.coins_increased.emit(change_amount)
+	
+	SignalBus.spawn_coin_get_nr.emit(change_amount,vis_nr_pos)
+
+func change_money_with_vis_nr_no_signal(change_amount: int, vis_nr_pos: Vector2):
+	if change_amount == 0: return
 	set_money(save_game.money_amount+change_amount)
 	
 	SignalBus.spawn_coin_get_nr.emit(change_amount,vis_nr_pos)

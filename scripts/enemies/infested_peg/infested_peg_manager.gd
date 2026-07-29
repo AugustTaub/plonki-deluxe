@@ -406,7 +406,7 @@ func die(peg: PegData):
 			if not hit_peg.active or hit_peg == peg:
 				continue
 			
-			change_fear(hit_peg, 35.0)
+			change_fear(hit_peg, 55.0)
 	
 	if peg.has_eaten:
 		SignalBus.play_sound.emit("plomp_low",0.8)

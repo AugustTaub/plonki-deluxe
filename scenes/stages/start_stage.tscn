@@ -3,14 +3,7 @@
 [ext_resource type="Script" uid="uid://rc1pswo54tv8" path="res://scripts/stage/stage_node.gd" id="1_whglb"]
 [ext_resource type="Resource" uid="uid://dgumkow6fk3pb" path="res://custom_res/upgrades/stage1_pegs.tres" id="2_wgon0"]
 [ext_resource type="PackedScene" uid="uid://c4ashcsbyavdi" path="res://scenes/destructible_peg_round.tscn" id="2_whglb"]
-
-[sub_resource type="Gradient" id="Gradient_tefeu"]
-colors = PackedColorArray(0.047058262, 0.032042556, 0.08885703, 1, 0.24866164, 0.57880425, 0.5206618, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_o6xl0"]
-gradient = SubResource("Gradient_tefeu")
-fill_from = Vector2(0.5, 1)
-fill_to = Vector2(0.5, 0)
+[ext_resource type="Texture2D" uid="uid://cgdem0eosy5si" path="res://2D/images/bg1.png" id="3_eelhj"]
 
 [node name="start_stage" type="Node2D" unique_id=16661170]
 script = ExtResource("1_whglb")
@@ -19,15 +12,82 @@ metadata/_custom_type_script = "uid://rc1pswo54tv8"
 
 [node name="bg" type="Sprite2D" parent="." unique_id=1945480160]
 z_index = -1
-position = Vector2(563.5, 387.5)
-scale = Vector2(17.765627, 14.859375)
-texture = SubResource("GradientTexture2D_o6xl0")
+texture_filter = 1
+position = Vector2(552, 380)
+scale = Vector2(4.744973, 3.96875)
+texture = ExtResource("3_eelhj")
 
 [node name="pegs" type="Node2D" parent="." unique_id=482697035]
 position = Vector2(402.00003, 250)
 
 [node name="DestructiblePeg4" parent="pegs" unique_id=1385874516 instance=ExtResource("2_whglb")]
 position = Vector2(311, 338)
+
+[node name="DestructiblePeg8" parent="pegs" unique_id=1750133912 instance=ExtResource("2_whglb")]
+position = Vector2(-86, 35)
+
+[node name="DestructiblePeg9" parent="pegs" unique_id=547288132 instance=ExtResource("2_whglb")]
+position = Vector2(-171.00003, -34)
+
+[node name="DestructiblePeg21" parent="pegs" unique_id=1997567150 instance=ExtResource("2_whglb")]
+position = Vector2(-237.00003, -85)
+
+[node name="DestructiblePeg23" parent="pegs" unique_id=180437055 instance=ExtResource("2_whglb")]
+position = Vector2(-60.00003, -50)
+
+[node name="DestructiblePeg31" parent="pegs" unique_id=27544356 instance=ExtResource("2_whglb")]
+position = Vector2(102.99997, 86)
+
+[node name="DestructiblePeg37" parent="pegs" unique_id=1818939956 instance=ExtResource("2_whglb")]
+position = Vector2(153.99997, -52)
+
+[node name="DestructiblePeg38" parent="pegs" unique_id=868592049 instance=ExtResource("2_whglb")]
+position = Vector2(288.99997, -25)
+
+[node name="DestructiblePeg39" parent="pegs" unique_id=1561243878 instance=ExtResource("2_whglb")]
+position = Vector2(331.99997, 85)
+
+[node name="DestructiblePeg40" parent="pegs" unique_id=659881231 instance=ExtResource("2_whglb")]
+position = Vector2(-98.00003, 250)
+
+[node name="DestructiblePeg41" parent="pegs" unique_id=43208902 instance=ExtResource("2_whglb")]
+position = Vector2(385.99997, 231)
+
+[node name="DestructiblePeg42" parent="pegs" unique_id=852216584 instance=ExtResource("2_whglb")]
+position = Vector2(139.99997, 178)
+
+[node name="DestructiblePeg43" parent="pegs" unique_id=1500668400 instance=ExtResource("2_whglb")]
+position = Vector2(-136.00003, 182)
+
+[node name="DestructiblePeg44" parent="pegs" unique_id=1149394480 instance=ExtResource("2_whglb")]
+position = Vector2(449.99997, 81)
+
+[node name="DestructiblePeg45" parent="pegs" unique_id=308433809 instance=ExtResource("2_whglb")]
+position = Vector2(449.99997, 81)
+
+[node name="DestructiblePeg46" parent="pegs" unique_id=1701541162 instance=ExtResource("2_whglb")]
+position = Vector2(553, -6)
+
+[node name="DestructiblePeg47" parent="pegs" unique_id=373986133 instance=ExtResource("2_whglb")]
+position = Vector2(548, -63)
+
+[node name="DestructiblePeg48" parent="pegs" unique_id=378163807 instance=ExtResource("2_whglb")]
+position = Vector2(-203, -153)
+
+[node name="DestructiblePeg49" parent="pegs" unique_id=1837569572 instance=ExtResource("2_whglb")]
+position = Vector2(477, -181)
+
+[node name="DestructiblePeg50" parent="pegs" unique_id=1435050362 instance=ExtResource("2_whglb")]
+position = Vector2(-86, 343)
+
+[node name="DestructiblePeg51" parent="pegs" unique_id=538452820 instance=ExtResource("2_whglb")]
+position = Vector2(58.99997, 336)
+
+[node name="DestructiblePeg52" parent="pegs" unique_id=947360835 instance=ExtResource("2_whglb")]
+position = Vector2(191.99997, 338)
+
+[node name="DestructiblePeg53" parent="pegs" unique_id=252685398 instance=ExtResource("2_whglb")]
+position = Vector2(191.99997, 338)
 
 [node name="DestructiblePeg5" parent="pegs" unique_id=1546263653 instance=ExtResource("2_whglb")]
 position = Vector2(-244, 2)
@@ -110,7 +170,7 @@ position = Vector2(481, -56)
 [node name="DestructiblePeg36" parent="pegs" unique_id=828909787 instance=ExtResource("2_whglb")]
 position = Vector2(518, -133)
 
-[node name="DestructiblePeg" parent="pegs" unique_id=1750133912 instance=ExtResource("2_whglb")]
+[node name="DestructiblePeg" parent="pegs" unique_id=1349513900 instance=ExtResource("2_whglb")]
 position = Vector2(68.99997, -31)
 
 [node name="DestructiblePeg2" parent="pegs" unique_id=762931387 instance=ExtResource("2_whglb")]

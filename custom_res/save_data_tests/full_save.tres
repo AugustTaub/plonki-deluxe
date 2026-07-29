@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="SaveGame" format=3 uid="uid://l5ootghviqp1"]
+[gd_resource type="Resource" script_class="SaveGame" format=3 uid="uid://68ax6ecxq54q"]
 
 [ext_resource type="Script" uid="uid://drfxtc5ceokld" path="res://scripts/save_data/save_game.gd" id="1_mx8ne"]
 [ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/save_data/upgrade_data.gd" id="2_j07jm"]
 [ext_resource type="Resource" uid="uid://xkmrcj7ftgbk" path="res://custom_res/upgrades/economy_upgrades_unlocked.tres" id="3_eni0e"]
 [ext_resource type="Resource" uid="uid://4xn8ym82suxm" path="res://custom_res/upgrades/factory_unlocked.tres" id="4_g0hje"]
+[ext_resource type="Resource" uid="uid://dx84p5wi2xcii" path="res://custom_res/upgrades/ball_bucket_unlocked.tres" id="4_rs8fr"]
 [ext_resource type="Resource" uid="uid://vts2014lkpqh" path="res://custom_res/upgrades/stage_upgrades_unlocked.tres" id="5_rs8fr"]
 [ext_resource type="Resource" uid="uid://dgumkow6fk3pb" path="res://custom_res/upgrades/stage1_pegs.tres" id="6_kkmnw"]
 [ext_resource type="Resource" uid="uid://c54xglrxo5btw" path="res://custom_res/upgrades/stage2_unlock.tres" id="7_7w2ib"]
@@ -22,25 +23,26 @@
 
 [resource]
 script = ExtResource("1_mx8ne")
-money_amount = 96432
-ball_amount = 10010
-unlocked_upgrades = Array[ExtResource("2_j07jm")]([ExtResource("3_eni0e"), ExtResource("4_g0hje"), ExtResource("5_rs8fr"), ExtResource("6_kkmnw"), ExtResource("7_7w2ib"), ExtResource("8_j40ah"), ExtResource("9_27w8e"), ExtResource("10_5fbj7"), ExtResource("11_vjtio"), ExtResource("12_nnh8e"), ExtResource("13_y52ph"), ExtResource("14_0u7i8"), ExtResource("15_0ur8y"), ExtResource("16_uwybn"), ExtResource("17_omyuu"), ExtResource("18_vnvm2"), ExtResource("19_uu75k")])
+money_amount = 1554567
+ball_amount = 1604
+unlocked_upgrades = Array[ExtResource("2_j07jm")]([ExtResource("4_g0hje"), ExtResource("4_rs8fr"), ExtResource("3_eni0e"), ExtResource("17_omyuu"), ExtResource("5_rs8fr"), ExtResource("6_kkmnw"), ExtResource("7_7w2ib"), ExtResource("10_5fbj7"), ExtResource("9_27w8e"), ExtResource("8_j40ah"), ExtResource("11_vjtio"), ExtResource("12_nnh8e"), ExtResource("13_y52ph"), ExtResource("15_0ur8y"), ExtResource("14_0u7i8"), ExtResource("16_uwybn"), ExtResource("18_vnvm2"), ExtResource("19_uu75k")])
 upgrade_levels = Dictionary[ExtResource("2_j07jm"), int]({
-ExtResource("3_eni0e"): 0,
 ExtResource("4_g0hje"): 0,
+ExtResource("4_rs8fr"): 0,
+ExtResource("3_eni0e"): 0,
+ExtResource("17_omyuu"): 0,
 ExtResource("5_rs8fr"): 0,
 ExtResource("6_kkmnw"): 10,
 ExtResource("7_7w2ib"): 1,
-ExtResource("8_j40ah"): 10,
-ExtResource("9_27w8e"): 10,
 ExtResource("10_5fbj7"): 1,
+ExtResource("9_27w8e"): 10,
+ExtResource("8_j40ah"): 10,
 ExtResource("11_vjtio"): 3,
-ExtResource("12_nnh8e"): 5,
-ExtResource("13_y52ph"): 5,
-ExtResource("14_0u7i8"): 10,
+ExtResource("12_nnh8e"): 3,
+ExtResource("13_y52ph"): 10,
 ExtResource("15_0ur8y"): 10,
-ExtResource("16_uwybn"): 6,
-ExtResource("17_omyuu"): 0,
+ExtResource("14_0u7i8"): 10,
+ExtResource("16_uwybn"): 5,
 ExtResource("18_vnvm2"): 3,
-ExtResource("19_uu75k"): 6
+ExtResource("19_uu75k"): 10
 })

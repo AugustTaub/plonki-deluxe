@@ -1,7 +1,6 @@
 extends Node2D
 class_name BallManager
 
-
 ### GLOBAL BALL SETTINGS
 var gravity: float = 900
 var bounciness: float = 0.95
@@ -32,6 +31,7 @@ class BallData extends RefCounted:
 	var simulated: bool = false
 	var frames_simulated: int = 0
 	var pos: Vector2 = Vector2.ZERO
+	var physics_prev_pos: Vector2 = Vector2.ZERO # ADDED: Tracks position at start of physics tick
 	var last_frame_pos: Vector2 = Vector2.ZERO
 	var vel: Vector2 = Vector2.ZERO
 	var air_time: float = 0.0
@@ -109,6 +109,7 @@ func spawn_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO, spawn_rad
 			# revive ball if there's one available
 			ball.active = true
 			ball.pos = spawn_pos
+			ball.physics_prev_pos = spawn_pos # ADDED: reset prev pos
 			ball.radius = clamp(spawn_radius, 1, max_allowed_ball_radius)
 			ball.last_frame_pos = spawn_pos
 			ball.vel = spawn_vel
@@ -128,6 +129,7 @@ func spawn_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO, spawn_rad
 	
 	new_ball.radius = clamp(spawn_radius, 1, max_allowed_ball_radius)
 	new_ball.pos = spawn_pos
+	new_ball.physics_prev_pos = spawn_pos # ADDED: reset prev pos
 	new_ball.last_frame_pos = spawn_pos
 	new_ball.vel = spawn_vel
 	new_ball.visual_instance_id = active_balls.size()
@@ -143,6 +145,7 @@ func spawn_simulated_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO,
 	new_ball.simulated = true
 	new_ball.radius = clamp(spawn_radius, 1, max_allowed_ball_radius)
 	new_ball.pos = spawn_pos
+	new_ball.physics_prev_pos = spawn_pos # ADDED: reset prev pos
 	new_ball.last_frame_pos = spawn_pos
 	new_ball.vel = spawn_vel
 	new_ball.visual_instance_id = 1
@@ -152,6 +155,19 @@ func spawn_simulated_ball(spawn_pos: Vector2, spawn_vel: Vector2 = Vector2.ZERO,
 	curr_simulated_ball = new_ball
 
 
+func _process(_delta):
+	var fraction = Engine.get_physics_interpolation_fraction()
+	
+	for ball in active_balls:
+		if not ball.active:
+			update_ball_visuals(ball, ball.pos)
+			continue
+			
+		# interpolate between previous physics tick and current physics tick
+		var render_pos = ball.physics_prev_pos.lerp(ball.pos, fraction)
+		update_ball_visuals(ball, render_pos)
+
+
 func _physics_process(delta):
 	
 	var space_state = get_world_2d().direct_space_state
@@ -159,9 +175,11 @@ func _physics_process(delta):
 	for ball in active_balls:
 		if not ball.active:
 			continue
+		
+		# store position before simulating tick
+		ball.physics_prev_pos = ball.pos 
 			
 		process_single_ball(ball, delta, space_state)
-		update_ball_visuals(ball)
 	
 	
 	if curr_simulated_ball != null : 
@@ -174,7 +192,7 @@ func _physics_process(delta):
 
 func process_single_ball(ball: BallData, delta: float, space_state: PhysicsDirectSpaceState2D):
 	
-	# Clear exclusions from the previous frame so pegs aren't permanently ignored
+	# clear exclusions
 	ball.query.exclude.clear()
 	
 	var has_bounced_this_frame = false
@@ -433,7 +451,8 @@ func queue_pegs_for_destruction(pegs: Array[Node2D]):
 		if peg.has_method("queue_destruction"):
 			peg.queue_destruction() 
 
-func update_ball_visuals(ball: BallData):
+
+func update_ball_visuals(ball: BallData, render_pos: Vector2):
 	
 	if adjustable_ball_multimesh and adjustable_shadow_multimesh and ball.visual_instance_id >= 0:
 		var multmesh_i: int = ball.visual_instance_id
@@ -446,7 +465,7 @@ func update_ball_visuals(ball: BallData):
 			return 
 		
 		# draw active ball
-		var trans = Transform2D(0,ball.vis_scale*Vector2.ONE,0, ball.pos)
+		var trans = Transform2D(0,ball.vis_scale*Vector2.ONE,0, render_pos)
 		adjustable_ball_multimesh.multimesh.set_instance_transform_2d(multmesh_i, trans)
 		
 		var custom_data = Color(ball.roll_offset.y, ball.roll_offset.x, ball.radius, 0.0)
@@ -454,7 +473,7 @@ func update_ball_visuals(ball: BallData):
 		
 		if ball.is_sliding:
 			# draw slide vfx
-			var vfxtrans = Transform2D(0,ball.vis_scale*Vector2.ONE*1.1,0, ball.pos)
+			var vfxtrans = Transform2D(0,ball.vis_scale*Vector2.ONE*1.1,0, render_pos)
 			adjustable_slidevfx_multimesh.multimesh.set_instance_transform_2d(multmesh_i, vfxtrans)
 			
 			var vfx_data = Color(ball.roll_offset.x, ball.roll_offset.y, ball.radius, 0.0)
@@ -464,7 +483,7 @@ func update_ball_visuals(ball: BallData):
 			adjustable_shadow_multimesh.multimesh.set_instance_color(multmesh_i,col)
 			
 		else:
-			var vfxtrans = Transform2D(0,Vector2.ZERO,0, ball.pos)
+			var vfxtrans = Transform2D(0,Vector2.ZERO,0, render_pos)
 			adjustable_slidevfx_multimesh.multimesh.set_instance_transform_2d(multmesh_i, vfxtrans)
 			
 			var col: Color = Color.BLACK
@@ -476,7 +495,7 @@ func update_ball_visuals(ball: BallData):
 		var s_data = Color(-s_vel.x,s_vel.y,ball.radius)
 		adjustable_shadow_multimesh.multimesh.set_instance_custom_data(multmesh_i, s_data)
 		
-		var s_trans = Transform2D(0, ball.pos - ball.vel * get_physics_process_delta_time())
+		var s_trans = Transform2D(0, render_pos - ball.vel * get_physics_process_delta_time())
 		adjustable_shadow_multimesh.multimesh.set_instance_transform_2d(multmesh_i, s_trans)
 		
 		

@@ -1,7 +1,10 @@
 [gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://2st62fguw873"]
 
-[ext_resource type="Curve" uid="uid://d3vjg4q23dchj" path="res://2D/curves/standard.tres" id="1_yd8r3"]
 [ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/save_data/upgrade_data.gd" id="2_7153c"]
+
+[sub_resource type="Curve" id="Curve_dwmkd"]
+_data = [Vector2(0, 0), 0.0, 0.080615945, 0, 0, Vector2(0.874074, 0.43560052), 1.5775149, 1.5775149, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Curve" id="Curve_yd8r3"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -12,8 +15,11 @@ script = ExtResource("2_7153c")
 name = "ball_production_speed"
 pretty_name = "Ball Production Time"
 unit = "sec."
-max_level = 5
+max_level = 10
+start_price = 10
+end_price = 25000
+price_scaling_curve = SubResource("Curve_dwmkd")
 start_result = 2.0
-end_result = 0.02
+end_result = 0.008
 result_scaling_curve = SubResource("Curve_yd8r3")
 metadata/_custom_type_script = "uid://bbo5op84iqbom"

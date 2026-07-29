@@ -117,10 +117,29 @@ func _physics_process(delta):
 		else:
 			shot_particles_one.emitting = true
 		
+		var prod_upgrade: UpgradeData = upgrade_preloader.get_resource("ball_production_speed")
+		var prod_level: int = SaveManager.get_upgrade_level_by_name("ball_production_speed")
+		
+		var curr_max_shot_speed: float = prod_upgrade.get_level_result(prod_level)
+		
+		#multi shot when shooting faster than physics frame rate
+		if  curr_max_shot_speed < delta:
+			var dir: Vector2 =  $pivot.global_transform.x
+			
+			var extra_shots: int = max( ( int(delta/curr_max_shot_speed) ), 2)
+			print(extra_shots)
+			for e in extra_shots:
+				var pos_add: Vector2 = dir*8*e* int(1 if randf() else -1)
+				SignalBus.spawn_ball.emit(pos+pos_add,vel,radius)
+				BallFactoryManager.remove_last_ball_from_queue()
+			
+		else:
+			SignalBus.spawn_ball.emit(pos,vel,radius)
+			BallFactoryManager.remove_last_ball_from_queue()
 		
 		time_since_last_shot = 0.0
-		SignalBus.spawn_ball.emit(pos,vel,radius)
-		BallFactoryManager.remove_last_ball_from_queue()
+		
+
 	
 	if Input.is_action_just_released("fire_ball") or not BallFactoryManager.has_balls():
 		shot_particles_more.emitting = false

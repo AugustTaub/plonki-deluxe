@@ -19,10 +19,14 @@ func physics_process(delta: float, actor: InfestedPegManager.PegData) -> void:
 	var agent_rid: RID = peg_manager_node.pooled_agents[actor.instance_id]
 	
 	
+	
+	var close_enough: bool = actor.pos.distance_to(actor.goal_peg_pos) <= 10
+	var peg_is_alive: bool = actor.goal_peg.curr_peg_state != DestructiblePeg.peg_state.REANIMATING
+	
 	# eat peg if possible
-	if actor.pos.distance_to(actor.goal_peg_pos) <= 10 and actor.goal_peg.curr_peg_state != DestructiblePeg.peg_state.REANIMATING:
+	if not actor.has_eaten and close_enough and peg_is_alive:
 		actor.goal_peg.destroy_without_payout.call_deferred()
-		actor.curr_value = actor.goal_peg.value * 24
+		actor.curr_value += actor.goal_peg.value * 24 
 		actor.fear *= 0.1
 		actor.has_eaten = true
 		actor.vis_scale = 1.3

@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://dxowdq7qo4vr5"]
+
+[ext_resource type="Script" uid="uid://bdp5fsrx4rjrc" path="res://scripts/stage/ball_bucket_controller.gd" id="1_5my37"]
+[ext_resource type="Texture2D" uid="uid://t55s26m1vrtm" path="res://2D/images/ball_bucket_back.png" id="2_jspq8"]
+[ext_resource type="Resource" uid="uid://dx84p5wi2xcii" path="res://custom_res/upgrades/ball_bucket_unlocked.tres" id="2_u1lr1"]
+[ext_resource type="Texture2D" uid="uid://cbyjgpfemlgru" path="res://2D/images/ball_bucket_front.png" id="3_u1lr1"]
+[ext_resource type="Script" uid="uid://dvetptfe2ws64" path="res://scripts/ball_interactibles/non_peg_interactibles/ball_bucket.gd" id="4_4h7vu"]
+[ext_resource type="Texture2D" uid="uid://dbf8xs67fg1be" path="res://2D/godot_gen_textures/coin_circle.tres" id="5_jspq8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ad8ux"]
+size = Vector2(107, 28)
+
+[node name="ball_bucket" type="Node2D" unique_id=825087764]
+script = ExtResource("1_5my37")
+associated_upgrade = ExtResource("2_u1lr1")
+
+[node name="vis_body" type="Node2D" parent="." unique_id=1584308647]
+unique_name_in_owner = true
+
+[node name="back" type="Sprite2D" parent="vis_body" unique_id=1340217259]
+texture_filter = 1
+scale = Vector2(3.809, 3.809)
+texture = ExtResource("2_jspq8")
+
+[node name="front" type="Sprite2D" parent="vis_body" unique_id=1901941902]
+z_index = 3
+texture_filter = 1
+scale = Vector2(3.809, 3.809)
+texture = ExtResource("3_u1lr1")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="vis_body" unique_id=730468135]
+z_index = 3
+offset_left = -44.0
+offset_top = 14.0
+offset_right = 44.0
+offset_bottom = 54.0
+alignment = 1
+
+[node name="payout_label" type="RichTextLabel" parent="vis_body/HBoxContainer" unique_id=423745576]
+unique_name_in_owner = true
+z_index = 3
+custom_minimum_size = Vector2(48.925, 0)
+layout_mode = 2
+theme_override_constants/outline_size = 5
+text = "99999"
+fit_content = true
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="vis_body/HBoxContainer" unique_id=1076206929]
+texture_filter = 1
+custom_minimum_size = Vector2(21.05, 0)
+layout_mode = 2
+texture = ExtResource("5_jspq8")
+stretch_mode = 5
+
+[node name="Area2D" type="Area2D" parent="." unique_id=372818841]
+script = ExtResource("4_4h7vu")
+
+[node name="bucket_coll_shape" type="CollisionShape2D" parent="Area2D" unique_id=1635693888]
+unique_name_in_owner = true
+position = Vector2(1.5, 18)
+shape = SubResource("RectangleShape2D_ad8ux")
