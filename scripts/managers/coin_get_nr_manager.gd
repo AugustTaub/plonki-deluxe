@@ -6,6 +6,7 @@ var mesh_instance_nr: int = 1000
 var active_coin_nrs: Array[CoinNrData] = []
 
 @export var nr_life_time: float = 0.6
+@export var nr_spread: float = 16.0
 
 class CoinNrData extends RefCounted:
 	var mesh_i: int = -1
@@ -35,7 +36,7 @@ func create_coin_nr(amount: int = 1, pos: Vector2 = Vector2.ZERO, size: float = 
 	for coin in active_coin_nrs:
 		if not coin.is_active:
 			coin.is_active= true
-			coin.pos= pos
+			coin.pos= pos + Vector2(randf_range(-nr_spread,nr_spread) , randf_range(-nr_spread,nr_spread))
 			coin.size = 1.0
 			coin.coin_amount = amount
 			coin.curr_life_time = 0.0

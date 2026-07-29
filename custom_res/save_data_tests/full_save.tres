@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="SaveGame" format=3 uid="uid://l5ootghviqp1"]
+
+[ext_resource type="Script" uid="uid://drfxtc5ceokld" path="res://scripts/managers/save_game.gd" id="1_mx8ne"]
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="2_j07jm"]
+[ext_resource type="Resource" uid="uid://xkmrcj7ftgbk" path="res://custom_res/upgrades/economy_upgrades_unlocked.tres" id="3_eni0e"]
+[ext_resource type="Resource" uid="uid://4xn8ym82suxm" path="res://custom_res/upgrades/factory_unlocked.tres" id="4_g0hje"]
+[ext_resource type="Resource" uid="uid://vts2014lkpqh" path="res://custom_res/upgrades/stage_upgrades_unlocked.tres" id="5_rs8fr"]
+[ext_resource type="Resource" uid="uid://dgumkow6fk3pb" path="res://custom_res/upgrades/stage1_pegs.tres" id="6_kkmnw"]
+[ext_resource type="Resource" uid="uid://c54xglrxo5btw" path="res://custom_res/upgrades/stage2_unlock.tres" id="7_7w2ib"]
+[ext_resource type="Resource" uid="uid://dmjiwt5k2bve4" path="res://custom_res/upgrades/stage2_pegs.tres" id="8_j40ah"]
+[ext_resource type="Resource" uid="uid://bpk8l30is7poq" path="res://custom_res/upgrades/stage3_pegs.tres" id="9_27w8e"]
+[ext_resource type="Resource" uid="uid://b2bdjv67ejl0n" path="res://custom_res/upgrades/stage3_unlock.tres" id="10_5fbj7"]
+[ext_resource type="Resource" uid="uid://b8q6y0sxfhomo" path="res://custom_res/upgrades/infested_spawn_time.tres" id="11_vjtio"]
+[ext_resource type="Resource" uid="uid://du3eonw0shm4s" path="res://custom_res/upgrades/ball_size.tres" id="12_nnh8e"]
+[ext_resource type="Resource" uid="uid://2st62fguw873" path="res://custom_res/upgrades/ball_production_speed.tres" id="13_y52ph"]
+[ext_resource type="Resource" uid="uid://bamlm0828kx7y" path="res://custom_res/upgrades/infested_peg_value.tres" id="14_0u7i8"]
+[ext_resource type="Resource" uid="uid://ephrii2u0dar" path="res://custom_res/upgrades/peg_value.tres" id="15_0ur8y"]
+[ext_resource type="Resource" uid="uid://dqr5o5n7665pk" path="res://custom_res/upgrades/peg_respawn_time.tres" id="16_uwybn"]
+[ext_resource type="Resource" uid="uid://hjia5v5y46i2" path="res://custom_res/upgrades/ball_cannon_unlocked.tres" id="17_omyuu"]
+[ext_resource type="Resource" uid="uid://clmbtqvm766ok" path="res://custom_res/upgrades/ball_piercing.tres" id="18_vnvm2"]
+[ext_resource type="Resource" uid="uid://v81rtw47g0f" path="res://custom_res/upgrades/ball_speed.tres" id="19_uu75k"]
+
+[resource]
+script = ExtResource("1_mx8ne")
+money_amount = 96432
+ball_amount = 10010
+unlocked_upgrades = Array[ExtResource("2_j07jm")]([ExtResource("3_eni0e"), ExtResource("4_g0hje"), ExtResource("5_rs8fr"), ExtResource("6_kkmnw"), ExtResource("7_7w2ib"), ExtResource("8_j40ah"), ExtResource("9_27w8e"), ExtResource("10_5fbj7"), ExtResource("11_vjtio"), ExtResource("12_nnh8e"), ExtResource("13_y52ph"), ExtResource("14_0u7i8"), ExtResource("15_0ur8y"), ExtResource("16_uwybn"), ExtResource("17_omyuu"), ExtResource("18_vnvm2"), ExtResource("19_uu75k")])
+upgrade_levels = Dictionary[ExtResource("2_j07jm"), int]({
+ExtResource("3_eni0e"): 0,
+ExtResource("4_g0hje"): 0,
+ExtResource("5_rs8fr"): 0,
+ExtResource("6_kkmnw"): 10,
+ExtResource("7_7w2ib"): 1,
+ExtResource("8_j40ah"): 10,
+ExtResource("9_27w8e"): 10,
+ExtResource("10_5fbj7"): 1,
+ExtResource("11_vjtio"): 3,
+ExtResource("12_nnh8e"): 5,
+ExtResource("13_y52ph"): 5,
+ExtResource("14_0u7i8"): 10,
+ExtResource("15_0ur8y"): 10,
+ExtResource("16_uwybn"): 6,
+ExtResource("17_omyuu"): 0,
+ExtResource("18_vnvm2"): 3,
+ExtResource("19_uu75k"): 6
+})

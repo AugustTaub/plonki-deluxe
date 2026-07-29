@@ -27,6 +27,7 @@ func _on_workshop_button_pressed():
 	SignalBus.workshop_toggled.emit()
 
 func on_workshop_toggled():
+	SignalBus.play_sound.emit("click")
 	if not workshop_screen_node: return
 	
 	workshop_enabled = !workshop_enabled
@@ -42,10 +43,13 @@ func on_workshop_toggled():
 
 
 func _on_options_button_pressed():
+	
 	SignalBus.options_toggled.emit()
 
 func on_options_toggled():
 	if not options_node: return
+	SignalBus.play_sound.emit("click")
+	
 	
 	options_enabled = !options_enabled
 	match options_enabled:

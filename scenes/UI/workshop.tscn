@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cpha31pc0s008" path="res://scenes/UI/workshop_upgrade_button.tscn" id="6_f1oc0"]
 [ext_resource type="Resource" uid="uid://v81rtw47g0f" path="res://custom_res/upgrades/ball_speed.tres" id="7_cy215"]
 [ext_resource type="Resource" uid="uid://du3eonw0shm4s" path="res://custom_res/upgrades/ball_size.tres" id="8_4xjol"]
+[ext_resource type="Resource" uid="uid://clmbtqvm766ok" path="res://custom_res/upgrades/ball_piercing.tres" id="8_qysch"]
 [ext_resource type="Resource" uid="uid://4xn8ym82suxm" path="res://custom_res/upgrades/factory_unlocked.tres" id="9_7qq22"]
 [ext_resource type="PackedScene" uid="uid://dxofmr5dxupur" path="res://scenes/UI/money_display.tscn" id="10_gdjy1"]
 [ext_resource type="Texture2D" uid="uid://q0lyelgpf0e8" path="res://2D/images/workshop_enchanter.png" id="10_mjyub"]
@@ -19,6 +20,16 @@
 [ext_resource type="Resource" uid="uid://c54xglrxo5btw" path="res://custom_res/upgrades/stage2_unlock.tres" id="15_uxmtj"]
 [ext_resource type="Resource" uid="uid://b2bdjv67ejl0n" path="res://custom_res/upgrades/stage3_unlock.tres" id="16_qq4e4"]
 [ext_resource type="Resource" uid="uid://bpk8l30is7poq" path="res://custom_res/upgrades/stage3_pegs.tres" id="17_toekv"]
+[ext_resource type="Resource" uid="uid://b8q6y0sxfhomo" path="res://custom_res/upgrades/infested_spawn_time.tres" id="19_0ovau"]
+[ext_resource type="Resource" uid="uid://xkmrcj7ftgbk" path="res://custom_res/upgrades/economy_upgrades_unlocked.tres" id="20_6qct2"]
+[ext_resource type="Texture2D" uid="uid://evdkxdmrfgxx" path="res://2D/images/workshop_ballfactory.png" id="21_nd5e1"]
+[ext_resource type="Resource" uid="uid://ephrii2u0dar" path="res://custom_res/upgrades/peg_value.tres" id="22_5j37t"]
+[ext_resource type="Resource" uid="uid://bamlm0828kx7y" path="res://custom_res/upgrades/infested_peg_value.tres" id="23_qysch"]
+[ext_resource type="Resource" uid="uid://dqr5o5n7665pk" path="res://custom_res/upgrades/peg_respawn_time.tres" id="25_1kisw"]
+
+[sub_resource type="Theme" id="Theme_toekv"]
+RichTextLabel/constants/outline_size = 16
+RichTextLabel/font_sizes/normal_font_size = 28
 
 [node name="workshop" type="Control" unique_id=1661245154]
 process_mode = 3
@@ -61,6 +72,7 @@ grow_vertical = 2
 pivot_offset = Vector2(868.515, 111.515)
 mouse_filter = 2
 script = ExtResource("6_cy215")
+zone_name = "Ball Cannon Upgrades"
 sprite = NodePath("cannon_sprite")
 button_parent = NodePath("upgrade_buttons")
 coll_area = NodePath("mouse_coll_area")
@@ -83,23 +95,23 @@ texture = ExtResource("3_cy215")
 anchors_preset = 0
 mouse_filter = 1
 
-[node name="UpgradeButton" parent="cannon/upgrade_buttons" unique_id=1671652110 instance=ExtResource("6_f1oc0")]
+[node name="ball_spd" parent="cannon/upgrade_buttons" unique_id=1671652110 instance=ExtResource("6_f1oc0")]
 layout_mode = 0
-offset_left = 902.0
-offset_top = 98.0
-offset_right = 966.0
-offset_bottom = 162.0
+offset_left = 903.0
+offset_top = 165.0
+offset_right = 967.0
+offset_bottom = 229.0
 mouse_filter = 1
 associated_upgrade = ExtResource("7_cy215")
 
-[node name="UpgradeButton2" parent="cannon/upgrade_buttons" unique_id=202079135 instance=ExtResource("6_f1oc0")]
+[node name="ball_pierce" parent="cannon/upgrade_buttons" unique_id=1305965214 instance=ExtResource("6_f1oc0")]
 layout_mode = 0
-offset_left = 740.0
-offset_top = 83.0
-offset_right = 804.0
-offset_bottom = 147.0
+offset_left = 677.0
+offset_top = 59.0
+offset_right = 741.0
+offset_bottom = 123.0
 mouse_filter = 1
-associated_upgrade = ExtResource("8_4xjol")
+associated_upgrade = ExtResource("8_qysch")
 
 [node name="mouse_coll_area" type="Area2D" parent="cannon" unique_id=480621266]
 position = Vector2(868, 113)
@@ -112,11 +124,11 @@ layout_mode = 0
 offset_left = 697.0
 offset_top = 14.0
 offset_right = 1045.0
-offset_bottom = 83.0
-mouse_filter = 1
-theme_override_constants/outline_size = 16
-theme_override_font_sizes/normal_font_size = 48
+offset_bottom = 148.0
+mouse_filter = 2
+theme = SubResource("Theme_toekv")
 text = "Unlock: 0000"
+horizontal_alignment = 1
 
 [node name="ball_factory" type="Control" parent="." unique_id=1827778502 node_paths=PackedStringArray("sprite", "button_parent", "coll_area", "unlock_cost_text")]
 layout_mode = 1
@@ -125,9 +137,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(868.515, 111.515)
+pivot_offset = Vector2(129.24, 565.75)
 mouse_filter = 2
 script = ExtResource("6_cy215")
+zone_name = "Ball Production Upgrades"
 sprite = NodePath("factory_sprite")
 button_parent = NodePath("upgrade_buttons")
 coll_area = NodePath("mouse_coll_area")
@@ -150,7 +163,7 @@ texture = ExtResource("10_mjyub")
 anchors_preset = 0
 mouse_filter = 1
 
-[node name="UpgradeButton" parent="ball_factory/upgrade_buttons" unique_id=149998191 instance=ExtResource("6_f1oc0")]
+[node name="ball_prod_spd" parent="ball_factory/upgrade_buttons" unique_id=149998191 instance=ExtResource("6_f1oc0")]
 layout_mode = 0
 offset_left = 100.0
 offset_top = 381.0
@@ -158,6 +171,15 @@ offset_right = 164.0
 offset_bottom = 445.0
 mouse_filter = 1
 associated_upgrade = ExtResource("11_ehqah")
+
+[node name="ball_size" parent="ball_factory/upgrade_buttons" unique_id=202079135 instance=ExtResource("6_f1oc0")]
+layout_mode = 0
+offset_left = 109.0
+offset_top = 547.0
+offset_right = 173.0
+offset_bottom = 611.0
+mouse_filter = 1
+associated_upgrade = ExtResource("8_4xjol")
 
 [node name="mouse_coll_area" type="Area2D" parent="ball_factory" unique_id=1705159147]
 position = Vector2(288, 408)
@@ -170,11 +192,11 @@ layout_mode = 0
 offset_left = 10.0
 offset_top = 308.0
 offset_right = 358.0
-offset_bottom = 377.0
-mouse_filter = 1
-theme_override_constants/outline_size = 16
-theme_override_font_sizes/normal_font_size = 48
+offset_bottom = 445.0
+mouse_filter = 2
+theme = SubResource("Theme_toekv")
 text = "Unlock: 0000"
+horizontal_alignment = 1
 
 [node name="stage_upgrades" type="Control" parent="." unique_id=1885261197 node_paths=PackedStringArray("sprite", "button_parent", "coll_area", "unlock_cost_text")]
 layout_mode = 1
@@ -186,6 +208,7 @@ grow_vertical = 2
 pivot_offset = Vector2(868.515, 111.515)
 mouse_filter = 2
 script = ExtResource("6_cy215")
+zone_name = "Stage Upgrades"
 sprite = NodePath("factory_sprite")
 button_parent = NodePath("upgrade_buttons")
 coll_area = NodePath("mouse_coll_area")
@@ -200,7 +223,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(871.03, 113.79)
+pivot_offset = Vector2(937.37, 629.525)
 mouse_filter = 2
 texture = ExtResource("13_uxmtj")
 
@@ -256,6 +279,16 @@ mouse_filter = 1
 associated_upgrade = ExtResource("16_qq4e4")
 required_upgrade = ExtResource("15_uxmtj")
 
+[node name="enemy_spawn_time" parent="stage_upgrades/upgrade_buttons" unique_id=471827181 instance=ExtResource("6_f1oc0")]
+layout_mode = 0
+offset_left = 980.0
+offset_top = 503.0
+offset_right = 1044.0
+offset_bottom = 567.0
+mouse_filter = 1
+associated_upgrade = ExtResource("19_0ovau")
+required_upgrade = ExtResource("15_uxmtj")
+
 [node name="mouse_coll_area" type="Area2D" parent="stage_upgrades" unique_id=1837242938]
 position = Vector2(1093, 420)
 
@@ -267,11 +300,89 @@ layout_mode = 0
 offset_left = 778.0
 offset_top = 414.0
 offset_right = 1126.0
-offset_bottom = 483.0
-mouse_filter = 1
-theme_override_constants/outline_size = 16
-theme_override_font_sizes/normal_font_size = 48
+offset_bottom = 522.0
+mouse_filter = 2
+theme = SubResource("Theme_toekv")
 text = "Unlock: 0000"
+horizontal_alignment = 1
+
+[node name="economy" type="Control" parent="." unique_id=292213513 node_paths=PackedStringArray("sprite", "button_parent", "coll_area", "unlock_cost_text")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(868.515, 111.515)
+mouse_filter = 2
+script = ExtResource("6_cy215")
+zone_name = "Stage Upgrades"
+sprite = NodePath("factory_sprite")
+button_parent = NodePath("upgrade_buttons")
+coll_area = NodePath("mouse_coll_area")
+unlock_cost_text = NodePath("unlock_cost_text")
+associated_upgrade = ExtResource("20_6qct2")
+
+[node name="factory_sprite" type="TextureRect" parent="economy" unique_id=542311006]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(149.744, 66.805)
+mouse_filter = 2
+texture = ExtResource("21_nd5e1")
+
+[node name="upgrade_buttons" type="Control" parent="economy" unique_id=1837682288]
+anchors_preset = 0
+mouse_filter = 1
+
+[node name="peg_val" parent="economy/upgrade_buttons" unique_id=2132205447 instance=ExtResource("6_f1oc0")]
+layout_mode = 0
+offset_left = 251.0
+offset_top = 42.0
+offset_right = 315.0
+offset_bottom = 106.0
+mouse_filter = 1
+associated_upgrade = ExtResource("22_5j37t")
+
+[node name="enemy_val" parent="economy/upgrade_buttons" unique_id=421701990 instance=ExtResource("6_f1oc0")]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 130.0
+offset_right = 130.0
+offset_bottom = 194.0
+mouse_filter = 1
+associated_upgrade = ExtResource("23_qysch")
+
+[node name="peg_respawn_time" parent="economy/upgrade_buttons" unique_id=1246329364 instance=ExtResource("6_f1oc0")]
+layout_mode = 0
+offset_left = 414.0
+offset_top = 52.0
+offset_right = 478.0
+offset_bottom = 116.0
+mouse_filter = 1
+associated_upgrade = ExtResource("25_1kisw")
+
+[node name="mouse_coll_area" type="Area2D" parent="economy" unique_id=903202551]
+position = Vector2(1093, 420)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="economy/mouse_coll_area" unique_id=1191628734]
+position = Vector2(-754, -552)
+polygon = PackedVector2Array(-189, 121, -350, 129, -346, 321, -336, 344, -138, 350, -137, 259, 68, 258, 149, 246, 156, 130)
+
+[node name="unlock_cost_text" type="RichTextLabel" parent="economy" unique_id=387394592]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 8.0
+offset_right = 369.0
+offset_bottom = 116.0
+mouse_filter = 2
+theme = SubResource("Theme_toekv")
+text = "Unlock: 0000"
+horizontal_alignment = 1
 
 [node name="close_button" type="Button" parent="." unique_id=1411028783]
 layout_mode = 0

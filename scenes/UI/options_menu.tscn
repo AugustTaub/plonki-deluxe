@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://7n2yo6j16r38" path="res://scripts/UI/reset_progress_button.gd" id="1_m3vow"]
 [ext_resource type="Script" uid="uid://dlny1bbk7nwiy" path="res://scripts/UI/options_close_button.gd" id="1_qgort"]
 [ext_resource type="Script" uid="uid://cj3mtfsfejgh7" path="res://scripts/UI/console.gd" id="4_ijsq6"]
+[ext_resource type="Resource" uid="uid://l5ootghviqp1" path="res://custom_res/save_data_tests/full_save.tres" id="5_6mmsa"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qgort"]
 texture = ExtResource("1_3t8k5")
@@ -60,6 +61,7 @@ layout_mode = 2
 placeholder_text = "type commands here..."
 script = ExtResource("4_ijsq6")
 notification_label = NodePath("../console_notification")
+full_save = ExtResource("5_6mmsa")
 
 [node name="console_notification" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=758700733]
 layout_mode = 2

@@ -9,11 +9,14 @@ void vertex() {
 }
 
 void fragment() {
-	
-	COLOR.rg = 2.0 - textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0).rg;
-	COLOR.b = texture(TEXTURE , UV).b;
-	COLOR.a = texture(TEXTURE , UV).a;
-	
-	
-
+    vec4 tex_color = texture(TEXTURE, UV);
+    
+    vec3 screen_color = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0).rgb;
+    
+    vec2 max_contrast_rg = step(0.5, 1.0 - screen_color.rg);
+    
+    COLOR.rg = max_contrast_rg;
+    COLOR.b = tex_color.b;
+    
+    COLOR.a = tex_color.a * alpha_adj;
 }

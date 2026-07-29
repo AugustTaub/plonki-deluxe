@@ -11,7 +11,7 @@ enum peg_state {DEFAULT, DYING, REANIMATING}
 var curr_peg_state: peg_state = peg_state.DEFAULT
 
 @export var peg_sprite: Sprite2D 
-@export var peg_coll_shape: CollisionShape2D 
+@export var peg_coll_shape: Node2D 
 
 var peg_sprite_start_scale: Vector2
 
@@ -27,11 +27,17 @@ var peg_sprite_start_scale: Vector2
 
 
 var reanimate_timer: float = 0.0
+var upgrade_preloader: ResourcePreloader
+
+func _on_upgrade_preloader_loaded(preloader: ResourcePreloader):
+	upgrade_preloader = preloader
 
 func _ready():
 	if peg_sprite:
 		peg_sprite_start_scale = peg_sprite.scale
 	set_unlock_state(is_unlocked)
+	
+	SignalBus.upgrade_preloader_loaded.connect(_on_upgrade_preloader_loaded)
 
 func _process(delta):
 	if destruction_queued:
@@ -60,8 +66,15 @@ func destroy_without_payout():
 	change_peg_state(peg_state.DYING)
 
 func destroy():
-	SaveManager.change_money_with_vis_nr(1, global_position)
+	var value_upgrade: UpgradeData = upgrade_preloader.get_resource("peg_value")
+	var value_level: int = SaveManager.get_upgrade_level_by_name("peg_value")
+	
+	var payout: int = int(value_upgrade.get_level_result(value_level))
+	
+	SaveManager.change_money_with_vis_nr(payout, global_position)
+	
 	SignalBus.play_sound.emit("plonk",1.0)
+	
 	destroy_without_payout()
 
 func set_unlock_state(new_is_unlocked: bool):
@@ -115,5 +128,10 @@ func enter_peg_state(enter_state: peg_state):
 			
 		peg_state.REANIMATING:
 			reanimate_timer = 0.0
+			
+			var upgrade: UpgradeData = upgrade_preloader.get_resource("peg_respawn_time")
+			var level: int = SaveManager.get_upgrade_level_by_name("peg_respawn_time")
+			
+			reanimate_time = upgrade.get_level_result(level)
 			
 #endregion

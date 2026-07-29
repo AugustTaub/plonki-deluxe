@@ -2,17 +2,6 @@
 
 [ext_resource type="Script" path="res://scripts/managers/save_game.gd" id="1_mx8ne"]
 [ext_resource type="Script" path="res://scripts/upgrade_data.gd" id="2_j07jm"]
-[ext_resource type="Resource" path="res://custom_res/upgrades/stage_upgrades_unlocked.tres" id="4_l3pva"]
-[ext_resource type="Resource" path="res://custom_res/upgrades/ball_cannon_unlocked.tres" id="5_42avq"]
-[ext_resource type="Resource" path="res://custom_res/upgrades/stage2_unlock.tres" id="8_vlxkk"]
 
 [resource]
 script = ExtResource("1_mx8ne")
-money_amount = 890
-ball_amount = 13
-unlocked_upgrades = Array[ExtResource("2_j07jm")]([ExtResource("8_vlxkk"), ExtResource("4_l3pva"), ExtResource("5_42avq")])
-upgrade_levels = Dictionary[ExtResource("2_j07jm"), int]({
-ExtResource("8_vlxkk"): 0,
-ExtResource("4_l3pva"): 0,
-ExtResource("5_42avq"): 0
-})

@@ -1,7 +1,7 @@
 extends Node
 
-#const SAVE_PATH := "user://plonki_save2fgd8teho.tres"
-const SAVE_PATH := "res://custom_res/save_data_tests/test.tres"
+const SAVE_PATH := "user://plonki_save.tres"
+#const SAVE_PATH := "res://custom_res/save_data_tests/test.tres"
 
 var save_game: SaveGame = null
 
@@ -66,6 +66,9 @@ func add_upgrade(new_upgrade: UpgradeData):
 	if not save_game.unlocked_upgrades.has(new_upgrade):
 		save_game.unlocked_upgrades.append(new_upgrade)
 		save_game.upgrade_levels[new_upgrade] = 0
+		
+		if new_upgrade.name == "ball_piercing":
+			SignalBus.enable_piercing_button.emit()
 	
 
 func increase_upgrade_level(increase_upgrade: UpgradeData):
@@ -109,4 +112,10 @@ func reset_save_game():
 	set_ball_amount(save_game.ball_amount)
 	
 	ResourceSaver.save(save_game, SAVE_PATH)
+
+func load_save_game(save: SaveGame):
+	save_game = save
+	set_money(save_game.money_amount)
+	set_ball_amount(save_game.ball_amount)
 	
+	ResourceSaver.save(save_game, SAVE_PATH)

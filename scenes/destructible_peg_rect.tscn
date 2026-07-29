@@ -6,7 +6,7 @@
 
 [node name="Node2D" type="Area2D" unique_id=1423066092 node_paths=PackedStringArray("peg_sprite", "peg_coll_shape")]
 script = ExtResource("1_1f7cw")
-peg_sprite = NodePath("Polygon2D2")
+peg_sprite = NodePath("Sprite2D")
 peg_coll_shape = NodePath("CollisionPolygon2D")
 preloaded_alive_tex = ExtResource("2_e6lef")
 preloaded_dead_tex = ExtResource("3_qnma7")
@@ -15,7 +15,7 @@ metadata/_custom_type_script = "uid://dlyva8iecj0md"
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=400368116]
 polygon = PackedVector2Array(-20, -8, -20, 8, -17.858822, 9.999999, 17.634506, 9.999999, 20.000004, 7.572444, 20, -8, 17.553288, -10, -18, -10)
 
-[node name="Polygon2D2" type="Polygon2D" parent="." unique_id=1041700422]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=470150115]
+position = Vector2(-3.8146973e-06, -1.9073486e-06)
+scale = Vector2(0.3125, 0.3125)
 texture = ExtResource("2_e6lef")
-polygon = PackedVector2Array(-20, -10, -20, 10, 20, 10, 20, -10)
-uv = PackedVector2Array(0.051496506, 0.05227363, -0.053276062, 64.1581, 128.38124, 64.36666, 128.38214, -0.06580353)

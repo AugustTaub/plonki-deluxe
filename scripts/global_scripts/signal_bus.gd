@@ -43,6 +43,12 @@ signal broadcast_available_stages(stages: Array[StageNode])
 @warning_ignore("unused_signal")
 signal select_stage(new_stage: StageNode)
 
+@warning_ignore("unused_signal")
+signal set_debug_txt(txt: String)
+
+@warning_ignore("unused_signal")
+signal enable_piercing_button()
+
 ### save
 
 @warning_ignore("unused_signal")

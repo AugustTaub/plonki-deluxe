@@ -6,6 +6,8 @@
 [resource]
 script = ExtResource("2_ktc02")
 name = "stage2_pegs"
+pretty_name = "Stage 2 Pegs"
+unit = "nr. of Pegs"
 max_level = 10
 start_price = 1
 start_result = 6.0

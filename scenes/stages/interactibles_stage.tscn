@@ -6,6 +6,10 @@
 [ext_resource type="Resource" uid="uid://b2bdjv67ejl0n" path="res://custom_res/upgrades/stage3_unlock.tres" id="3_1tge3"]
 [ext_resource type="Script" uid="uid://c33idtn4w1ory" path="res://scripts/ball_interactibles/ball_teleporter.gd" id="3_8q8ih"]
 [ext_resource type="Script" uid="uid://gyalaocvdi10" path="res://scripts/ball_interactibles/ball_exploder.gd" id="4_k45mu"]
+[ext_resource type="Texture2D" uid="uid://dnindf1po1ar8" path="res://2D/images/bg3.png" id="4_m7bve"]
+[ext_resource type="PackedScene" uid="uid://c4ashcsbyavdi" path="res://scenes/destructible_peg_round.tscn" id="5_dhrly"]
+[ext_resource type="Script" uid="uid://0ga5ihunpge7" path="res://scripts/ball_interactibles/falling_block.gd" id="8_uljrg"]
+[ext_resource type="Texture2D" uid="uid://bb2cee8x2tlcy" path="res://2D/godot_gen_textures/debug_circle.tres" id="9_m7bve"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_k45mu"]
 radius = 16.0
@@ -37,16 +41,28 @@ fill_from = Vector2(0.5, 0.5)
 [sub_resource type="CircleShape2D" id="CircleShape2D_ncvry"]
 radius = 128.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_n0eoj"]
+radius = 80.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i4mlw"]
+
 [node name="interactibles_stage" type="Node2D" unique_id=1777195591]
 script = ExtResource("1_3847s")
 associated_peg_upgrade = ExtResource("2_l1pay")
 unlock_upgrade = ExtResource("3_1tge3")
 metadata/_custom_type_script = "uid://rc1pswo54tv8"
 
+[node name="bg" type="Sprite2D" parent="." unique_id=1688993737]
+z_index = -1
+texture_filter = 1
+position = Vector2(586, 409)
+scale = Vector2(4.6061254, 4.2109942)
+texture = ExtResource("4_m7bve")
+
 [node name="pegs" type="Node2D" parent="." unique_id=494298063]
 position = Vector2(2, 6)
 
-[node name="peg" parent="pegs" unique_id=1423066092 instance=ExtResource("2_cuow7")]
+[node name="peg19" parent="pegs" unique_id=1423066092 instance=ExtResource("2_cuow7")]
 position = Vector2(554, 298)
 rotation = -1.2037057
 
@@ -57,6 +73,22 @@ rotation = -0.76211786
 [node name="peg3" parent="pegs" unique_id=531258507 instance=ExtResource("2_cuow7")]
 position = Vector2(499, 350)
 rotation = -0.34905934
+
+[node name="peg4" parent="pegs" unique_id=1708760838 instance=ExtResource("2_cuow7")]
+position = Vector2(461, 357.00003)
+rotation = 0.00011190772
+
+[node name="peg5" parent="pegs" unique_id=598567506 instance=ExtResource("2_cuow7")]
+position = Vector2(422, 357.00003)
+rotation = 0.00011190772
+
+[node name="peg6" parent="pegs" unique_id=279739632 instance=ExtResource("2_cuow7")]
+position = Vector2(382, 357.00003)
+rotation = 0.00011190772
+
+[node name="peg7" parent="pegs" unique_id=1925709118 instance=ExtResource("2_cuow7")]
+position = Vector2(342, 357)
+rotation = 0.00011190772
 
 [node name="peg8" parent="pegs" unique_id=1191389254 instance=ExtResource("2_cuow7")]
 position = Vector2(857.00006, 290)
@@ -83,7 +115,7 @@ position = Vector2(766, 354.00003)
 rotation = -0.028853446
 
 [node name="peg12" parent="pegs" unique_id=1715408932 instance=ExtResource("2_cuow7")]
-position = Vector2(727, 346.00003)
+position = Vector2(726, 347.00003)
 rotation = 0.47987133
 
 [node name="peg13" parent="pegs" unique_id=170757135 instance=ExtResource("2_cuow7")]
@@ -102,24 +134,127 @@ rotation = 1.9136679
 position = Vector2(714.00006, 209)
 rotation = 2.5130205
 
-[node name="peg4" parent="pegs" unique_id=1708760838 instance=ExtResource("2_cuow7")]
-position = Vector2(461, 357.00003)
+[node name="peg1" parent="pegs" unique_id=1750133912 instance=ExtResource("5_dhrly")]
+position = Vector2(911, 589)
+
+[node name="peg20" parent="pegs" unique_id=2101436513 instance=ExtResource("5_dhrly")]
+position = Vector2(937, 488)
+
+[node name="peg21" parent="pegs" unique_id=1271825337 instance=ExtResource("5_dhrly")]
+position = Vector2(1009, 598)
+
+[node name="peg22" parent="pegs" unique_id=1026265214 instance=ExtResource("5_dhrly")]
+position = Vector2(868, 641)
+
+[node name="peg23" parent="pegs" unique_id=1383927360 instance=ExtResource("5_dhrly")]
+position = Vector2(1040, 477)
+
+[node name="peg24" parent="pegs" unique_id=1221644931 instance=ExtResource("5_dhrly")]
+position = Vector2(1063, 551)
+
+[node name="peg25" parent="pegs" unique_id=786155361 instance=ExtResource("5_dhrly")]
+position = Vector2(1000, 427)
+
+[node name="peg26" parent="pegs" unique_id=31897350 instance=ExtResource("5_dhrly")]
+position = Vector2(852, 495)
+
+[node name="peg27" parent="pegs" unique_id=1007440290 instance=ExtResource("5_dhrly")]
+position = Vector2(891, 406)
+
+[node name="peg28" parent="pegs" unique_id=744248844 instance=ExtResource("5_dhrly")]
+position = Vector2(920, 346)
+
+[node name="peg29" parent="pegs" unique_id=2095667919 instance=ExtResource("5_dhrly")]
+position = Vector2(994, 301)
+
+[node name="peg30" parent="pegs" unique_id=1982475134 instance=ExtResource("5_dhrly")]
+position = Vector2(923, 238)
+
+[node name="peg31" parent="pegs" unique_id=1964562390 instance=ExtResource("5_dhrly")]
+position = Vector2(1054, 346)
+
+[node name="peg32" parent="pegs" unique_id=1094972413 instance=ExtResource("5_dhrly")]
+position = Vector2(1062, 428)
+
+[node name="peg33" parent="pegs" unique_id=988555562 instance=ExtResource("5_dhrly")]
+position = Vector2(1062, 428)
+
+[node name="peg34" parent="pegs" unique_id=1802822684 instance=ExtResource("2_cuow7")]
+position = Vector2(98, 407)
+rotation = -2.3866415
+
+[node name="peg35" parent="pegs" unique_id=439711727 instance=ExtResource("2_cuow7")]
+position = Vector2(131.00003, 433)
+rotation = -2.6488843
+
+[node name="peg36" parent="pegs" unique_id=537347612 instance=ExtResource("2_cuow7")]
+position = Vector2(323.99997, 440)
+rotation = -0.34905934
+
+[node name="peg37" parent="pegs" unique_id=1426623597 instance=ExtResource("2_cuow7")]
+position = Vector2(286, 447.00003)
 rotation = 0.00011190772
 
-[node name="peg5" parent="pegs" unique_id=598567506 instance=ExtResource("2_cuow7")]
-position = Vector2(422, 357.00003)
+[node name="peg38" parent="pegs" unique_id=497749802 instance=ExtResource("2_cuow7")]
+position = Vector2(247, 447.00003)
 rotation = 0.00011190772
 
-[node name="peg6" parent="pegs" unique_id=279739632 instance=ExtResource("2_cuow7")]
-position = Vector2(382, 357.00003)
+[node name="peg39" parent="pegs" unique_id=745499662 instance=ExtResource("2_cuow7")]
+position = Vector2(207, 447.00003)
 rotation = 0.00011190772
 
-[node name="peg7" parent="pegs" unique_id=1925709118 instance=ExtResource("2_cuow7")]
-position = Vector2(342, 357)
+[node name="peg40" parent="pegs" unique_id=763199522 instance=ExtResource("2_cuow7")]
+position = Vector2(169, 447.00003)
 rotation = 0.00011190772
+
+[node name="peg41" parent="pegs" unique_id=1593036664 instance=ExtResource("2_cuow7")]
+position = Vector2(593, 458)
+rotation = -1.2037057
+
+[node name="peg42" parent="pegs" unique_id=1297213840 instance=ExtResource("2_cuow7")]
+position = Vector2(572, 487)
+rotation = -0.76211786
+
+[node name="peg43" parent="pegs" unique_id=423137559 instance=ExtResource("2_cuow7")]
+position = Vector2(538, 510)
+rotation = -0.34905934
+
+[node name="peg44" parent="pegs" unique_id=1192889902 instance=ExtResource("2_cuow7")]
+position = Vector2(500, 517)
+rotation = 0.00011190772
+
+[node name="peg45" parent="pegs" unique_id=810686212 instance=ExtResource("2_cuow7")]
+position = Vector2(461, 517)
+rotation = 0.00011190772
+
+[node name="peg46" parent="pegs" unique_id=1688351294 instance=ExtResource("2_cuow7")]
+position = Vector2(421, 517)
+rotation = 0.00011190772
+
+[node name="peg47" parent="pegs" unique_id=1617761449 instance=ExtResource("2_cuow7")]
+position = Vector2(381, 517)
+rotation = 0.00011190772
+
+[node name="peg48" parent="pegs" unique_id=1988290466 instance=ExtResource("5_dhrly")]
+position = Vector2(364, 646)
+
+[node name="peg49" parent="pegs" unique_id=1788529410 instance=ExtResource("5_dhrly")]
+position = Vector2(467, 635)
+
+[node name="peg50" parent="pegs" unique_id=1927070189 instance=ExtResource("5_dhrly")]
+position = Vector2(207, 580)
+
+[node name="peg51" parent="pegs" unique_id=425145692 instance=ExtResource("5_dhrly")]
+position = Vector2(563, 547)
+
+[node name="peg52" parent="pegs" unique_id=1694563643 instance=ExtResource("5_dhrly")]
+position = Vector2(489, 586)
+
+[node name="peg53" parent="pegs" unique_id=1524381609 instance=ExtResource("5_dhrly")]
+position = Vector2(659, 538)
 
 [node name="BallTeleporter" type="Area2D" parent="." unique_id=316168401 node_paths=PackedStringArray("paired_telporter")]
-position = Vector2(615, 220)
+position = Vector2(965, 681)
 script = ExtResource("3_8q8ih")
 paired_telporter = NodePath("../BallTeleporter2")
 metadata/_custom_type_script = "uid://c33idtn4w1ory"
@@ -132,7 +267,7 @@ scale = Vector2(2.2854311, 2.2854311)
 texture = SubResource("GradientTexture2D_k45mu")
 
 [node name="BallTeleporter2" type="Area2D" parent="." unique_id=1126508263 node_paths=PackedStringArray("paired_telporter")]
-position = Vector2(205, 384)
+position = Vector2(209, 215)
 script = ExtResource("3_8q8ih")
 paired_telporter = NodePath("../BallTeleporter")
 metadata/_custom_type_script = "uid://c33idtn4w1ory"
@@ -145,7 +280,7 @@ scale = Vector2(2.2854311, 2.2854311)
 texture = SubResource("GradientTexture2D_k45mu")
 
 [node name="BallExploder" type="Area2D" parent="." unique_id=718596040 node_paths=PackedStringArray("explo_area", "sprite")]
-position = Vector2(486, 260)
+position = Vector2(773, 276)
 script = ExtResource("4_k45mu")
 explo_area = NodePath("explo_area")
 sprite = NodePath("Sprite2D")
@@ -162,3 +297,61 @@ collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BallExploder/explo_area" unique_id=1971360052]
 shape = SubResource("CircleShape2D_ncvry")
+
+[node name="BallExploder2" type="Area2D" parent="." unique_id=1677101686 node_paths=PackedStringArray("explo_area", "sprite")]
+position = Vector2(658, 666)
+script = ExtResource("4_k45mu")
+explo_area = NodePath("explo_area")
+sprite = NodePath("Sprite2D")
+metadata/_custom_type_script = "uid://gyalaocvdi10"
+
+[node name="Sprite2D" type="Sprite2D" parent="BallExploder2" unique_id=1342055276]
+texture = SubResource("GradientTexture2D_ncvry")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallExploder2" unique_id=273123752]
+shape = SubResource("CircleShape2D_k45mu")
+
+[node name="explo_area" type="Area2D" parent="BallExploder2" unique_id=763728774]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallExploder2/explo_area" unique_id=183017205]
+shape = SubResource("CircleShape2D_ncvry")
+
+[node name="BallExploder3" type="Area2D" parent="." unique_id=880530138 node_paths=PackedStringArray("explo_area", "sprite")]
+position = Vector2(254, 671)
+script = ExtResource("4_k45mu")
+explo_area = NodePath("explo_area")
+sprite = NodePath("Sprite2D")
+metadata/_custom_type_script = "uid://gyalaocvdi10"
+
+[node name="Sprite2D" type="Sprite2D" parent="BallExploder3" unique_id=950459207]
+texture = SubResource("GradientTexture2D_ncvry")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallExploder3" unique_id=420416719]
+shape = SubResource("CircleShape2D_k45mu")
+
+[node name="explo_area" type="Area2D" parent="BallExploder3" unique_id=1560136058]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallExploder3/explo_area" unique_id=879057313]
+shape = SubResource("CircleShape2D_ncvry")
+
+[node name="BallInteractibleFallingBlock" type="Area2D" parent="." unique_id=1836088349 node_paths=PackedStringArray("sprite", "falling_area")]
+position = Vector2(984, 146)
+script = ExtResource("8_uljrg")
+sprite = NodePath("Sprite2D")
+falling_area = NodePath("falling")
+metadata/_custom_type_script = "uid://0ga5ihunpge7"
+
+[node name="falling" type="Area2D" parent="BallInteractibleFallingBlock" unique_id=1306649997]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallInteractibleFallingBlock/falling" unique_id=1309608393]
+shape = SubResource("CircleShape2D_n0eoj")
+
+[node name="inner" type="CollisionShape2D" parent="BallInteractibleFallingBlock" unique_id=1890466887]
+shape = SubResource("RectangleShape2D_i4mlw")
+
+[node name="Sprite2D" type="Sprite2D" parent="BallInteractibleFallingBlock" unique_id=550380348]
+scale = Vector2(0.7366964, 0.7366964)
+texture = ExtResource("9_m7bve")

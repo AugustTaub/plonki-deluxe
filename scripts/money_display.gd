@@ -1,49 +1,32 @@
 extends Control
 
+const SUFFIXES: Array[String] = ["", "k", "m", "b", "t"]
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	SignalBus.set_money_counter.connect(set_money)
 
-func set_money(new_amount: int):
+
+func set_money(new_amount: int) -> void:
 	$money.text = amount_to_string(new_amount)
-	$money.tooltip_text = str(new_amount) + "$"
+	$money.tooltip_text = str(new_amount) + " Coins"
 
 
-func amount_to_string(money_amount: int):
+func amount_to_string(money_amount: int) -> String:
+	var abs_amount: float = float(abs(money_amount))
 	
-	var nr_length: int = str(abs(money_amount)).length()
+	if abs_amount < 1000.0:
+		return str(money_amount)
 	
-	var with_decimal: float = money_amount/ 100.0	
+	var suffix_index: int = 0
 	
-	var return_val: String = str(money_amount)
+	while abs_amount >= 999.95 and suffix_index < SUFFIXES.size() - 1:
+		abs_amount /= 1000.0
+		suffix_index += 1
 	
-	#var size_degree: int = log()
+	var formatted: String = "%.1f" % abs_amount
 	
-	if nr_length <= 2:
-		return_val = str(with_decimal)
-	elif nr_length <= 4:
-		return_val = str(with_decimal)
-	elif nr_length <= 6:
-		return_val = str(with_decimal)
-	elif nr_length <= 8:
-		return_val = str(snappedf(money_amount/100000.0,0.1)) + " K"
-	elif nr_length <= 12:
-		return_val = str(snappedf(money_amount/1000.0/1000.0/10.0, 0.1)) + " Mio."
-	
-	
-	return return_val
-	#var low_float: float = (float(money_amount))/100
-	#
-	#if money_amount < 10000:
-		#
-		#return str(low_float)
-		#
-	#elif money_amount < 1000000:
-		#return str((round(low_float/10)/100)) + " K"
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-@warning_ignore("unused_parameter")
-func _process(delta):
-	pass
+	if formatted.ends_with(".0"):
+		formatted = formatted.left(-2)
+		
+	var prefix: String = "-" if money_amount < 0 else ""
+	return prefix + formatted + SUFFIXES[suffix_index]

@@ -17,4 +17,4 @@ func exit(actor: InfestedPegManager.PegData) -> void:
 func physics_process(delta: float, actor: InfestedPegManager.PegData) -> void:
 	actor.vis_scale -= delta * 2
 	if actor.vis_scale <= 0:
-		actor.active = false
+		peg_manager_node.despawn(actor)

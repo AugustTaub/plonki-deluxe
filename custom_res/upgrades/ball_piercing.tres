@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://clmbtqvm766ok"]
+
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="2_q1h6x"]
+
+[sub_resource type="Curve" id="Curve_yghut"]
+_data = [Vector2(0, 0), 0.0, 0.8015134, 0, 0, Vector2(0.05925926, 0.049927592), 1.2177805, 1.2177805, 0, 0, Vector2(0.59999996, 0.30390728), 1.1093986, 1.1093986, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_5wk4t"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.6, 0.5), 0.6187041, 0.6187041, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
+point_count = 3
+
+[resource]
+script = ExtResource("2_q1h6x")
+name = "ball_piercing"
+pretty_name = "Ball Piercing"
+unit = "Balls pierced"
+price_scaling_curve = SubResource("Curve_yghut")
+start_result = 0.0
+end_result = 5.0
+result_scaling_curve = SubResource("Curve_5wk4t")
+wants_integer_result = true
+metadata/_custom_type_script = "uid://bbo5op84iqbom"

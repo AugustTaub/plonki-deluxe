@@ -6,8 +6,11 @@
 [resource]
 script = ExtResource("2_umgbl")
 name = "stage1_pegs"
+pretty_name = "Stage 1 Pegs"
+unit = "nr. of Pegs"
 max_level = 10
 start_price = 1
 start_result = 3.0
 end_result = 37.0
+wants_integer_result = true
 metadata/_custom_type_script = "uid://bbo5op84iqbom"

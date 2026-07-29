@@ -6,5 +6,10 @@
 [resource]
 script = ExtResource("2_vicae")
 name = "stage2_unlock"
+pretty_name = "Unlock Stage 2"
+unit = "Stages Unlocked"
 max_level = 1
+start_result = 0.0
+end_result = 1.0
+wants_integer_result = true
 metadata/_custom_type_script = "uid://bbo5op84iqbom"

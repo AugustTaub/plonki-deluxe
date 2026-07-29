@@ -16,17 +16,24 @@ var is_hovered: bool = false
 @export var associated_upgrade: UpgradeData
 
 func _ready() -> void:
+	SignalBus.options_toggled.connect(update_visuals)
+	
 	if coll_area:
 		coll_area.mouse_entered.connect(on_mouse_entered)
 		coll_area.mouse_exited.connect(on_mouse_exited)
 	
+	update_visuals()
+	
+	if unlock_cost_text and associated_upgrade:
+		unlock_cost_text.text = zone_name + " \n Buy for: " + str(associated_upgrade.start_price)
+
+func update_visuals():
 	if is_zone_unlocked():
 		change_vis_state(vis_state.UNLOCKED)
 	else:
 		change_vis_state(vis_state.LOCKED)
-	
-	if unlock_cost_text and associated_upgrade:
-		unlock_cost_text.text = zone_name + " \b Buy for: " + str(associated_upgrade.start_price)
+
+
 
 func is_zone_unlocked() -> bool:
 	return associated_upgrade != null and SaveManager.save_game != null and SaveManager.save_game.unlocked_upgrades.has(associated_upgrade)

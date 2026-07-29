@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://ephrii2u0dar"]
+
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="2_wj8uq"]
+
+[sub_resource type="Curve" id="Curve_n0vx3"]
+_data = [Vector2(0, 0), 0.0, 0.8015134, 0, 0, Vector2(0.05925926, 0.049927592), 0.24188545, 0.24188545, 0, 0, Vector2(0.6185185, 0.3509406), 1.3606056, 1.3606056, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_fnlif"]
+_data = [Vector2(0, 0), 0.0, 0.8015134, 0, 0, Vector2(0.05925926, 0.049927592), 1.2177805, 1.2177805, 0, 0, Vector2(0.5703703, 0.51085377), 1.1093986, 1.1093986, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
+point_count = 4
+
+[resource]
+script = ExtResource("2_wj8uq")
+name = "peg_value"
+pretty_name = "Peg Value"
+unit = "Coins"
+max_level = 10
+price_scaling_curve = SubResource("Curve_n0vx3")
+start_result = 1.0
+end_result = 64.0
+result_scaling_curve = SubResource("Curve_fnlif")
+metadata/_custom_type_script = "uid://bbo5op84iqbom"

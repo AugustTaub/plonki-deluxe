@@ -3,9 +3,10 @@ class_name InfestedPegManager
 
 #global settings
 @export var max_number_of_pegs: int = 1000
+@export var desired_max_number_of_pegs: int = 600
 @export var death_explosion_radius: float = 250
-
-
+# bounding box for active pegs 
+@onready var peg_bounding_box = Rect2($enemy_bounding_area.global_position,$enemy_bounding_area.size)
 
 var state_dict: Dictionary = {} 
 
@@ -23,6 +24,9 @@ var rid_to_agent_id: Dictionary = {}    # RID -> ID
 @export var stage_manager: StageManager
 
 var death_explo_shape: RID
+
+var time_since_last_spawn: float = 0.0
+var active_peg_amount: int = 0
 
 ### DATA STRUCTURE
 class PegData extends RefCounted:
@@ -61,8 +65,14 @@ var run_time: float = 0.0
 ### DEBUG
 var peg_nr_spawned: int = 0
 
+var upgrade_preloader: ResourcePreloader
+
+func _on_upgrade_preloader_loaded(preloader: ResourcePreloader):
+	upgrade_preloader = preloader
+
 func _ready():
-	SignalBus.spawn_infested_peg.connect(spawn_infested_peg) 
+	SignalBus.spawn_infested_peg.connect(spawn_infested_peg)
+	SignalBus.upgrade_preloader_loaded.connect(_on_upgrade_preloader_loaded)
 	
 	# set up multimesh
 	adjustable_peg_multimesh.multimesh.instance_count = max_number_of_pegs
@@ -185,12 +195,23 @@ func spawn_infested_peg(spawn_pos: Vector2):
 	var curr_stage_node: StageNode = stage_manager.curr_stage_node
 	if curr_stage_node.navigation_region == null : return
 	
+	active_peg_amount += 1
+	
+	
+	var upgrade: UpgradeData = upgrade_preloader.get_resource("infested_peg_value")
+	var level: int = SaveManager.get_upgrade_level_by_name("infested_peg_value")
+	
+	var upgraded_value: int = int(upgrade.get_level_result(level))
+	
+	
 	#revive pegs if possible
 	for peg in active_pegs:
 		if not peg.active:
 			peg.health = 1
 			peg.has_eaten = false
 			peg.fear = 0.0
+			
+			peg.curr_value = upgraded_value
 			
 			peg.goal_peg = get_random_goal_peg()
 			peg.goal_peg_pos = peg.goal_peg.global_position
@@ -208,6 +229,8 @@ func spawn_infested_peg(spawn_pos: Vector2):
 			
 			activate_area(peg.instance_id, peg.pos)
 			change_peg_state(peg, "idle")
+			
+			
 			return
 	
 	# dont make make pegs if there are too many
@@ -219,6 +242,8 @@ func spawn_infested_peg(spawn_pos: Vector2):
 	
 	new_peg.pos = spawn_pos
 	
+	new_peg.curr_value = upgraded_value
+	
 	new_peg.goal_peg = get_random_goal_peg()
 	new_peg.goal_peg_pos = new_peg.goal_peg.global_position
 	
@@ -228,11 +253,28 @@ func spawn_infested_peg(spawn_pos: Vector2):
 	active_pegs.append(new_peg)
 
 func _physics_process(delta):
-	### DEBUG
-	if Input.is_action_pressed("ui_accept"):
-		spawn_infested_peg(Vector2(randf_range(0,800),0))
-		peg_nr_spawned += 1
-		#print(peg_nr_spawned)
+	## DEBUG
+	#if Input.is_action_pressed("ui_accept"):
+		#spawn_infested_peg(Vector2(randf_range(0,400),0))
+		#peg_nr_spawned += 1
+		##print(peg_nr_spawned)
+	
+	SignalBus.set_debug_txt.emit(str(active_peg_amount) + "\nEnemies")
+	
+	## spawn infested pegs
+	
+	var intervall_upgrade: UpgradeData = upgrade_preloader.get_resource("infested_spawn_time")
+	var level: int = SaveManager.get_upgrade_level_by_name("infested_spawn_time")
+	
+	var spawn_time: float = intervall_upgrade.get_level_result(level)
+	
+	time_since_last_spawn += delta
+	if time_since_last_spawn > spawn_time and active_peg_amount < desired_max_number_of_pegs:
+		time_since_last_spawn = 0.0
+		spawn_infested_peg(Vector2(randf_range(0,300),-100))
+		spawn_infested_peg(Vector2(randf_range(900,1000),-100))
+	
+	
 	
 	# cache parameters for worker threads
 	current_delta = delta
@@ -276,6 +318,10 @@ func _process_peg_batch(index: int):
 		peg.vel = peg.safe_velocity
 	
 	peg.pos += peg.vel * current_delta
+	
+	# check if oob
+	if not peg_bounding_box.has_point(peg.pos):
+		call_deferred("despawn", peg)
 
 func update_peg_visuals(peg: PegData):
 	if adjustable_peg_multimesh and peg.instance_id >= 0 and peg.instance_id <= active_pegs.size()-1:
@@ -362,11 +408,17 @@ func die(peg: PegData):
 			
 			change_fear(hit_peg, 35.0)
 	
+	if peg.has_eaten:
+		SignalBus.play_sound.emit("plomp_low",0.8)
+	else:
+		SignalBus.play_sound.emit("plomp_high",0.8)
+	
 	change_peg_state(peg, "dying")
 
 func despawn(peg: PegData):
 	deactivate_area(peg.instance_id)
 	peg.active = false
+	active_peg_amount -= 1
 
 
 func change_fear(peg: PegData, amount: float):

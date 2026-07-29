@@ -6,6 +6,8 @@
 [resource]
 script = ExtResource("2_v7rgg")
 name = "ball_size"
+pretty_name = "Ball Radius"
+unit = "px"
 max_level = 5
 start_price = 200
 start_result = 8.0

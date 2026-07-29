@@ -46,7 +46,8 @@ func unlock_pegs(peg_amount: int):
 	
 	for i in peg_amount:
 		var new_unlocked_peg: DestructiblePeg = locked_peg_nodes.pop_front()
-		new_unlocked_peg.set_unlock_state(true)
+		if new_unlocked_peg:
+			new_unlocked_peg.set_unlock_state(true)
 
 func lock_pegs(peg_amount: int):
 	var unlocked_amount: int = 0

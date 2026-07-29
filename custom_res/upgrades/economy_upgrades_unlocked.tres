@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://xkmrcj7ftgbk"]
+
+[ext_resource type="Curve" uid="uid://d3vjg4q23dchj" path="res://2D/curves/standard.tres" id="1_q6jke"]
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="2_nvw1c"]
+
+[resource]
+script = ExtResource("2_nvw1c")
+metadata/_custom_type_script = "uid://bbo5op84iqbom"

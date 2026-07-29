@@ -10,6 +10,8 @@ point_count = 2
 [resource]
 script = ExtResource("2_7153c")
 name = "ball_production_speed"
+pretty_name = "Ball Production Time"
+unit = "sec."
 max_level = 5
 start_result = 2.0
 end_result = 0.1

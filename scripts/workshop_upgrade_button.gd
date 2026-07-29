@@ -47,6 +47,8 @@ func _on_pressed() -> void:
 			SaveManager.increase_upgrade_level(associated_upgrade)
 			update_visuals_from_save_game()
 			
+			SignalBus.play_sound.emit("paid",1.2)
+			
 			buy_anim()
 		else:
 			too_expensive_anim()
@@ -83,6 +85,8 @@ func update_visuals_from_save_game() -> void:
 	
 	# hint text display
 	if has_node("%hint_text"):
+		
+		#return early if required upgrade is missing
 		if required_upgrade:
 			if not SaveManager.save_game.unlocked_upgrades.has(required_upgrade):
 				%hint_text.text = "You have to buy: " + required_upgrade.name + " first!"
@@ -96,9 +100,10 @@ func update_visuals_from_save_game() -> void:
 			var r_curr_value: float = adaptive_round(curr_value)
 			var r_next_value: float = adaptive_round(next_value)
 			
-			%hint_text.text = associated_upgrade.name + "\r" + str(r_curr_value) + " -> " + str(r_next_value)
+			%hint_text.text = associated_upgrade.pretty_name + "\r" + str(r_curr_value) + " -> " + str(r_next_value) + " " + associated_upgrade.unit
+			
 		else:
-			%hint_text.text = associated_upgrade.name + "\r [fully upgraded]"
+			%hint_text.text = associated_upgrade.pretty_name + "\r [fully upgraded]"
 
 func set_button_disabled(button_disabled: bool) -> void:
 	disabled = button_disabled

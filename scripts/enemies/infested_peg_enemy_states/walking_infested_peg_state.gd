@@ -26,6 +26,9 @@ func physics_process(delta: float, actor: InfestedPegManager.PegData) -> void:
 		actor.fear *= 0.1
 		actor.has_eaten = true
 		actor.vis_scale = 1.3
+		
+		SignalBus.play_sound.emit.call_deferred("eat", 1.5)
+	
 	
 	# decrease fear
 	if not actor.has_eaten:
@@ -34,7 +37,7 @@ func physics_process(delta: float, actor: InfestedPegManager.PegData) -> void:
 	var goal_pos: Vector2
 	if actor.has_eaten:
 		# if not hungry anymore go back to top of screen
-		goal_pos = Vector2(screen_size.x / 2.0, -100)
+		goal_pos = Vector2(0, -1600)
 		
 	else:
 		# if hungry go to the goal peg and try to eat it
