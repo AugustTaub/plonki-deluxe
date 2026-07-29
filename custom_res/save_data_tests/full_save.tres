@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="SaveGame" format=3 uid="uid://l5ootghviqp1"]
 
-[ext_resource type="Script" uid="uid://drfxtc5ceokld" path="res://scripts/managers/save_game.gd" id="1_mx8ne"]
-[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="2_j07jm"]
+[ext_resource type="Script" uid="uid://drfxtc5ceokld" path="res://scripts/save_data/save_game.gd" id="1_mx8ne"]
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/save_data/upgrade_data.gd" id="2_j07jm"]
 [ext_resource type="Resource" uid="uid://xkmrcj7ftgbk" path="res://custom_res/upgrades/economy_upgrades_unlocked.tres" id="3_eni0e"]
 [ext_resource type="Resource" uid="uid://4xn8ym82suxm" path="res://custom_res/upgrades/factory_unlocked.tres" id="4_g0hje"]
 [ext_resource type="Resource" uid="uid://vts2014lkpqh" path="res://custom_res/upgrades/stage_upgrades_unlocked.tres" id="5_rs8fr"]

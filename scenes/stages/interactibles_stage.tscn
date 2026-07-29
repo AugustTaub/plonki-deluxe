@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://dt4cjm7fquw6t"]
 
-[ext_resource type="Script" uid="uid://rc1pswo54tv8" path="res://scripts/stage_node.gd" id="1_3847s"]
+[ext_resource type="Script" uid="uid://rc1pswo54tv8" path="res://scripts/stage/stage_node.gd" id="1_3847s"]
 [ext_resource type="PackedScene" uid="uid://d1f7gqwmdc8fk" path="res://scenes/destructible_peg_rect.tscn" id="2_cuow7"]
 [ext_resource type="Resource" uid="uid://bpk8l30is7poq" path="res://custom_res/upgrades/stage3_pegs.tres" id="2_l1pay"]
 [ext_resource type="Resource" uid="uid://b2bdjv67ejl0n" path="res://custom_res/upgrades/stage3_unlock.tres" id="3_1tge3"]
-[ext_resource type="Script" uid="uid://c33idtn4w1ory" path="res://scripts/ball_interactibles/ball_teleporter.gd" id="3_8q8ih"]
-[ext_resource type="Script" uid="uid://gyalaocvdi10" path="res://scripts/ball_interactibles/ball_exploder.gd" id="4_k45mu"]
+[ext_resource type="Script" uid="uid://c33idtn4w1ory" path="res://scripts/ball_interactibles/non_peg_interactibles/ball_teleporter.gd" id="3_8q8ih"]
+[ext_resource type="Script" uid="uid://gyalaocvdi10" path="res://scripts/ball_interactibles/non_peg_interactibles/ball_exploder.gd" id="4_k45mu"]
 [ext_resource type="Texture2D" uid="uid://dnindf1po1ar8" path="res://2D/images/bg3.png" id="4_m7bve"]
 [ext_resource type="PackedScene" uid="uid://c4ashcsbyavdi" path="res://scenes/destructible_peg_round.tscn" id="5_dhrly"]
-[ext_resource type="Script" uid="uid://0ga5ihunpge7" path="res://scripts/ball_interactibles/falling_block.gd" id="8_uljrg"]
-[ext_resource type="Texture2D" uid="uid://bb2cee8x2tlcy" path="res://2D/godot_gen_textures/debug_circle.tres" id="9_m7bve"]
+[ext_resource type="Script" uid="uid://0ga5ihunpge7" path="res://scripts/ball_interactibles/non_peg_interactibles/falling_block.gd" id="8_uljrg"]
+[ext_resource type="Texture2D" uid="uid://17mlxjsy4idm" path="res://2D/images/falling_block.png" id="10_m7bve"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_k45mu"]
 radius = 16.0
@@ -353,5 +353,6 @@ shape = SubResource("CircleShape2D_n0eoj")
 shape = SubResource("RectangleShape2D_i4mlw")
 
 [node name="Sprite2D" type="Sprite2D" parent="BallInteractibleFallingBlock" unique_id=550380348]
-scale = Vector2(0.7366964, 0.7366964)
-texture = ExtResource("9_m7bve")
+texture_filter = 1
+scale = Vector2(1.4732056, 1.4732056)
+texture = ExtResource("10_m7bve")

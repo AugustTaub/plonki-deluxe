@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cpha31pc0s008"]
 
 [ext_resource type="Texture2D" uid="uid://j0uodtkukcni" path="res://2D/godot_gen_textures/ball.tres" id="1_lfnkh"]
-[ext_resource type="Script" uid="uid://c3qxq6fdv1cgr" path="res://scripts/workshop_upgrade_button.gd" id="2_sxehb"]
+[ext_resource type="Script" uid="uid://c3qxq6fdv1cgr" path="res://scripts/UI/workshop_upgrade_button.gd" id="2_sxehb"]
 [ext_resource type="Texture2D" uid="uid://dbf8xs67fg1be" path="res://2D/godot_gen_textures/coin_circle.tres" id="3_o5l0w"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_35y6k"]

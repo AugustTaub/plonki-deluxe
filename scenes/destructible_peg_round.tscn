@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c4ashcsbyavdi"]
 
-[ext_resource type="Script" uid="uid://dlyva8iecj0md" path="res://scripts/destructible_peg.gd" id="1_oouwb"]
+[ext_resource type="Script" uid="uid://dlyva8iecj0md" path="res://scripts/ball_interactibles/destructible_peg.gd" id="1_oouwb"]
 [ext_resource type="Texture2D" uid="uid://cy1q20a3g3tnb" path="res://2D/images/peg.png" id="2_oouwb"]
 
 [sub_resource type="Gradient" id="Gradient_oouwb"]
@@ -15,20 +15,37 @@ height = 32
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
+[sub_resource type="Gradient" id="Gradient_gqub4"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.42372882, 0.5805085)
+colors = PackedColorArray(0, 0, 0, 0, 0.77832, 0.92, 0.7268, 0.8352941, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cprsj"]
+gradient = SubResource("Gradient_gqub4")
+width = 32
+height = 32
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_jru8u"]
 radius = 15.0
 
-[node name="DestructiblePeg" type="Area2D" unique_id=1750133912 node_paths=PackedStringArray("peg_sprite", "peg_coll_shape")]
+[node name="DestructiblePeg" type="Area2D" unique_id=1750133912 node_paths=PackedStringArray("peg_sprite", "peg_reanimating_sprite", "peg_coll_shape")]
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_oouwb")
 peg_sprite = NodePath("peg_sprite")
+peg_reanimating_sprite = NodePath("peg_reanimating_sprite")
 peg_coll_shape = NodePath("peg_coll_shape")
 preloaded_alive_tex = ExtResource("2_oouwb")
 
 [node name="peg_damage_sprite" type="Sprite2D" parent="." unique_id=1054120760]
 texture_filter = 1
 texture = SubResource("GradientTexture2D_gqub4")
+
+[node name="peg_reanimating_sprite" type="Sprite2D" parent="." unique_id=375800238]
+texture_filter = 1
+texture = SubResource("GradientTexture2D_cprsj")
 
 [node name="peg_sprite" type="Sprite2D" parent="." unique_id=1572766428]
 unique_name_in_owner = true

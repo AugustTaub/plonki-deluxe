@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d1f7gqwmdc8fk"]
 
-[ext_resource type="Script" uid="uid://dlyva8iecj0md" path="res://scripts/destructible_peg.gd" id="1_1f7cw"]
+[ext_resource type="Script" uid="uid://dlyva8iecj0md" path="res://scripts/ball_interactibles/destructible_peg.gd" id="1_1f7cw"]
 [ext_resource type="Texture2D" uid="uid://cvqhgtudil8lp" path="res://2D/godot_gen_textures/alive_rect_peg.tres" id="2_e6lef"]
 [ext_resource type="Texture2D" uid="uid://com7mgsdnhi3g" path="res://2D/godot_gen_textures/dead_rect_peg.tres" id="3_qnma7"]
 

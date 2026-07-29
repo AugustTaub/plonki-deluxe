@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dxofmr5dxupur"]
 
-[ext_resource type="Script" uid="uid://b3ywhwga858ka" path="res://scripts/money_display.gd" id="1_vr4hv"]
+[ext_resource type="Script" uid="uid://b3ywhwga858ka" path="res://scripts/UI/money_display.gd" id="1_vr4hv"]
 [ext_resource type="Texture2D" uid="uid://dbf8xs67fg1be" path="res://2D/godot_gen_textures/coin_circle.tres" id="2_bft5h"]
 [ext_resource type="Texture2D" uid="uid://ch0ub3rdyc4km" path="res://2D/images/9_patch.png" id="2_ompqv"]
 

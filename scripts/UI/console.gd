@@ -65,4 +65,5 @@ func add_balls(amount: int):
 func load_full_save():
 	if full_save:
 		SaveManager.load_save_game(full_save)
+		SignalBus.enable_piercing_button.emit()
 		push_notification("Loaded complete save game with all Unlocks")

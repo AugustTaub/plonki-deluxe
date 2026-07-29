@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dmdmxku73lvmo"]
 
-[ext_resource type="Script" uid="uid://rc1pswo54tv8" path="res://scripts/stage_node.gd" id="1_k7kex"]
+[ext_resource type="Script" uid="uid://rc1pswo54tv8" path="res://scripts/stage/stage_node.gd" id="1_k7kex"]
 [ext_resource type="PackedScene" uid="uid://c4ashcsbyavdi" path="res://scenes/destructible_peg_round.tscn" id="2_sl44i"]
-[ext_resource type="Script" uid="uid://0ga5ihunpge7" path="res://scripts/ball_interactibles/falling_block.gd" id="3_sl44i"]
+[ext_resource type="Script" uid="uid://0ga5ihunpge7" path="res://scripts/ball_interactibles/non_peg_interactibles/falling_block.gd" id="3_sl44i"]
 [ext_resource type="Texture2D" uid="uid://bb2cee8x2tlcy" path="res://2D/godot_gen_textures/debug_circle.tres" id="4_8ykyq"]
 
 [sub_resource type="Gradient" id="Gradient_tefeu"]

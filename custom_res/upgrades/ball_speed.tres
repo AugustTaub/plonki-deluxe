@@ -1,19 +1,25 @@
 [gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://v81rtw47g0f"]
 
-[ext_resource type="Curve" uid="uid://d3vjg4q23dchj" path="res://2D/curves/standard.tres" id="1_aifwu"]
-[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="2_53lf0"]
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/save_data/upgrade_data.gd" id="1_aghkm"]
 
 [sub_resource type="Curve" id="Curve_aifwu"]
+_data = [Vector2(0, 0), 0.0, 0.072201334, 0, 0, Vector2(0.8167939, 0.22000003), 1.1093986, 1.1093986, 0, 0, Vector2(1, 1), 8.174398, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_53lf0"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.6, 0.5), 0.6187041, 0.6187041, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
 point_count = 3
 
 [resource]
-script = ExtResource("2_53lf0")
+script = ExtResource("1_aghkm")
 name = "ball_speed"
 pretty_name = "Ball Speed"
 unit = "px per second"
-max_level = 6
+max_level = 10
+start_price = 5
+end_price = 100000
+price_scaling_curve = SubResource("Curve_aifwu")
 start_result = 200.0
 end_result = 3500.0
-result_scaling_curve = SubResource("Curve_aifwu")
+result_scaling_curve = SubResource("Curve_53lf0")
 metadata/_custom_type_script = "uid://bbo5op84iqbom"

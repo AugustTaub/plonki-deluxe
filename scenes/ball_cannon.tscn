@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dcmaqt0frjic"]
 
-[ext_resource type="Script" uid="uid://cbax1n6d7rsfi" path="res://scripts/ball_cannon.gd" id="1_587w4"]
+[ext_resource type="Script" uid="uid://cbax1n6d7rsfi" path="res://scripts/ball/ball_cannon.gd" id="1_587w4"]
 [ext_resource type="Resource" uid="uid://cvslx5sb28pf5" path="res://custom_res/upgrades/test.tres" id="2_yppoi"]
 [ext_resource type="Texture2D" uid="uid://btqsytmfobaep" path="res://2D/images/cannon1.png" id="3_k8t16"]
 [ext_resource type="Texture2D" uid="uid://bsc6thrn6u4xq" path="res://2D/images/cannon_anim.png" id="4_5tpgd"]

@@ -1,7 +1,46 @@
 [gd_resource type="Resource" script_class="SaveGame" format=3]
 
-[ext_resource type="Script" path="res://scripts/managers/save_game.gd" id="1_mx8ne"]
-[ext_resource type="Script" path="res://scripts/upgrade_data.gd" id="2_j07jm"]
+[ext_resource type="Script" path="res://scripts/save_data/save_game.gd" id="1_mx8ne"]
+[ext_resource type="Script" path="res://scripts/save_data/upgrade_data.gd" id="2_j07jm"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/economy_upgrades_unlocked.tres" id="3_rvg25"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/factory_unlocked.tres" id="4_d75he"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/stage_upgrades_unlocked.tres" id="5_c2e1y"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/stage1_pegs.tres" id="6_em5y1"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/stage2_unlock.tres" id="7_xt8qk"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/stage2_pegs.tres" id="8_sh13l"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/stage3_pegs.tres" id="9_rmg8r"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/stage3_unlock.tres" id="10_vthlm"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/infested_spawn_time.tres" id="11_dwab1"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/ball_size.tres" id="12_vaqhr"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/ball_production_speed.tres" id="13_lquk3"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/infested_peg_value.tres" id="14_rhuym"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/peg_value.tres" id="15_fdsuh"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/peg_respawn_time.tres" id="16_l4r0p"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/ball_cannon_unlocked.tres" id="17_cv861"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/ball_piercing.tres" id="18_3hhlr"]
+[ext_resource type="Resource" path="res://custom_res/upgrades/ball_speed.tres" id="19_vpen6"]
 
 [resource]
 script = ExtResource("1_mx8ne")
+money_amount = 813880
+ball_amount = 9180
+unlocked_upgrades = Array[ExtResource("2_j07jm")]([ExtResource("3_rvg25"), ExtResource("4_d75he"), ExtResource("5_c2e1y"), ExtResource("6_em5y1"), ExtResource("7_xt8qk"), ExtResource("8_sh13l"), ExtResource("9_rmg8r"), ExtResource("10_vthlm"), ExtResource("11_dwab1"), ExtResource("12_vaqhr"), ExtResource("13_lquk3"), ExtResource("14_rhuym"), ExtResource("15_fdsuh"), ExtResource("16_l4r0p"), ExtResource("17_cv861"), ExtResource("18_3hhlr"), ExtResource("19_vpen6")])
+upgrade_levels = Dictionary[ExtResource("2_j07jm"), int]({
+ExtResource("3_rvg25"): 0,
+ExtResource("4_d75he"): 0,
+ExtResource("5_c2e1y"): 0,
+ExtResource("6_em5y1"): 10,
+ExtResource("7_xt8qk"): 1,
+ExtResource("8_sh13l"): 10,
+ExtResource("9_rmg8r"): 10,
+ExtResource("10_vthlm"): 1,
+ExtResource("11_dwab1"): 3,
+ExtResource("12_vaqhr"): 5,
+ExtResource("13_lquk3"): 5,
+ExtResource("14_rhuym"): 10,
+ExtResource("15_fdsuh"): 10,
+ExtResource("16_l4r0p"): 6,
+ExtResource("17_cv861"): 0,
+ExtResource("18_3hhlr"): 3,
+ExtResource("19_vpen6"): 6
+})

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://bamlm0828kx7y"]
 
-[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="1_460by"]
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/save_data/upgrade_data.gd" id="1_460by"]
 
 [sub_resource type="Curve" id="Curve_n0vx3"]
 _data = [Vector2(0, 0), 0.0, 0.8015134, 0, 0, Vector2(0.05925926, 0.049927592), 0.24188545, 0.24188545, 0, 0, Vector2(0.6185185, 0.3509406), 1.3606056, 1.3606056, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]

@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://ckp6h4cuw88tj" path="res://2D/godot_gen_textures/hold_reset_gradient_tex.tres" id="1_3t8k5"]
 [ext_resource type="Script" uid="uid://7n2yo6j16r38" path="res://scripts/UI/reset_progress_button.gd" id="1_m3vow"]
 [ext_resource type="Script" uid="uid://dlny1bbk7nwiy" path="res://scripts/UI/options_close_button.gd" id="1_qgort"]
+[ext_resource type="Script" uid="uid://12xqxyagwt7h" path="res://scripts/UI/volume_slider.gd" id="2_5tpni"]
 [ext_resource type="Script" uid="uid://cj3mtfsfejgh7" path="res://scripts/UI/console.gd" id="4_ijsq6"]
 [ext_resource type="Resource" uid="uid://l5ootghviqp1" path="res://custom_res/save_data_tests/full_save.tres" id="5_6mmsa"]
 
@@ -29,7 +30,7 @@ layout_mode = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1891388860]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1020411675]
+[node name="headline" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1020411675]
 custom_minimum_size = Vector2(317.58, 0)
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 26
@@ -41,6 +42,24 @@ horizontal_alignment = 1
 layout_mode = 2
 text = "  X  "
 script = ExtResource("1_qgort")
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=777879393]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="volume_label" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=1653249049]
+layout_mode = 2
+text = "Volume:"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="volume_slider" type="HSlider" parent="MarginContainer/VBoxContainer" unique_id=579110595 node_paths=PackedStringArray("volume_label")]
+layout_mode = 2
+script = ExtResource("2_5tpni")
+volume_label = NodePath("../volume_label")
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=2023667481]
+layout_mode = 2
 
 [node name="reset_progress_button" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1137696838 node_paths=PackedStringArray("notification_label")]
 layout_mode = 2
@@ -54,6 +73,9 @@ notification_label = NodePath("../notification")
 layout_mode = 2
 fit_content = true
 horizontal_alignment = 1
+
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=17265089]
+layout_mode = 2
 
 [node name="console" type="TextEdit" parent="MarginContainer/VBoxContainer" unique_id=1943315190 node_paths=PackedStringArray("notification_label")]
 custom_minimum_size = Vector2(0, 39.5)
@@ -71,5 +93,6 @@ fit_content = true
 horizontal_alignment = 1
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/options_close_button" to="MarginContainer/VBoxContainer/HBoxContainer/options_close_button" method="_on_pressed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/volume_slider" to="MarginContainer/VBoxContainer/volume_slider" method="_on_h_slider_value_changed"]
 [connection signal="button_down" from="MarginContainer/VBoxContainer/reset_progress_button" to="MarginContainer/VBoxContainer/reset_progress_button" method="_on_button_down"]
 [connection signal="button_up" from="MarginContainer/VBoxContainer/reset_progress_button" to="MarginContainer/VBoxContainer/reset_progress_button" method="_on_button_up"]

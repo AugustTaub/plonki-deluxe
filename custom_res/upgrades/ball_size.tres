@@ -1,7 +1,11 @@
 [gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://du3eonw0shm4s"]
 
 [ext_resource type="Curve" uid="uid://d3vjg4q23dchj" path="res://2D/curves/standard.tres" id="1_gsqlm"]
-[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/upgrade_data.gd" id="2_v7rgg"]
+[ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/save_data/upgrade_data.gd" id="2_v7rgg"]
+
+[sub_resource type="Curve" id="Curve_gsqlm"]
+_data = [Vector2(0, 0), 0.0, 0.26005962, 0, 0, Vector2(0.8053435, 0.17840004), 1.0899193, 1.0899193, 0, 0, Vector2(1, 1), 10.29368, 0.0, 0, 0]
+point_count = 3
 
 [resource]
 script = ExtResource("2_v7rgg")
@@ -10,6 +14,7 @@ pretty_name = "Ball Radius"
 unit = "px"
 max_level = 5
 start_price = 200
+price_scaling_curve = SubResource("Curve_gsqlm")
 start_result = 8.0
 end_result = 24.0
 metadata/_custom_type_script = "uid://bbo5op84iqbom"

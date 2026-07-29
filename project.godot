@@ -29,6 +29,16 @@ window/size/viewport_height=864
 window/stretch/mode="canvas_items"
 window/vsync/vsync_mode=0
 
+[file_customization]
+
+folder_colors={
+"res://2D/": "green",
+"res://custom_res/": "purple",
+"res://scenes/": "yellow",
+"res://scripts/": "blue",
+"res://sounds/": "orange"
+}
+
 [global_group]
 
 ball_kill=""

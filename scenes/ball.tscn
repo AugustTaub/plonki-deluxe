@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bxfextcfhtqvk"]
 
-[ext_resource type="Script" uid="uid://bnmoi1dowi5rn" path="res://scripts/ball_physics_node_ver.gd" id="1_7s4qf"]
+[ext_resource type="Script" uid="uid://bnmoi1dowi5rn" path="res://scripts/deprecated/ball_physics_node_ver.gd" id="1_7s4qf"]
 [ext_resource type="Texture2D" uid="uid://j0uodtkukcni" path="res://2D/godot_gen_textures/ball.tres" id="2_cxlvu"]
 
 [node name="ball" type="Node2D" unique_id=712663774]
