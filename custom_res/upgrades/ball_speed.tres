@@ -3,11 +3,11 @@
 [ext_resource type="Script" uid="uid://bbo5op84iqbom" path="res://scripts/save_data/upgrade_data.gd" id="1_aghkm"]
 
 [sub_resource type="Curve" id="Curve_aifwu"]
-_data = [Vector2(0, 0), 0.0, 0.072201334, 0, 0, Vector2(0.8167939, 0.22000003), 1.1093986, 1.1093986, 0, 0, Vector2(1, 1), 8.174398, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 0.34486318, 0, 0, Vector2(0.8167939, 0.22000003), 1.1093986, 1.1093986, 0, 0, Vector2(1, 1), 8.174398, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="Curve" id="Curve_53lf0"]
-_data = [Vector2(0, 0), 0.0, 1.1207188, 0, 0, Vector2(0.6, 0.5), 0.6187041, 0.6187041, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 0.7191241, 0, 0, Vector2(0.8851851, 0.47322714), 0.6187041, 0.6187041, 0, 0, Vector2(1, 1), 2.3951128, 0.0, 0, 0]
 point_count = 3
 
 [resource]

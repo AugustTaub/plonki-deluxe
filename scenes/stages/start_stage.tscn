@@ -11,6 +11,7 @@ associated_peg_upgrade = ExtResource("2_wgon0")
 metadata/_custom_type_script = "uid://rc1pswo54tv8"
 
 [node name="bg" type="Sprite2D" parent="." unique_id=1945480160]
+modulate = Color(0.49354547, 0.49354553, 0.49354553, 1)
 z_index = -1
 texture_filter = 1
 position = Vector2(552, 380)
