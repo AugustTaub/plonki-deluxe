@@ -1,6 +1,6 @@
 extends TextEdit
 
-@export var notification_label: RichTextLabel
+@export var console_feed: TextEdit
 
 @export var full_save: SaveGame
 
@@ -10,6 +10,7 @@ var known_commands: Dictionary[String, Callable] = {
 	"add balls": add_balls,
 	"load full save": load_full_save,
 	"reset progress": reset_progress,
+	"list commands": list_commands,
 }
 
 var commands_with_variables: Array[String] = ["add coins","add balls"]
@@ -35,11 +36,11 @@ func try_command(content: String):
 			
 			return
 
-func get_first_number_chain(text: String) -> String:
+func get_first_number_chain(gtext: String) -> String:
 	var regex := RegEx.new()
 	regex.compile("\\d+")
 	
-	var result := regex.search(text)
+	var result := regex.search(gtext)
 	if result:
 		return result.get_string()
 		
@@ -47,10 +48,10 @@ func get_first_number_chain(text: String) -> String:
 
 
 func push_notification(content: String):
-	if notification_label:
-		notification_label.text = content
-		await get_tree().create_timer(5.0).timeout
-		notification_label.text = ""
+	if console_feed:
+		console_feed.text = content
+		await get_tree().create_timer(60.0).timeout
+		console_feed.text = ""
 
 func say_hello():
 	push_notification("Hello!")
@@ -72,3 +73,10 @@ func load_full_save():
 func reset_progress():
 	SaveManager.reset_save_game()
 	push_notification("Progress was reset. Savegame overwritten")
+
+func list_commands():
+	var string: String = ""
+	for key in known_commands.keys():
+		string += "\n" + key
+	
+	push_notification(string)

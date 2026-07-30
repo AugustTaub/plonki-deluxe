@@ -3,6 +3,8 @@ extends Node
 const SAVE_PATH := "user://plonki_save_1.tres"
 #const SAVE_PATH := "res://custom_res/save_data_tests/full_save.tres"
 
+var full_save: SaveGame = preload("res://custom_res/save_data_tests/full_save.tres")
+
 var save_game: SaveGame = null
 
 var upgrade_preloader: ResourcePreloader
@@ -92,11 +94,14 @@ func increase_upgrade_level(increase_upgrade: UpgradeData):
 	else:
 		save_game.upgrade_levels[increase_upgrade] = 0
 	
+	if check_if_save_is_complete(): 
+		SignalBus.upgrades_complete.emit()
 
 func set_upgrade_level(set_upgrade: UpgradeData, new_level: int):
 	if save_game.unlocked_upgrades.has(set_upgrade):
 		new_level = clamp(new_level,0,set_upgrade.max_level)
 		save_game.upgrade_levels[set_upgrade] = new_level
+	
 
 
 func get_unlocked_upgrade_by_name(upgrade_name: String):
@@ -129,3 +134,15 @@ func load_save_game(save: SaveGame):
 	set_ball_amount(save_game.ball_amount)
 	
 	ResourceSaver.save(save_game, SAVE_PATH)
+
+func check_if_save_is_empty() -> bool:
+	var is_empty: bool = save_game.unlocked_upgrades == []
+	return is_empty
+
+func check_if_save_is_complete() -> bool:
+	
+	var full_levels = full_save.upgrade_levels
+	
+	var is_complete: bool = save_game.upgrade_levels == full_levels
+	
+	return is_complete

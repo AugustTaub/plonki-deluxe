@@ -127,7 +127,7 @@ func _physics_process(delta):
 			var dir: Vector2 =  $pivot.global_transform.x
 			
 			var extra_shots: int = max( ( int(delta/curr_max_shot_speed) ), 2)
-			print(extra_shots)
+			
 			for e in extra_shots:
 				var pos_add: Vector2 = dir*8*e* int(1 if randf() else -1)
 				SignalBus.spawn_ball.emit(pos+pos_add,vel,radius)

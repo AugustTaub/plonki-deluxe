@@ -15,7 +15,7 @@ func _ready() -> void:
 func set_nr(new_nr: int):
 	nr_label.text = "+" + str(new_nr)
 	var len_adj: float = 32.0 - nr_label.text.length() * 2.0
-	nr_label.add_theme_font_size_override("normal_font_size",len_adj)
+	nr_label.add_theme_font_size_override("normal_font_size",int(len_adj))
 
 func ball_generated_anim():
 	

@@ -78,7 +78,7 @@ func update_peg_amount_from_save():
 		var unlocked_pegs_upgrade: UpgradeData = associated_peg_upgrade
 		var unlocked_lvl: int = SaveManager.get_upgrade_level_by_name(associated_peg_upgrade.name)
 		
-		nr_of_free_pegs = unlocked_pegs_upgrade.get_level_result(unlocked_lvl)
+		nr_of_free_pegs = int(unlocked_pegs_upgrade.get_level_result(unlocked_lvl))
 		
 	else:
 		push_warning("Stage: Could not find associated peg amount upgrade!")

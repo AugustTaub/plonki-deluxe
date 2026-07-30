@@ -22,12 +22,16 @@
 [ext_resource type="Texture2D" uid="uid://dupvpasgqfy1j" path="res://2D/images/gear_icon.png" id="11_ty1g6"]
 [ext_resource type="Texture2D" uid="uid://dj7aryelt4xny" path="res://2D/godot_gen_textures/white_circle.tres" id="13_yc10j"]
 [ext_resource type="PackedScene" uid="uid://dxowdq7qo4vr5" path="res://scenes/ball_bucket.tscn" id="13_ygd8o"]
+[ext_resource type="Script" uid="uid://d4e31lucunohn" path="res://scripts/UI/info_popup_controller.gd" id="14_2s0kr"]
 [ext_resource type="Shader" uid="uid://d2d3h755xlejn" path="res://2D/shaders/sim_ball_trans.gdshader" id="15_jbj1t"]
 [ext_resource type="Texture2D" uid="uid://cj8bbt23rgiqq" path="res://2D/godot_gen_textures/blu_ball.tres" id="15_jkv2x"]
+[ext_resource type="PackedScene" uid="uid://rpq3vcjv5u48" path="res://scenes/UI/win_screen.tscn" id="15_ndrjj"]
 [ext_resource type="PackedScene" uid="uid://didcss5a6tuv4" path="res://scenes/UI/ball_factory.tscn" id="15_tel4y"]
 [ext_resource type="Shader" uid="uid://b8oco35fngtil" path="res://2D/shaders/fake3Dball_glowing.gdshader" id="16_0ld40"]
 [ext_resource type="Texture2D" uid="uid://dyd4oclypohv0" path="res://2D/images/flames.png" id="16_dp3eg"]
+[ext_resource type="PackedScene" uid="uid://c44t1goem3yoh" path="res://scenes/UI/intro_screen.tscn" id="16_ih3m7"]
 [ext_resource type="PackedScene" uid="uid://c6f1nbs4ofhu2" path="res://scenes/stages/enemy_stage.tscn" id="17_c6pm6"]
+[ext_resource type="Texture2D" uid="uid://cjb1ogj31l0cc" path="res://2D/images/reward_plush.png" id="17_ih3m7"]
 [ext_resource type="Texture2D" uid="uid://bcwj61mhugcmi" path="res://2D/images/ball3.png" id="20_fv21b"]
 [ext_resource type="Script" uid="uid://bpkun8bhfpwog" path="res://scripts/managers/shock_wave_manager.gd" id="20_gqmmt"]
 [ext_resource type="Script" uid="uid://c44acerkmynj2" path="res://scripts/enemies/infested_peg/infested_peg_manager.gd" id="20_ksmap"]
@@ -469,6 +473,33 @@ anchors_preset = 0
 script = ExtResource("6_og1vs")
 workshop_screen_node = NodePath("../workshop_node")
 options_node = NodePath("../options_menu")
+
+[node name="info_popup_controller" type="Control" parent="CanvasLayer" unique_id=171668909 node_paths=PackedStringArray("win_screen", "intro_screen", "reward_plushy")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("14_2s0kr")
+win_screen = NodePath("WinScreen")
+intro_screen = NodePath("IntroScreen")
+reward_plushy = NodePath("reward_plushy")
+
+[node name="WinScreen" parent="CanvasLayer/info_popup_controller" unique_id=536217762 instance=ExtResource("15_ndrjj")]
+visible = false
+layout_mode = 1
+
+[node name="IntroScreen" parent="CanvasLayer/info_popup_controller" unique_id=1637780100 instance=ExtResource("16_ih3m7")]
+visible = false
+layout_mode = 1
+
+[node name="reward_plushy" type="TextureRect" parent="CanvasLayer/info_popup_controller" unique_id=1422197528]
+visible = false
+layout_mode = 0
+offset_left = -23.0
+offset_top = 583.0
+offset_right = 164.0
+offset_bottom = 770.0
+texture = ExtResource("17_ih3m7")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1171107608]
 position = Vector2(582, 430)

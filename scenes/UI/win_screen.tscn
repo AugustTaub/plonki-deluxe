@@ -1,0 +1,96 @@
+[gd_scene format=3 uid="uid://rpq3vcjv5u48"]
+
+[ext_resource type="Texture2D" uid="uid://iucxct4felay" path="res://2D/images/ui_frame.png" id="1_aov5u"]
+[ext_resource type="Texture2D" uid="uid://cjb1ogj31l0cc" path="res://2D/images/reward_plush.png" id="1_ofhcv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c1oj8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aov5u"]
+bg_color = Color(0.16, 0.16, 0.16, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c1oj8"]
+bg_color = Color(0.09239709, 0.09239706, 0.09239706, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.46229053, 0.46229064, 0.46229035, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0g4u2"]
+bg_color = Color(0.26293245, 0.26293245, 0.26293242, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+
+[node name="WinScreen" type="Control" unique_id=536217762]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1487161988]
+layout_mode = 0
+offset_left = 128.0
+offset_top = 93.0
+offset_right = 1026.0
+offset_bottom = 721.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_c1oj8")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="PanelContainer" unique_id=79243811]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("1_aov5u")
+region_rect = Rect2(1, 0, 127, 128)
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 9
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=617888604]
+layout_mode = 2
+
+[node name="headline" type="RichTextLabel" parent="PanelContainer/VBoxContainer" unique_id=1738729698]
+custom_minimum_size = Vector2(0, 55.25)
+layout_mode = 2
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 32
+text = "Congratulations! You earned the exclusive plushy!"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer" unique_id=1988535146]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 380.78)
+layout_mode = 2
+texture = ExtResource("1_ofhcv")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="main_text" type="RichTextLabel" parent="PanelContainer/VBoxContainer" unique_id=1865674101]
+custom_minimum_size = Vector2(0, 154.305)
+layout_mode = 2
+text = "You have unlocked all Upgrades!
+
+Here's a little Secret as an extra Reward:
+1. Go to Options
+2. Type \"list commands\" in the console at the bottom
+"
+horizontal_alignment = 1
+
+[node name="x_button" type="Button" parent="." unique_id=1865848482]
+layout_mode = 0
+offset_left = 993.0
+offset_top = 77.0
+offset_right = 1041.0
+offset_bottom = 126.41177
+theme_override_font_sizes/font_size = 38
+theme_override_styles/normal = SubResource("StyleBoxFlat_aov5u")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_c1oj8")
+theme_override_styles/hover = SubResource("StyleBoxFlat_0g4u2")
+text = " X "

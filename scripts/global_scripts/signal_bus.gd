@@ -59,10 +59,13 @@ signal save_game_loaded()
 @warning_ignore("unused_signal")
 signal play_sound(sound_name: String, volume_modifier: float)
 
-### misc
+### save system
 
 @warning_ignore("unused_signal")
 signal upgrade_preloader_loaded(preloader_node: ResourcePreloader)
 
 @warning_ignore("unused_signal")
 signal coins_increased(increase_amount)
+
+@warning_ignore("unused_signal")
+signal upgrades_complete()

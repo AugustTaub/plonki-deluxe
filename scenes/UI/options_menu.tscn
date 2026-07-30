@@ -5,13 +5,11 @@
 [ext_resource type="Script" uid="uid://dlny1bbk7nwiy" path="res://scripts/UI/options_close_button.gd" id="1_qgort"]
 [ext_resource type="Script" uid="uid://12xqxyagwt7h" path="res://scripts/UI/volume_slider.gd" id="2_5tpni"]
 [ext_resource type="Script" uid="uid://cj3mtfsfejgh7" path="res://scripts/UI/console.gd" id="4_ijsq6"]
-[ext_resource type="Resource" uid="uid://l5ootghviqp1" path="res://custom_res/save_data_tests/full_save.tres" id="5_6mmsa"]
+[ext_resource type="Resource" uid="uid://68ax6ecxq54q" path="res://custom_res/save_data_tests/full_save.tres" id="5_6mmsa"]
+[ext_resource type="Script" uid="uid://7lhl2bagtqv2" path="res://scripts/UI/console_feed_copy.gd" id="7_bj8r8"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qgort"]
 texture = ExtResource("1_3t8k5")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ijsq6"]
-bg_color = Color(0.47553003, 0.66, 0.40260002, 0.09803922)
 
 [node name="settings_menu" type="PanelContainer" unique_id=1264954009]
 offset_right = 385.0
@@ -77,20 +75,25 @@ horizontal_alignment = 1
 [node name="HSeparator3" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=17265089]
 layout_mode = 2
 
-[node name="console" type="TextEdit" parent="MarginContainer/VBoxContainer" unique_id=1943315190 node_paths=PackedStringArray("notification_label")]
+[node name="console" type="TextEdit" parent="MarginContainer/VBoxContainer" unique_id=1943315190 node_paths=PackedStringArray("console_feed")]
 custom_minimum_size = Vector2(0, 39.5)
 layout_mode = 2
 placeholder_text = "type commands here..."
 script = ExtResource("4_ijsq6")
-notification_label = NodePath("../console_notification")
+console_feed = NodePath("../console_feed")
 full_save = ExtResource("5_6mmsa")
 
-[node name="console_notification" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=758700733]
+[node name="console_feed" type="TextEdit" parent="MarginContainer/VBoxContainer" unique_id=2061433370]
+custom_minimum_size = Vector2(0, 450)
 layout_mode = 2
-theme_override_font_sizes/normal_font_size = 12
-theme_override_styles/normal = SubResource("StyleBoxFlat_ijsq6")
-fit_content = true
-horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.7209, 0.89, 0.7857216, 1)
+theme_override_font_sizes/font_size = 12
+editable = false
+context_menu_enabled = false
+emoji_menu_enabled = false
+shortcut_keys_enabled = false
+virtual_keyboard_enabled = false
+script = ExtResource("7_bj8r8")
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/options_close_button" to="MarginContainer/VBoxContainer/HBoxContainer/options_close_button" method="_on_pressed"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/volume_slider" to="MarginContainer/VBoxContainer/volume_slider" method="_on_h_slider_value_changed"]

@@ -254,7 +254,7 @@ position = Vector2(489, 586)
 position = Vector2(659, 538)
 
 [node name="BallTeleporter" type="Area2D" parent="." unique_id=316168401 node_paths=PackedStringArray("paired_telporter")]
-position = Vector2(965, 681)
+position = Vector2(823, 451)
 script = ExtResource("3_8q8ih")
 paired_telporter = NodePath("../BallTeleporter2")
 metadata/_custom_type_script = "uid://c33idtn4w1ory"
