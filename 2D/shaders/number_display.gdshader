@@ -12,11 +12,18 @@ void vertex() {
 
 void fragment() {
 	
-	int val = int(clamp(number, 0.0, 999.0));
+	int val = int(clamp(number, 0.0, 99999.0));
 	
 	// find how many digits there are
 	int num_digits = 1;
-	if (val >= 100) {
+	
+	if (val >= 10000) {
+		num_digits = 5;
+	}
+	if (val >= 1000) {
+		num_digits = 4;
+	}
+	else if (val >= 100) {
 		num_digits = 3;
 	} else if (val >= 10) {
 		num_digits = 2;

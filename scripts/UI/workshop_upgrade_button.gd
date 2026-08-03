@@ -73,7 +73,8 @@ func update_visuals_from_save_game() -> void:
 	if curr_lvl < associated_upgrade.max_level:
 		var cost: int = associated_upgrade.get_level_price(curr_lvl)
 		if has_node("%cost_text"):
-			%cost_text.text = str(cost)
+			%cost_text.text = MoneyTextShortener.amount_to_string(cost)
+			
 		if has_node("cost_text_container"):
 			$cost_text_container.show()
 	else:

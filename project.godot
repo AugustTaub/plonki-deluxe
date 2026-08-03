@@ -23,6 +23,7 @@ SaveManager="*uid://d03l27pfkh31u"
 BallFactoryManager="*uid://btanyn2b3wtwh"
 GlobalVars="*uid://cwoxp4vyoq74f"
 CsCalculator="*uid://b4jekncudnine"
+MoneyTextShortener="*uid://oy8lc1yo4l08"
 
 [display]
 

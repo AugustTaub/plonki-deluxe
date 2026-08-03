@@ -10,8 +10,8 @@ func _ready():
 	hide()
 	
 	SignalBus.enable_piercing_button.connect(_on_enable_piercing_button)
-	SignalBus.options_toggled.connect(update_from_save)
-	SignalBus.workshop_toggled.connect(update_from_save)
+	
+	SaveManager.save_game_changed.connect(update_from_save)
 	
 	update_from_save()
 

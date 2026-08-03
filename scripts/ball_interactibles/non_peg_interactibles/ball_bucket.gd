@@ -7,7 +7,7 @@ func perform_interaction(ball_data: BallManager.BallData) -> BallManager.BallDat
 	
 	ball_data.active = false
 	
-	var payout: int = int(CsCalculator.curr_cs * 5)
+	var payout: int = int(CsCalculator.curr_cs * 10)
 	SaveManager.change_money_with_vis_nr_no_signal(payout,global_position)
 	
 	var parent = get_parent()
@@ -18,8 +18,15 @@ func perform_interaction(ball_data: BallManager.BallData) -> BallManager.BallDat
 		
 		if parent.vis_body:
 			var tween = create_tween()
+			var tween_scale = create_tween()
+			
 			tween.tween_property(parent.vis_body,"position:y",12,0.1)
 			tween.tween_property(parent.vis_body,"position:y",0,0.3)
+			
+			tween_scale.tween_property(parent.vis_body,"scale",Vector2.ONE * 1.3,0.1)
+			tween_scale.tween_property(parent.vis_body,"scale",Vector2.ONE * 1.0,0.1)
+			
+		
 	
 	SignalBus.play_sound.emit("plomp_lower")
 	

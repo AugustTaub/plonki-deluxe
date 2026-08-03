@@ -18,5 +18,5 @@ void fragment() {
     COLOR.rg = max_contrast_rg;
     COLOR.b = tex_color.b;
     
-    COLOR.a = tex_color.a * alpha_adj;
+    COLOR.a = tex_color.a * alpha_adj * 2.0;
 }

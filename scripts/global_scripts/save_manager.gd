@@ -12,6 +12,10 @@ var upgrade_preloader: ResourcePreloader
 var delta_timer: float = 0
 var auto_save_time: float = 1
 
+var max_balls: int = 999999
+
+signal save_game_changed
+
 func _ready() -> void:
 	
 	var new_save: bool = false
@@ -49,7 +53,7 @@ func _on_upgrade_preloader_loaded(preloader: ResourcePreloader):
 func set_money(new_money: int):
 	save_game.money_amount = new_money
 	SignalBus.set_money_counter.emit(new_money)
-	
+	save_game_changed.emit()
 
 func change_money(change_amount: int):
 	set_money(save_game.money_amount+change_amount)
@@ -70,8 +74,9 @@ func change_money_with_vis_nr_no_signal(change_amount: int, vis_nr_pos: Vector2)
 	SignalBus.spawn_coin_get_nr.emit(change_amount,vis_nr_pos)
 
 func set_ball_amount(new_amount: int):
-	save_game.ball_amount = max(new_amount,0)
+	save_game.ball_amount = clamp(new_amount,0,max_balls)
 	SignalBus.set_ball_counter.emit(new_amount)
+	save_game_changed.emit()
 
 
 func add_upgrade(new_upgrade: UpgradeData):
@@ -81,7 +86,9 @@ func add_upgrade(new_upgrade: UpgradeData):
 		
 		if new_upgrade.name == "ball_piercing":
 			SignalBus.enable_piercing_button.emit()
-	
+		
+		save_game_changed.emit()
+
 
 func increase_upgrade_level(increase_upgrade: UpgradeData):
 	
@@ -91,6 +98,9 @@ func increase_upgrade_level(increase_upgrade: UpgradeData):
 		
 		if new_val <= increase_upgrade.max_level:
 			save_game.upgrade_levels[increase_upgrade] = new_val
+			
+			save_game_changed.emit()
+		
 	else:
 		save_game.upgrade_levels[increase_upgrade] = 0
 	
@@ -101,7 +111,7 @@ func set_upgrade_level(set_upgrade: UpgradeData, new_level: int):
 	if save_game.unlocked_upgrades.has(set_upgrade):
 		new_level = clamp(new_level,0,set_upgrade.max_level)
 		save_game.upgrade_levels[set_upgrade] = new_level
-	
+		save_game_changed.emit()
 
 
 func get_unlocked_upgrade_by_name(upgrade_name: String):

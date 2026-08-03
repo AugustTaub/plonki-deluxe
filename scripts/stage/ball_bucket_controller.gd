@@ -53,7 +53,8 @@ func _on_coins_increased(_amount: int):
 	update_payout_label()
 
 func update_payout_label():
-	payout_label.text = "+" + str(int(CsCalculator.curr_cs * 5))
+	var payout: int = int(CsCalculator.curr_cs * 10)
+	payout_label.text = "+" + MoneyTextShortener.amount_to_string(payout)
 
 func _physics_process(delta):
 	
